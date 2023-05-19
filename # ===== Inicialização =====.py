@@ -34,7 +34,7 @@ quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 
 class Quadra(pygame.sprite.Sprite):
     def __init__(self, img, x, y):
-        # Construtor da classe mãe (Sprite).
+        # Construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
         self.image = img
@@ -54,7 +54,7 @@ for posicao in Posição_quadra:
 
 # ===== Tempo ====
 clock = pygame.time.Clock()
-FPS = 500
+FPS = 50
 # ===== Loop principal =====
 while game:
     clock.tick(FPS)

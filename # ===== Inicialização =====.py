@@ -27,7 +27,7 @@ Posição_quadra=[[-3600, 3500],[-3600, 2700],[-3600, 1900],[-3600, 1100],[-3600
 [5400, 1100],[5400, 300],[5400, -500],[5400, -1300],[5400, -2100],[5400, -2900],[5400, -3700]]
 
 # ----- Inicia assets
-quarteirao_img = pygame.image.load('C:/Users/gabri/OneDrive - Insper - Institudo de Ensino e Pesquisa/Insper/2023/1-semestre/DSoft(desing de software)/Sprites/Background cortado.png').convert()
+quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800)) 
 
 
@@ -39,15 +39,22 @@ class Quadra(pygame.sprite.Sprite):
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = x
+        self.rect.x = x
         self.rect.y= y
         self.speedx=2
     def atualiza(self):
         self.rect.x += self.speedx
-
+class Player(pygame.sprite.Sprite):
+    def __init__(self,img):
+        pygame.sprite.Sprite.__init__(self)
+        self.img=img
+        self.rect = self.img.get_rect()
+        self.rect.x = Largura_janela/2
+        self.rect.y = Altura_janela/2 
+        
 Mapa=pygame.sprite.Group()
 for posicao in Posição_quadra:
-    x=posicao[0]-500
+    x=posicao[0]
     y=posicao[1]
     Quarteirao=Quadra(quarteirao_img,x,y)
     Mapa.add(Quarteirao)
@@ -86,13 +93,3 @@ while game:
 
 # ===== Finalização =====
 pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
-explosion_anim=[]
-assets={}
-for i in range(9):
-        # Os arquivos de animação são numerados de 00 a 08
-        filename = os.path.join(IMG_DIR, 'regularExplosion0{}.png'.format(i))
-        img = pygame.image.load(filename).convert()
-        img = pygame.transform.scale(img, (32, 32))
-        explosion_anim.append(img)
-    assets[EXPLOSION_ANIM] = explosion_anim
-assets[SCORE_FONT] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P.ttf'), 28)

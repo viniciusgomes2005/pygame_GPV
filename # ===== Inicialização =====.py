@@ -27,7 +27,7 @@ Posição_quadra=[[-3600, 3500],[-3600, 2700],[-3600, 1900],[-3600, 1100],[-3600
 [5400, 1100],[5400, 300],[5400, -500],[5400, -1300],[5400, -2100],[5400, -2900],[5400, -3700]]
 
 # ----- Inicia assets
-quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
+quarteirao_img = pygame.image.load('assets/Sprite/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800)) 
 
 
@@ -44,14 +44,7 @@ class Quadra(pygame.sprite.Sprite):
         self.speedx=2
     def atualiza(self):
         self.rect.x += self.speedx
-class Player(pygame.sprite.Sprite):
-    def __init__(self,img):
-        pygame.sprite.Sprite.__init__(self)
-        self.img=img
-        self.rect = self.img.get_rect()
-        self.rect.x = Largura_janela/2
-        self.rect.y = Altura_janela/2 
-        
+
 Mapa=pygame.sprite.Group()
 for posicao in Posição_quadra:
     x=posicao[0]

@@ -27,7 +27,7 @@ Posição_quadra=[[-3600, 3500],[-3600, 2700],[-3600, 1900],[-3600, 1100],[-3600
 [5400, 1100],[5400, 300],[5400, -500],[5400, -1300],[5400, -2100],[5400, -2900],[5400, -3700]]
 
 # ----- Inicia assets
-quarteirao_img = pygame.image.load('assets/Sprite/Background cortado.png').convert()
+quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800)) 
 
 

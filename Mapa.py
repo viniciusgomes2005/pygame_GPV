@@ -82,7 +82,7 @@ class Player(pygame.sprite.Sprite):
 Player_Grupo.add(Player(Player_Normal_Anim))
 game = True
 clock = pygame.time.Clock()
-FPS = 70
+FPS = 100
 
 while game:
     clock.tick(FPS)
@@ -93,29 +93,29 @@ while game:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 for quadra in Mapa:
-                    quadra.speedy += 1
+                    quadra.speedy += 2
             elif event.key == pygame.K_s:
                 for quadra in Mapa:
-                    quadra.speedy -= 1
+                    quadra.speedy -= 2
             elif event.key == pygame.K_a:
                 for quadra in Mapa:
-                    quadra.speedx += 1
+                    quadra.speedx += 2
             elif event.key == pygame.K_d:
                 for quadra in Mapa:
-                    quadra.speedx -= 1
+                    quadra.speedx -= 2
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
                 for quadra in Mapa:
-                    quadra.speedy -= 1
+                    quadra.speedy -= 2
             elif event.key == pygame.K_s:
                 for quadra in Mapa:
-                    quadra.speedy += 1
+                    quadra.speedy += 2
             elif event.key == pygame.K_a:
                 for quadra in Mapa:
-                    quadra.speedx -= 1
+                    quadra.speedx -= 2
             elif event.key == pygame.K_d:
                 for quadra in Mapa:
-                    quadra.speedx += 1
+                    quadra.speedx += 2
     Mapa.update()
     Player_Grupo.update()
     window.fill((0, 0, 0))

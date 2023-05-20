@@ -13,7 +13,7 @@ quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').conv
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 Player_Normal_Anim=[]
 for i in range(1,10):
-    # Os arquivos de animação são numerados de 00 a 08
+    # Os arquivos de animação são numerados de 00 a 10
     filename = 'assets/Sprites/Player_Normal{}.png'.format(i)
     img = pygame.image.load(filename).convert_alpha()
     img = pygame.transform.scale(img, (120, 130))
@@ -76,8 +76,8 @@ class Player(pygame.sprite.Sprite):
             self.last_update=now
             self.frame+=1
             if self.frame == len(self.anim):
-                # Se sim, tchau explosão!
                 self.frame=0
+            self.img=self.anim[self.frame]
 
 Player_Grupo.add(Player(Player_Normal_Anim))
 game = True

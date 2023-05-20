@@ -1,36 +1,34 @@
-#################  IMPORTS  #######################
 import pygame
-import os
 
 pygame.init()
 
 Altura_janela = 600
 Largura_janela = 800
-window = pygame.display.set_mode(( Largura_janela, Altura_janela))
+window = pygame.display.set_mode((Largura_janela,Altura_janela))
 pygame.display.set_caption('Pygame')
-################  SPRITES  ##################################################
+
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
-Player_Normal_Anim=[]
-for i in range(1,10):
-    # Os arquivos de animação são numerados de 00 a 08
+
+Player_Normal_Anim = []
+for i in range(1, 10):
     filename = 'assets/Sprites/Player_Normal{}.png'.format(i)
-    img = pygame.image.load(filename).convert_alpha()
-    img = pygame.transform.scale(img, (120, 130))
+    img = pygame.image.load(filename).convert()
+    img = pygame.transform.scale(img, (80, 100))
     Player_Normal_Anim.append(img)
-###############  Grupos  #####################################
+
 Mapa = pygame.sprite.Group()
-Player_Grupo= pygame.sprite.Group()
-###############  Mapa  #################################################
+Player_Grupo = pygame.sprite.Group()
+
 class Quadra(pygame.sprite.Sprite):
     def __init__(self, img, x, y, speedx, speedy):
         pygame.sprite.Sprite.__init__(self)
-        self.image = img # define imagem
-        self.rect = self.image.get_rect() #torna imagem em um retangulo
-        self.rect.x = x # X do canto superior esquerdo do retangulo
-        self.rect.y = y # Y do canto superior esquerdo do retangulo
-        self.speedx = speedx # VELOCIDADE DO PLAYER NO EIXO X
-        self.speedy = speedy # VELOCIDADE DO PLAYER NO EIXO Y
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.speedx = speedx
+        self.speedy = speedy
 
     def update(self):
         self.rect.x += self.speedx
@@ -55,31 +53,33 @@ for posicao in Posição_quadra:
     x = posicao[0]
     y = posicao[1]
     speedx = 0
-    speedy = 0  # Velocidade do movimento do fundo
+    speedy = 0
     quarteirao = Quadra(quarteirao_img, x, y, speedx, speedy)
     Mapa.add(quarteirao)
-###################  Player  #######################
+
 class Player(pygame.sprite.Sprite):
-    def __init__(self,anim):
+    def __init__(self, anim):
         pygame.sprite.Sprite.__init__(self)
-        self.frame=0
-        self.anim=anim
-        self.img=self.anim[self.frame]
-        self.rect=self.img.get_rect()
+        self.frame = 0
+        self.anim = anim
+        self.img = self.anim[self.frame]
+        self.rect = self.img.get_rect()
         self.rect.center = (Largura_janela / 2, Altura_janela / 2)
-        self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.frame_ticks=50
+        self.last_update = pygame.time.get_ticks()
+        self.frame_ticks = 50
+
     def update(self):
-        now=pygame.time.get_ticks()
-        elapsed_ticks= now - self.last_update
-        if elapsed_ticks>self.frame_ticks:
-            self.last_update=now
-            self.frame+=1
+        now = pygame.time.get_ticks()
+        elapsed_ticks = now - self.last_update
+        if elapsed_ticks > self.frame_ticks:
+            self.last_update = now
+            self.frame += 1
             if self.frame == len(self.anim):
-                # Se sim, tchau explosão!
-                self.frame=0
+                self.frame = 0
+            self.img = self.anim[self.frame]
 
 Player_Grupo.add(Player(Player_Normal_Anim))
+
 game = True
 clock = pygame.time.Clock()
 FPS = 70
@@ -90,34 +90,10 @@ while game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w:
-                for quadra in Mapa:
-                    quadra.speedy += 1
-            elif event.key == pygame.K_s:
-                for quadra in Mapa:
-                    quadra.speedy -= 1
-            elif event.key == pygame.K_a:
-                for quadra in Mapa:
-                    quadra.speedx += 1
-            elif event.key == pygame.K_d:
-                for quadra in Mapa:
-                    quadra.speedx -= 1
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_w:
-                for quadra in Mapa:
-                    quadra.speedy -= 1
-            elif event.key == pygame.K_s:
-                for quadra in Mapa:
-                    quadra.speedy += 1
-            elif event.key == pygame.K_a:
-                for quadra in Mapa:
-                    quadra.speedx -= 1
-            elif event.key == pygame.K_d:
-                for quadra in Mapa:
-                    quadra.speedx += 1
+    
     Mapa.update()
     Player_Grupo.update()
+    
     window.fill((0, 0, 0))
     Mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)

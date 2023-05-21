@@ -7,12 +7,22 @@ pygame.init()
 # Dimensões da janela
 altura_janela = 1000
 largura_janela = 800
+altura_camera = 800
+largura_camera = 600
 window = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 
 # Gera tela principal
 game = True
 
+Player_Normal_Anim=[]
+for i in range(1,10):
+    # Os arquivos de animação são numerados de 00 a 10
+    filename = 'assets/Sprites/Player_Normal{}.png'.format(i)
+    img = pygame.image.load(filename).convert_alpha()
+    img = pygame.transform.scale(img, (120, 130))
+    Player_Normal_Anim.append(img)
+Player_Grupo= pygame.sprite.Group()
 # Posições das quadras
 posicoes_quadra = [[-3600, 3500], [-3600, 2700], [-3600, 1900], [-3600, 1100], [-3600, 300], [-3600, -500],
                    [-3600, -1300], [-3600, -2100], [-3600, -2900], [-3600, -3700], [-2600, 3500], [-2600, 2700],
@@ -55,20 +65,20 @@ predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert()
 predio1_img = pygame.transform.scale(predio1_img, (300, 500))
 # Classe para representar uma quadra
 class Quadra(pygame.sprite.Sprite):
-    def __init__(self, img, x, y):
+    def __init__(self, img, x, y, speedx, speedy):
         pygame.sprite.Sprite.__init__(self)
-        self.image = img
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.speedx = 0
-        self.speedy = 0
+        self.image = img # define imagem
+        self.rect = self.image.get_rect() #torna imagem em um retangulo
+        self.rect.x = x # X do canto superior esquerdo do retangulo
+        self.rect.y = y # Y do canto superior esquerdo do retangulo
+        self.speedx = speedx # VELOCIDADE DO PLAYER NO EIXO X
+        self.speedy = speedy # VELOCIDADE DO PLAYER NO EIXO Y
 
     def update(self):
         self.rect.x += self.speedx
-        self.rect.y +=self.speedy
-    def colisao(self, other_sprite):
-        return pygame.sprite.collide_rect(self, other_sprite)
+        self.rect.y += self.speedy
+
+    
 class casa(pygame.sprite.Sprite):
     def __init__(self, img, quadra_x,quadra_y,x,y):
         pygame.sprite.Sprite.__init__(self)
@@ -81,16 +91,38 @@ class casa(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
         self.rect.y +=self.speedy
+    def colisao(self, other_sprite):
+        return pygame.sprite.collide_rect(self, other_sprite)
 predio1=[predio1_img,350,150]
 casas=[predio1_img]*36
+class Player(pygame.sprite.Sprite):
+    def __init__(self,anim):
+        pygame.sprite.Sprite.__init__(self)
+        self.frame=0
+        self.anim=anim
+        self.img=self.anim[self.frame]
+        self.rect=self.img.get_rect()
+        self.rect.center = (largura_camera / 2, altura_camera / 2)
+        self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.frame_ticks=50
+    def update(self):
+        now=pygame.time.get_ticks()
+        elapsed_ticks= now - self.last_update
+        if elapsed_ticks>self.frame_ticks:
+            self.last_update=now
+            self.frame+=1
+            if self.frame == len(self.anim):
+                self.frame=0
+            self.img=self.anim[self.frame]
 
+Player_Grupo.add(Player(Player_Normal_Anim))
 # Cria o grupo de sprites para o mapa
 mapa = pygame.sprite.Group()
 for i in range(6):
     for j in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
-        quarteirao = Quadra(quarteirao_img, x, y)
+        quarteirao = Quadra(quarteirao_img, x, y,0,0)
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
 
@@ -100,35 +132,48 @@ FPS = 60
 
 while game:
     clock.tick(FPS)
-
-    # Trata eventos
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_w:
                 for quadra in mapa:
-                    quadra.speedx += 8
-            elif event.key == pygame.K_RIGHT:
+                    quadra.speedy += 2
+            elif event.key == pygame.K_s:
                 for quadra in mapa:
-                    quadra.speedx -= 8
+                    quadra.speedy -= 2
+            elif event.key == pygame.K_a:
+                for quadra in mapa:
+                    quadra.speedx += 2
+            elif event.key == pygame.K_d:
+                for quadra in mapa:
+                    quadra.speedx -= 2
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_w:
                 for quadra in mapa:
-                    quadra.speedy += 8
-            elif event.key == pygame.K_RIGHT:
+                    quadra.speedy -= 2
+            elif event.key == pygame.K_s:
                 for quadra in mapa:
-                    quadra.speedy -= 8 
+                    quadra.speedy += 2
+            elif event.key == pygame.K_a:
+                for quadra in mapa:
+                    quadra.speedx -= 2
+            elif event.key == pygame.K_d:
+                for quadra in mapa:
+                    quadra.speedx += 2
 
     # Atualiza os sprites do mapa
     mapa.update()
+    Player_Grupo.update()
 
     # Gera saídas
     window.fill((255, 255, 255))  # Preenche com a cor branca
     mapa.draw(window)
-
+    window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
     # Atualiza a janela
     pygame.display.update()
 
 # Finalização
 pygame.quit()
+    

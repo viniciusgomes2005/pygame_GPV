@@ -1,88 +1,114 @@
-# ===== Inicialização =====
-# ----- Importa e inicia pacotes
 import pygame
-import os
+import random
 
+# Inicialização do Pygame
 pygame.init()
 
-# ----- Gera tela principal
-Altura_janela = 800
-Largura_janela = 600
-window = pygame.display.set_mode((Altura_janela, Largura_janela))
+# Dimensões da janela
+altura_janela = 1000
+largura_janela = 800
+window = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 
-# ----- Inicia estruturas de dados
+# Gera tela principal
 game = True
-Posição_quadra=[[-3600, 3500],[-3600, 2700],[-3600, 1900],[-3600, 1100],[-3600, 300],[-3600, -500],[-3600, -1300]
-,[-3600, -2100],[-3600, -2900],[-3600, -3700],[-2600, 3500],[-2600, 2700],[-2600, 1900],[-2600, 1100],[-2600, 300]
-,[-2600, -500],[-2600, -1300],[-2600, -2100],[-2600, -2900],[-2600, -3700],[-1600, 3500],[-1600, 2700],[-1600, 1900]
-,[-1600, 1100],[-1600, 300],[-1600, -500],[-1600, -1300],[-1600, -2100],[-1600, -2900],[-1600, -3700],[-600, 3500]
-,[-600, 2700],[-600, 1900],[-600, 1100],[-600, 300],[-600, -500],[-600, -1300],[-600, -2100],[-600, -2900],[-600, -3700]
-,[400, 3500],[400, 2700],[400, 1900],[400, 1100],[400, 300],[400, -500],[400, -1300],[400, -2100],[400, -2900],[400, -3700]
-,[1400, 3500],[1400, 2700],[1400, 1900],[1400, 1100],[1400, 300],[1400, -500],[1400, -1300],[1400, -2100],[1400, -2900]
-,[1400, -3700],[2400, 3500],[2400, 2700],[2400, 1900],[2400, 1100],[2400, 300],[2400, -500],[2400, -1300],[2400, -2100]
-,[2400, -2900],[2400, -3700],[3400, 3500],[3400, 2700],[3400, 1900],[3400, 1100],[3400, 300],[3400, -500]
-,[3400, -1300],[3400, -2100],[3400, -2900],[3400, -3700],[4400, 3500],[4400, 2700],[4400, 1900],[4400, 1100]
-,[4400, 300],[4400, -500],[4400, -1300],[4400, -2100],[4400, -2900],[4400, -3700],[5400, 3500],[5400, 2700],[5400, 1900],
-[5400, 1100],[5400, 300],[5400, -500],[5400, -1300],[5400, -2100],[5400, -2900],[5400, -3700]]
 
-# ----- Inicia assets
+# Posições das quadras
+posicoes_quadra = [[-3600, 3500], [-3600, 2700], [-3600, 1900], [-3600, 1100], [-3600, 300], [-3600, -500],
+                   [-3600, -1300], [-3600, -2100], [-3600, -2900], [-3600, -3700], [-2600, 3500], [-2600, 2700],
+                   [-2600, 1900], [-2600, 1100], [-2600, 300], [-2600, -500], [-2600, -1300], [-2600, -2100],
+                   [-2600, -2900], [-2600, -3700], [-1600, 3500], [-1600, 2700], [-1600, 1900], [-1600, 1100],
+                   [-1600, 300], [-1600, -500], [-1600, -1300], [-1600, -2100], [-1600, -2900], [-1600, -3700],
+                   [-600, 3500], [-600, 2700], [-600, 1900], [-600, 1100], [-600, 300], [-600, -500], [-600, -1300],
+                   [-600, -2100], [-600, -2900], [-600, -3700], [400, 3500], [400, 2700], [400, 1900], [400, 1100],
+                   [400, 300], [400, -500], [400, -1300], [400, -2100], [400, -2900], [400, -3700], [1400, 3500],
+                   [1400, 2700], [1400, 1900], [1400, 1100], [1400, 300], [1400, -500], [1400, -1300], [1400, -2100],
+                   [1400, -2900], [1400, -3700], [2400, 3500], [2400, 2700], [2400, 1900], [2400, 1100], [2400, 300],
+                   [2400, -500], [2400, -1300], [2400, -2100], [2400, -2900], [2400, -3700], [3400, 3500],
+                   [3400, 2700], [3400, 1900], [3400, 1100], [3400, 300], [3400, -500], [3400, -1300], [3400, -2100],
+                   [3400, -2900], [3400, -3700], [4400, 3500], [4400, 2700], [4400, 1900], [4400, 1100], [4400, 300], [4400, -500], [4400, -1300],
+                   [4400, -2100], [4400, -2900], [4400, -3700], [5400, 3500], [5400, 2700], [5400, 1900], [5400, 1100],
+                   [5400, 300], [5400, -500], [5400, -1300], [5400, -2100], [5400, -2900], [5400, -3700]]
+
+mapa_largura = 800 * 6  # Largura total do mapa
+mapa_altura = 600 * 6  # Altura total do mapa
+map_data = [[None] * 6 for _ in range(6)]  # Matriz 6x6 para representar o mapa
+
+quadra_possivel = []
+for i in range(36):
+    quadra_possivel.append('assets/Sprites/Background cortado.png')
+
+def gerar_bloco_aleatorio(quadra_possivel):
+    blocos_possiveis = quadra_possivel  # Lista com os blocos possíveis (imagens, texturas, etc.)
+    bloco_aleatorio = random.choice(blocos_possiveis)  # Escolhe aleatoriamente um bloco da lista
+    return bloco_aleatorio
+
+for i in range(6):
+    for j in range(6):
+        random_block = gerar_bloco_aleatorio(quadra_possivel)
+        map_data[i][j] = random_block
+
+# Carrega imagens
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
-quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800)) 
+quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 
-
-
+# Classe para representar uma quadra
 class Quadra(pygame.sprite.Sprite):
     def __init__(self, img, x, y):
-        # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = x
-        self.rect.y= y
-        self.speedx=2
-    def atualiza(self):
+        self.rect.y = y
+        self.speedx = 2
+
+    def update(self):
         self.rect.x += self.speedx
 
-Mapa=pygame.sprite.Group()
-for posicao in Posição_quadra:
-    x=posicao[0]
-    y=posicao[1]
-    Quarteirao=Quadra(quarteirao_img,x,y)
-    Mapa.add(Quarteirao)
+# Cria o grupo de sprites para o mapa
+mapa = pygame.sprite.Group()
+for i in range(6):
+    for j in range(6):
+        x = j * 1000 - 3600
+        y = i * 800 - 2900
+        quarteirao = Quadra(quarteirao_img, x, y)
+        mapa.add(quarteirao)
 
-# ===== Tempo ====
+# Loop principal
 clock = pygame.time.Clock()
-FPS = 500
-# ===== Loop principal =====
+FPS = 60
+
 while game:
     clock.tick(FPS)
-    # ----- Trata eventos
+
+    # Trata eventos
     for event in pygame.event.get():
-        # ----- Verifica consequências
         if event.type == pygame.QUIT:
             game = False
-        # Verifica se apertou alguma tecla.
-        if event.type == pygame.KEYDOWN:
-            # Dependendo da tecla, altera a velocidade.
+        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                Quarteirao.speedx -= 8
-            if event.key == pygame.K_RIGHT:
-                Quarteirao.speedx += 8
-        # Verifica se soltou alguma tecla.
-        if event.type == pygame.KEYUP:
-            # Dependendo da tecla, altera a velocidade.
+                for quadra in mapa:
+                    quadra.speedx -= 8
+            elif event.key == pygame.K_RIGHT:
+                for quadra in mapa:
+                    quadra.speedx += 8
+        elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                Quarteirao.speedx += 8
-            if event.key == pygame.K_RIGHT:
-                Quarteirao.speedx -= 8
-    Mapa.update()
-    # ----- Gera saídas
-    window.fill((255, 255, 255))  # Preenche com a cor branca
-    Mapa.draw(window)
-    # ----- Atualiza estado do jogo
-    pygame.display.update()  # Mostra o novo frame para o jogador
+                for quadra in mapa:
+                    quadra.speedx += 8
+            elif event.key == pygame.K_RIGHT:
+                for quadra in mapa:
+                    quadra.speedx -= 8
 
-# ===== Finalização =====
-pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
+    # Atualiza os sprites do mapa
+    mapa.update()
+
+    # Gera saídas
+    window.fill((255, 255, 255))  # Preenche com a cor branca
+    mapa.draw(window)
+
+    # Atualiza a janela
+    pygame.display.update()
+
+# Finalização
+pygame.quit()

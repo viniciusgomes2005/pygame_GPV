@@ -51,7 +51,8 @@ for i in range(6):
 # Carrega imagens
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
-
+predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert()
+predio1_img = pygame.transform.scale(predio1_img, (300, 500))
 # Classe para representar uma quadra
 class Quadra(pygame.sprite.Sprite):
     def __init__(self, img, x, y):
@@ -60,10 +61,28 @@ class Quadra(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.speedx = 2
+        self.speedx = 0
+        self.speedy = 0
 
     def update(self):
         self.rect.x += self.speedx
+        self.rect.y +=self.speedy
+    def colisao(self, other_sprite):
+        return pygame.sprite.collide_rect(self, other_sprite)
+class casa(pygame.sprite.Sprite):
+    def __init__(self, img, quadra_x,quadra_y,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = quadra_x+x
+        self.rect.y = quadra_y+y
+        self.speedx = 0
+        self.speedy = 0
+    def update(self):
+        self.rect.x += self.speedx
+        self.rect.y +=self.speedy
+predio1=[predio1_img,350,150]
+casas=[predio1_img]*36
 
 # Cria o grupo de sprites para o mapa
 mapa = pygame.sprite.Group()
@@ -72,7 +91,8 @@ for i in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
         quarteirao = Quadra(quarteirao_img, x, y)
-        mapa.add(quarteirao)
+        predio = casa(predio1[0],x,y,predio1[1],predio1[2])
+        mapa.add(quarteirao,predio)
 
 # Loop principal
 clock = pygame.time.Clock()
@@ -88,17 +108,17 @@ while game:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 for quadra in mapa:
-                    quadra.speedx -= 8
+                    quadra.speedx += 8
             elif event.key == pygame.K_RIGHT:
                 for quadra in mapa:
-                    quadra.speedx += 8
+                    quadra.speedx -= 8
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 for quadra in mapa:
-                    quadra.speedx += 8
+                    quadra.speedy += 8
             elif event.key == pygame.K_RIGHT:
                 for quadra in mapa:
-                    quadra.speedx -= 8
+                    quadra.speedy -= 8 
 
     # Atualiza os sprites do mapa
     mapa.update()

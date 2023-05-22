@@ -104,12 +104,13 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         now=pygame.time.get_ticks()
         elapsed_ticks= now - self.last_update
-        if elapsed_ticks>self.frame_ticks:
-            self.last_update=now
-            self.frame+=1
-            if self.frame == len(self.anim):
-                self.frame=0
-            self.img=self.anim[self.frame]
+        if quarteirao.speedx==0 and quarteirao.speedy==0:
+            if elapsed_ticks>self.frame_ticks:
+                self.last_update=now
+                self.frame+=1
+                if self.frame == len(self.anim):
+                    self.frame=0
+                self.img=self.anim[self.frame]
 
 Player_Grupo.add(Player(Player_Normal_Anim))
 # Cria o grupo de sprites para o mapa

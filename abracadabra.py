@@ -48,14 +48,10 @@ for i in range(36):
     quadra_possivel.append('assets/Sprites/Background cortado.png')
 
 def gerar_bloco_aleatorio(quadra_possivel):
-    blocos_possiveis = quadra_possivel  # Lista com os blocos possíveis (imagens, texturas, etc.)
-    bloco_aleatorio = random.choice(blocos_possiveis)  # Escolhe aleatoriamente um bloco da lista
+    bloco_aleatorio = random.choice(quadra_possivel)
+    del quadra_possivel[quadra_possivel.index(bloco_aleatorio)]
     return bloco_aleatorio
 
-for i in range(6):
-    for j in range(6):
-        random_block = gerar_bloco_aleatorio(quadra_possivel)
-        map_data[i][j] = random_block
 
 # Carrega imagens
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
@@ -92,8 +88,8 @@ class casa(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.rect.y +=self.speedy
 
-predio1=[predio1_img,350,150]
-casas=[predio1_img]*36
+predio2=[predio1_img,350,150]
+casas=[predio2]*36
 class Player(pygame.sprite.Sprite):
     def __init__(self,anim):
         pygame.sprite.Sprite.__init__(self)
@@ -123,6 +119,7 @@ for i in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
         quarteirao = Quadra(quarteirao_img, x, y,0,0)
+        predio1=gerar_bloco_aleatorio(casas)
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)

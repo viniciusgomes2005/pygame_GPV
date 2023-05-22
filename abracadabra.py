@@ -82,6 +82,7 @@ class casa(pygame.sprite.Sprite):
     def __init__(self, img, quadra_x,quadra_y,x,y):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
+        self.mask= pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = quadra_x+x
         self.rect.y = quadra_y+y
@@ -99,6 +100,7 @@ class Player(pygame.sprite.Sprite):
         self.frame=0
         self.anim=anim
         self.img=self.anim[self.frame]
+        self.mask= pygame.mask.from_surface(self.img)
         self.rect=self.img.get_rect()
         self.rect.center = (largura_janela/2, altura_janela/ 2)
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
@@ -173,7 +175,7 @@ while game:
     # Atualiza os sprites do mapa
     mapa.update()
     Player_Grupo.update()
-    hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False)
+    hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)
     if hits!= {}:
         for quadra in mapa:
             quadra.speedx= 0

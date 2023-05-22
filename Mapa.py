@@ -69,15 +69,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (Largura_janela / 2, Altura_janela / 2)
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
+        self.speedx = speedx # VELOCIDADE DO PLAYER NO EIXO X
+        self.speedy = speedy
     def update(self):
-        now=pygame.time.get_ticks()
-        elapsed_ticks= now - self.last_update
-        if elapsed_ticks>self.frame_ticks:
-            self.last_update=now
-            self.frame+=1
-            if self.frame == len(self.anim):
-                self.frame=0
-            self.img=self.anim[self.frame]
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        
 
 Player_Grupo.add(Player(Player_Normal_Anim))
 game = True
@@ -92,30 +89,9 @@ while game:
             game = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
-                for quadra in Mapa:
-                    quadra.speedy += 2
-            elif event.key == pygame.K_s:
-                for quadra in Mapa:
-                    quadra.speedy -= 2
-            elif event.key == pygame.K_a:
-                for quadra in Mapa:
-                    quadra.speedx += 2
-            elif event.key == pygame.K_d:
-                for quadra in Mapa:
-                    quadra.speedx -= 2
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_w:
-                for quadra in Mapa:
-                    quadra.speedy -= 2
-            elif event.key == pygame.K_s:
-                for quadra in Mapa:
-                    quadra.speedy += 2
-            elif event.key == pygame.K_a:
-                for quadra in Mapa:
-                    quadra.speedx -= 2
-            elif event.key == pygame.K_d:
-                for quadra in Mapa:
-                    quadra.speedx += 2
+                    Player_Grupo.speedy += speedy
+
+
     Mapa.update()
     Player_Grupo.update()
     window.fill((0, 0, 0))

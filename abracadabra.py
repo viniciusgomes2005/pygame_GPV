@@ -117,7 +117,7 @@ for i in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
         quarteirao = Quadra(quarteirao_img, x, y,0,0)
-        predio1=gerar_bloco_aleatorio(assets)
+        predio1=gerar_bloco_aleatorio(assets["casas"])
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)

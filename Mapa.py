@@ -200,7 +200,7 @@ while game:
     if quarteirao.speedx==0 and quarteirao.speedy==0:
         P1.move=2
     mapa.update() # Atualiza os sprites do mapa
-    P1.update() # Atualiza os sprites do Player
+    Player_Grupo.update() # Atualiza os sprites do Player
 
     hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
     if hits!= {}:

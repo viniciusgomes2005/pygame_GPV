@@ -1,5 +1,6 @@
 import pygame
 import random
+from assets import *
 
 # Inicialização do Pygame
 pygame.init()

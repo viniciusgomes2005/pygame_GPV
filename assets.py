@@ -57,3 +57,15 @@ predio3_img = pygame.transform.scale(predio3_img, (300, 500))
 predio3=[predio3_img,350,150]
 casas.append(predio3)	
 casas.append(predio3)
+pizzaria_img = pygame.image.load('assets/Sprites/pizzaria.png').convert_alpha()
+pizzaria_img = pygame.transform.scale(pizzaria_img, (300, 500))
+pizzaria=[pizzaria_img,350,150]
+casas.append(pizzaria)
+farmacia_img = pygame.image.load('assets/Sprites/farmacia.png').convert_alpha()
+farmacia_img = pygame.transform.scale(farmacia_img, (300, 500))
+farmacia=[farmacia_img,350,150]
+casas.append(farmacia)
+escola_img = pygame.image.load('assets/Sprites/escola.png').convert_alpha()
+escola_img = pygame.transform.scale(escola_img, (300, 500))
+escola=[escola_img,350,150]
+casas.append(escola)

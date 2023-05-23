@@ -17,12 +17,18 @@ quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
 predio1_img = pygame.transform.scale(predio1_img, (300, 500))
 Player_Normal_Anim=[]
-for i in range(1,10):
+for i in range(1,11):
     # Os arquivos de animação são numerados de 00 a 10
-    filename = 'assets/Sprites/Player_Normal{}.png'.format(i)
-    img = pygame.image.load(filename).convert_alpha()
-    img = pygame.transform.scale(img, (120, 130))
-    Player_Normal_Anim.append(img)
+    Player_Normal = 'assets/Sprites/Player_Normal{}.png'.format(i)
+    Player_Normal_img = pygame.image.load(Player_Normal).convert_alpha()
+    Player_Normal_img = pygame.transform.scale(Player_Normal_img, (120, 130))
+    Player_Normal_Anim.append(Player_Normal_img)
+for i in range(1,9):
+    # Os arquivos de animação são numerados de 00 a 10
+    Player_Run = 'assets/Sprites/Player_Run{}.png'.format(i)
+    Player_Run_img = pygame.image.load(Player_Run).convert_alpha()
+    Player_Run_img = pygame.transform.scale(Player_Run_img, (120, 130))
+    Player_Normal_Anim.append(Player_Run_img)
 
 ###########################  GRUPOS  ################################
 
@@ -93,10 +99,16 @@ class Player(pygame.sprite.Sprite):
             if elapsed_ticks>self.frame_ticks:
                 self.last_update=now
                 self.frame+=1
-                if self.frame == len(self.anim):
+                if self.frame >= 10:
                     self.frame=0
                 self.img=self.anim[self.frame]
-
+        elif quarteirao.speedx!=0 or quarteirao.speedy!=0:
+            if elapsed_ticks>self.frame_ticks:
+                self.last_update=now
+                self.frame+=1
+                if self.frame == 18:
+                    self.frame=10
+                self.img=self.anim[self.frame]
 Player_Grupo.add(Player(Player_Normal_Anim))
 
 predio2=[predio1_img,350,150]

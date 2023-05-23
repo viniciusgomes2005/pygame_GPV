@@ -97,7 +97,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (largura_janela/2, altura_janela/ 2)
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
-        self.move=move #1=sim 2=não
+        self.move=move #1=sim 2=não 3=ataque
     def update(self):
         now=pygame.time.get_ticks()
         elapsed_ticks= now - self.last_update
@@ -119,7 +119,6 @@ class Player(pygame.sprite.Sprite):
                     self.frame=10
                 self.img=self.anim[self.frame]
         elif self.move==3: 
-            print('atacar')
             if elapsed_ticks>self.frame_ticks:
                 if self.frame<18:
                     self.frame=18
@@ -129,6 +128,9 @@ class Player(pygame.sprite.Sprite):
                 if self.frame >= 25:
                     self.frame=18
                 self.img=self.anim[self.frame]
+                if self.img== self.anim[24]:
+                    self.move=1
+                    self.frame=10
 P1=Player(Player_Normal_Anim,2)
 Player_Grupo.add(P1)
 
@@ -214,5 +216,4 @@ while game:
 
     pygame.display.update() # Atualiza a janela
 
-pygame.quit() # Finalização
-    
+pygame.quit() # Finalizaçãodw

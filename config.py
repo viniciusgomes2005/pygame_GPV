@@ -1,6 +1,6 @@
 from os import path
 import pygame
-IMG_DIR = path.join(path.dirname(__file__), 'assets', 'img')
+IMG_DIR = path.join(path.dirname(__file__), 'assets', 'Sprites')
 SND_DIR = path.join(path.dirname(__file__), 'assets', 'snd')
 FNT_DIR = path.join(path.dirname(__file__), 'assets', 'font')
 

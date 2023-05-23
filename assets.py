@@ -8,7 +8,7 @@ def load_assets():
     assets = {}
     Normal_Anim=[]
     casas = []
-    for i in range(10):
+    for i in range(1,10):
         # Os arquivos de animação são numerados de 00 a 08
         filename = os.path.join(IMG_DIR, 'Player_Normal{}.png'.format(i))
         img = pygame.image.load(filename).convert()
@@ -123,6 +123,6 @@ def load_assets():
     casa16=[casa16_img,350,150]
     casas.append(casa16)
     casas.append(casa16)
-    assets[casas] = casas
+    assets["casas"] = casas
     return assets
 

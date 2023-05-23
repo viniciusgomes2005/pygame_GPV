@@ -1,7 +1,7 @@
 import pygame
 import random
 from assets import *
-assets = load_assets()
+
 # Inicialização do Pygame
 pygame.init()
 
@@ -10,7 +10,7 @@ altura_janela = 1000
 largura_janela = 800
 window = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
-
+assets = load_assets()
 # Gera tela principal
 game = True
 

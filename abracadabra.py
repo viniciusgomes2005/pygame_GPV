@@ -1,7 +1,7 @@
 import pygame
 import random
 from assets import *
-
+assets = load_assets()
 # Inicialização do Pygame
 pygame.init()
 
@@ -57,8 +57,7 @@ def gerar_bloco_aleatorio(quadra_possivel):
 # Carrega imagens
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
-predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
-predio1_img = pygame.transform.scale(predio1_img, (300, 500))
+
 # Classe para representar uma quadra
 class Quadra(pygame.sprite.Sprite):
     def __init__(self, img, x, y, speedx, speedy):
@@ -89,8 +88,6 @@ class casa(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.rect.y +=self.speedy
 
-predio2=[predio1_img,350,150]
-casas=[predio2]*36
 class Player(pygame.sprite.Sprite):
     def __init__(self,anim):
         pygame.sprite.Sprite.__init__(self)
@@ -120,7 +117,7 @@ for i in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
         quarteirao = Quadra(quarteirao_img, x, y,0,0)
-        predio1=gerar_bloco_aleatorio(casas)
+        predio1=gerar_bloco_aleatorio(assets)
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)

@@ -31,9 +31,9 @@ for i in range(1,9):
     Player_Normal_Anim.append(Player_Run_img)
 for i in range(1,8):
     # Os arquivos de animação são numerados de 00 a 10
-    Player_Ataca = 'assets/Sprites/Player_ataca{}.png'.format(i)
-    Player_Ataca_img = pygame.image.load(Player_Run).convert_alpha()
-    Player_Ataca_img = pygame.transform.scale(Player_Run_img, (120, 130))
+    Player_Ataca = 'assets/Sprites/Player_atacar{}.png'.format(i)
+    Player_Ataca_img = pygame.image.load(Player_Ataca).convert_alpha()
+    Player_Ataca_img = pygame.transform.scale(Player_Ataca_img, (120, 130))
     Player_Normal_Anim.append(Player_Ataca_img)
 ###########################  GRUPOS  ################################
 
@@ -87,7 +87,7 @@ class casa(pygame.sprite.Sprite):
         self.rect.y +=self.speedy
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,anim):
+    def __init__(self,anim,move):
         pygame.sprite.Sprite.__init__(self)
         self.frame=0
         self.anim=anim
@@ -97,33 +97,40 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (largura_janela/2, altura_janela/ 2)
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
+        self.move=move #1=sim 2=não
     def update(self):
         now=pygame.time.get_ticks()
         elapsed_ticks= now - self.last_update
-        if quarteirao.speedx==0 and quarteirao.speedy==0:
+        if self.move==2:
             if elapsed_ticks>self.frame_ticks:
                 self.last_update=now
                 self.frame+=1
                 if self.frame >= 10:
                     self.frame=0
                 self.img=self.anim[self.frame]
-        elif quarteirao.speedx!=0 or quarteirao.speedy!=0:
+        elif self.move==1:
             if elapsed_ticks>self.frame_ticks:
+                if self.frame<10:
+                    self.frame=10
+                else:
+                    self.frame+=1
                 self.last_update=now
-                self.frame+=1
                 if self.frame == 18:
                     self.frame=10
                 self.img=self.anim[self.frame]
-    def ataca(self):
-        now=pygame.time.get_ticks()
-        elapsed_ticks= now - self.last_update
-        if elapsed_ticks>self.frame_ticks:
-            self.last_update=now
-            self.frame+=1
-            if self.frame >= 26:
-                self.frame=18
-            self.img=self.anim[self.frame]
-Player_Grupo.add(Player(Player_Normal_Anim))
+        elif self.move==3: 
+            print('atacar')
+            if elapsed_ticks>self.frame_ticks:
+                if self.frame<18:
+                    self.frame=18
+                else:
+                    self.frame+=1
+                self.last_update=now
+                if self.frame >= 25:
+                    self.frame=18
+                self.img=self.anim[self.frame]
+P1=Player(Player_Normal_Anim,2)
+Player_Grupo.add(P1)
 
 predio2=[predio1_img,350,150]
 casas=[predio2]*36
@@ -150,27 +157,31 @@ while game:
             game = False
         elif event.type == pygame.KEYDOWN :
             if event.key == pygame.K_w:
+                P1.move=1
                 direcao=1
                 for quadra in mapa:
                     quadra.speedy += 2
                     antigo=direcao
-            elif event.key == pygame.K_s :
+            elif event.key == pygame.K_s :                
                 direcao=3
+                P1.move=1
                 for quadra in mapa:
                     quadra.speedy -= 2
                     antigo=direcao
-            elif event.key == pygame.K_a :   
+            elif event.key == pygame.K_a :                   
                 direcao=2
+                P1.move=1
                 for quadra in mapa:
                     quadra.speedx += 2
                     antigo=direcao
-            elif event.key == pygame.K_d :
+            elif event.key == pygame.K_d :                
                 direcao=4
+                P1.move=1
                 for quadra in mapa:
                     quadra.speedx -= 2
                     antigo=direcao
             elif event.key == pygame.K_SPACE:
-                Player(Player_Normal_Anim).ataca()
+                P1.move=3
         elif event.type == pygame.KEYUP :
             if event.key == pygame.K_w :
                 for quadra in mapa:
@@ -184,8 +195,10 @@ while game:
             elif event.key == pygame.K_d :
                 for quadra in mapa:
                     quadra.speedx = 0
+    if quarteirao.speedx==0 and quarteirao.speedy==0:
+        P1.move=2
     mapa.update() # Atualiza os sprites do mapa
-    Player_Grupo.update() # Atualiza os sprites do Player
+    P1.update() # Atualiza os sprites do Player
 
     hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
     if hits!= {}:

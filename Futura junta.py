@@ -12,7 +12,7 @@ largura_janela = 800
 window = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 #####################  SPRITES  ################################
-
+assets=load_assets()
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()

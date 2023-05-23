@@ -13,6 +13,12 @@ Player_largura=45
 Player_altura=55
 Zumbi_largura=45
 Zumbie_altura=55
+Arma_largura=20
+Arma_atura=20
+Munição_altura=20
+Munição_largura=20
+Item_raro_altura=20
+Item_raro_largura=20
 
 INIT=0
 GAME=1

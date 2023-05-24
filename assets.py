@@ -9,6 +9,7 @@ def load_assets():
     casas = []
     Player_Normal_Anim=[]
     Zombie_Anim=[]
+    Vida_Anim=[]
 
     for i in range(1,11):
         Player_Normal = 'assets/Sprites/Player_Normal{}.png'.format(i)
@@ -45,9 +46,16 @@ def load_assets():
         Zombie_Morre_img = pygame.image.load(Zombie_Morre).convert_alpha()
         Zombie_Morre_img = pygame.transform.scale(Zombie_Morre_img, (120, 130))
         Zombie_Anim.append(Zombie_Morre_img)
+    
+    for i in range(10,0,-1):
+        Vida= 'assets/Sprites/VIDA_{}.png'.format(i)
+        Vida_img= pygame.image.load(Vida).convert_alpha()
+        Vida_img = pygame.transform.scale(Vida_img, (800, 100))
+        Vida_Anim.append(Vida_img)
 
     assets['Player_Normal_Anim'] = Player_Normal_Anim
     assets['Zombie_Anim']=Zombie_Anim
+    assets['Vida_Anim']=Vida_Anim
 
     predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
     predio1_img = pygame.transform.scale(predio1_img, (300, 500))

@@ -163,6 +163,29 @@ Player_Grupo.add(P1)
 Z1 = Zombie(assets['Zombie_Anim'],1 ,1,0,0)
 Zombie_Grupo.add(Z1)
 
+class Vida(pygame.sprite.Sprite):
+    def __init__(self, anim):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        self.frame= 100
+        self.anim=anim
+        self.img=self.anim[self.frame//100]
+        self.rect = self.img.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
+        self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.frame_ticks=400
+    def update(self, vida_seg):
+        now=pygame.time.get_ticks()
+        elapsed_ticks= now - self.last_update
+        self.frame=vida_seg
+        if elapsed_ticks>self.frame_ticks:
+            self.last_update=now
+            if self.frame == 11:
+                game = False
+                return game
+            self.img=self.anim[self.frame//100]
+
 for i in range(6):
     for j in range(6):
         x = j * 1000 - 3600
@@ -180,6 +203,9 @@ clock = pygame.time.Clock()
 FPS = 60
 direcao=0
 game = True
+vida=Vida(assets['Vida_Anim'])
+vida_seg=100
+
 while game:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -249,11 +275,17 @@ while game:
     Z1.update()
     Z1.Animacao()
     
-    hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
-    if hits!= {}:
+    hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
+    if hits_Construcoes!= {}:
         for quadra in mapa:
             quadra.speedx= 0
             quadra.speedy=0
+    
+    Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+    if Hit_do_zumbi!={} and P1.move!=Facada:
+        vida_seg-=1
+    vida.update(vida_seg)
+
     mapa.update()
     Player_Grupo.update()
 
@@ -261,7 +293,7 @@ while game:
     mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
     window.blit(Z1.img, Z1.rect)
-
+    window.blit(vida.img, vida.rect)
     pygame.display.update() # Atualiza a janela
 
 pygame.quit() # Finalização

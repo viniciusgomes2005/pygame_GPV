@@ -131,7 +131,7 @@ def load_assets():
     casa15=[casa15_img,200,120]
     casas.append(casa15)
     casa16_img = pygame.image.load('assets/Sprites/casa16.png').convert_alpha()
-    casa16_img = pygame.transform.scale(casa16_img, (600, 500))
+    casa16_img = pygame.transform.scale(casa16_img, (400, 300))
     casa16=[casa16_img,200,120]
     casas.append(casa16)
     casas.append(casa16)

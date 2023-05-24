@@ -18,7 +18,6 @@ pygame.display.set_caption('Pygame')
 assets=load_assets()
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
-# Posições das quadras
 
 ################################  GRUPOS  ####################################
 
@@ -114,6 +113,9 @@ class Player(pygame.sprite.Sprite):
                 if self.frame >= 25:
                     self.frame=18
                 self.img=self.anim[self.frame]
+                if self.frame==24:
+                    self.move=1
+                    self.frame=10
 P1=Player(assets['Player_Normal_Anim'],2)
 Player_Grupo.add(P1)
 

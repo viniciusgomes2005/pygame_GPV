@@ -1,50 +1,38 @@
+
 import pygame
 import random
+from assets import *
 
 # Inicialização do Pygame
 pygame.init()
-#############################  JANELA  ###############################
+
+######################  JANELA  #############################
+
 # Dimensões da janela
 altura_janela = 1000
 largura_janela = 800
 window = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 
-############################  SPRITES  #################################
-
+#####################  SPRITES  ################################
+assets=load_assets()
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
-predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
-predio1_img = pygame.transform.scale(predio1_img, (300, 500))
-Player_Normal_Anim=[]
-for i in range(1,11): #1,2,3,4,5,6,7,8,9,10
-    # Os arquivos de animação são numerados de 00 a 10
-    Player_Normal = 'assets/Sprites/Player_Normal{}.png'.format(i)
-    Player_Normal_img = pygame.image.load(Player_Normal).convert_alpha()
-    Player_Normal_img = pygame.transform.scale(Player_Normal_img, (120, 130))
-    Player_Normal_Anim.append(Player_Normal_img)
-for i in range(1,9):#11,12,13,14,15,16,17,18
-    # Os arquivos de animação são numerados de 00 a 10
-    Player_Run = 'assets/Sprites/Player_Run{}.png'.format(i)
-    Player_Run_img = pygame.image.load(Player_Run).convert_alpha()
-    Player_Run_img = pygame.transform.scale(Player_Run_img, (120, 130))
-    Player_Normal_Anim.append(Player_Run_img)
-for i in range(1,8): #19,20,21,22,23,24,25
-    # Os arquivos de animação são numerados de 00 a 10
-    Player_Ataca = 'assets/Sprites/Player_atacar{}.png'.format(i)
-    Player_Ataca_img = pygame.image.load(Player_Ataca).convert_alpha()
-    Player_Ataca_img = pygame.transform.scale(Player_Ataca_img, (120, 130))
-    Player_Normal_Anim.append(Player_Ataca_img)
-###########################  GRUPOS  ################################
+zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
+zombie_img = pygame.transform.scale(zombie_img, (120, 130))
+Parado=1
+Correndo=2
+Facada=3
+################################  GRUPOS  ####################################
 
 Player_Grupo= pygame.sprite.Group()
 Construcoes_Grupo= pygame.sprite.Group()
+Zombie_Grupo = pygame.sprite.Group()
 mapa = pygame.sprite.Group()
-# Posições das quadras
-posicoes_quadra = [[-3600, 3500], [-3600, 2700], [-3600, 1900], [-3600, 1100], [-3600, 300], [-3600, -500],[-3600, -1300], [-3600, -2100], [-3600, -2900], [-3600, -3700], [-2600, 3500], [-2600, 2700],[-2600, 1900], [-2600, 1100], [-2600, 300], [-2600, -500], [-2600, -1300], [-2600, -2100],[-2600, -2900], [-2600, -3700], [-1600, 3500], [-1600, 2700], [-1600, 1900], [-1600, 1100],[-1600, 300], [-1600, -500], [-1600, -1300], [-1600, -2100], [-1600, -2900], [-1600, -3700],[-600, 3500], [-600, 2700], [-600, 1900], [-600, 1100], [-600, 300], [-600, -500], [-600, -1300],[-600, -2100], [-600, -2900], [-600, -3700], [400, 3500], [400, 2700], [400, 1900], [400, 1100],[400, 300], [400, -500], [400, -1300], [400, -2100], [400, -2900], [400, -3700], [1400, 3500],[1400, 2700], [1400, 1900], [1400, 1100], [1400, 300], [1400, -500], [1400, -1300], [1400, -2100],[1400, -2900], [1400, -3700], [2400, 3500], [2400, 2700], [2400, 1900], [2400, 1100], [2400, 300],[2400, -500], [2400, -1300], [2400, -2100], [2400, -2900], [2400, -3700], [3400, 3500],[3400, 2700], [3400, 1900], [3400, 1100], [3400, 300], [3400, -500], [3400, -1300], [3400, -2100],[3400, -2900], [3400, -3700], [4400, 3500], [4400, 2700], [4400, 1900], [4400, 1100], [4400, 300], [4400, -500], [4400, -1300],[4400, -2100], [4400, -2900], [4400, -3700], [5400, 3500], [5400, 2700], [5400, 1900], [5400, 1100],[5400, 300], [5400, -500], [5400, -1300], [5400, -2100], [5400, -2900], [5400, -3700]]
 
-mapa_largura = 1000 * 6  # Largura total do mapa
-mapa_altura = 800 * 6  # Altura total do mapa
+posicoes_quadra = posicoes_quadra = [[-3600, 3500], [-3600, 2700], [-3600, 1900], [-3600, 1100], [-3600, 300], [-3600, -500],[-3600, -1300], [-3600, -2100], [-3600, -2900], [-3600, -3700], [-2600, 3500], [-2600, 2700],[-2600, 1900], [-2600, 1100], [-2600, 300], [-2600, -500], [-2600, -1300], [-2600, -2100],[-2600, -2900], [-2600, -3700], [-1600, 3500], [-1600, 2700], [-1600, 1900], [-1600, 1100],[-1600, 300], [-1600, -500], [-1600, -1300], [-1600, -2100], [-1600, -2900], [-1600, -3700],[-600, 3500], [-600, 2700], [-600, 1900], [-600, 1100], [-600, 300], [-600, -500], [-600, -1300],[-600, -2100], [-600, -2900], [-600, -3700], [400, 3500], [400, 2700], [400, 1900], [400, 1100],[400, 300], [400, -500], [400, -1300], [400, -2100], [400, -2900], [400, -3700], [1400, 3500],[1400, 2700], [1400, 1900], [1400, 1100], [1400, 300], [1400, -500], [1400, -1300], [1400, -2100],[1400, -2900], [1400, -3700], [2400, 3500], [2400, 2700], [2400, 1900], [2400, 1100], [2400, 300],[2400, -500], [2400, -1300], [2400, -2100], [2400, -2900], [2400, -3700], [3400, 3500],[3400, 2700], [3400, 1900], [3400, 1100], [3400, 300], [3400, -500], [3400, -1300], [3400, -2100],[3400, -2900], [3400, -3700], [4400, 3500], [4400, 2700], [4400, 1900], [4400, 1100], [4400, 300], [4400, -500], [4400, -1300],[4400, -2100], [4400, -2900], [4400, -3700], [5400, 3500], [5400, 2700], [5400, 1900], [5400, 1100],[5400, 300], [5400, -500], [5400, -1300], [5400, -2100], [5400, -2900], [5400, -3700]]
+mapa_largura = 800 * 6  # Largura total do mapa
+mapa_altura = 600 * 6  # Altura total do mapa
 map_data = [[None] * 6 for _ in range(6)]  # Matriz 6x6 para representar o mapa
 
 quadra_possivel = []
@@ -56,7 +44,7 @@ def gerar_bloco_aleatorio(quadra_possivel):
     del quadra_possivel[quadra_possivel.index(bloco_aleatorio)]
     return bloco_aleatorio
 
-############################  CLASSES  ########################################
+###############################  CLASSES  #################################
 
 class Quadra(pygame.sprite.Sprite): # Classe para representar uma quadra
     def __init__(self, img, x, y, speedx, speedy):
@@ -72,6 +60,7 @@ class Quadra(pygame.sprite.Sprite): # Classe para representar uma quadra
         self.rect.x += self.speedx
         self.rect.y += self.speedy
 
+    
 class casa(pygame.sprite.Sprite):
     def __init__(self, img, quadra_x,quadra_y,x,y):
         pygame.sprite.Sprite.__init__(self)
@@ -85,9 +74,7 @@ class casa(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
         self.rect.y +=self.speedy
-Parado=1
-Correndo=2
-Facada=3
+
 class Player(pygame.sprite.Sprite):
     def __init__(self,anim,move):
         pygame.sprite.Sprite.__init__(self)
@@ -130,23 +117,54 @@ class Player(pygame.sprite.Sprite):
                 if self.frame==24:
                     self.move=Correndo
                     self.frame=10
-P1=Player(Player_Normal_Anim, Parado)
-Player_Grupo.add(P1)
 
-predio2=[predio1_img,350,150]
-casas=[predio2]*36
+class Zombie(pygame.sprite.Sprite):
+    def __init__(self, img, speedx, speedy,speedxmap,speedymap):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.img = img
+        self.mask = pygame.mask.from_surface(self.img)
+
+        self.rect = self.img.get_rect()
+        self.rect.centerx =  400
+        self.rect.bottom = 200
+        self.speedy = speedy
+        self.speedx = speedx
+        self.speedxmap = speedxmap
+        self.speedymap = speedymap
+    def move(self):
+        # Move em x
+        if self.rect.x > P1.rect.x:
+            self.rect.x -= self.speedx
+        elif self.rect.x < P1.rect.x:
+            self.rect.x += self.speedx
+        # Move em y
+        if self.rect.y < P1.rect.y:
+            self.rect.y += self.speedy
+        elif self.rect.y > P1.rect.y:
+            self.rect.y -= self.speedy
+    def update(self):
+        self.rect.x += self.speedxmap
+        self.rect.y += self.speedymap
+P1=Player(assets['Player_Normal_Anim'],Parado)
+Player_Grupo.add(P1)
+Z1 = Zombie(zombie_img,1 ,1,0,0)
+Zombie_Grupo.add(Z1)
+
 for i in range(6):
     for j in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
         quarteirao = Quadra(quarteirao_img, x, y,0,0)
-        predio1=gerar_bloco_aleatorio(casas)
+        predio1=gerar_bloco_aleatorio(assets["casas"])
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)
 
-################ LOOP PRINCIPAL##########################
+##########################  LOOP PRINCIPAL ###############################
 
+# Loop principal
 clock = pygame.time.Clock()
 FPS = 60
 direcao=0
@@ -163,43 +181,61 @@ while game:
                 for quadra in mapa:
                     quadra.speedy += 2
                     antigo=direcao
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedymap +=2
             elif event.key == pygame.K_s :                
                 direcao=3
                 P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedy -= 2
                     antigo=direcao
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedymap -=2
             elif event.key == pygame.K_a :                   
                 direcao=2
                 P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedx += 2
                     antigo=direcao
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedxmap +=2
             elif event.key == pygame.K_d :                
                 direcao=4
                 P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedx -= 2
                     antigo=direcao
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedxmap -=2
             elif event.key == pygame.K_SPACE:
                 P1.move=Facada
         elif event.type == pygame.KEYUP :
             if event.key == pygame.K_w :
                 for quadra in mapa:
                     quadra.speedy = 0
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedymap -=2
             elif event.key == pygame.K_s :
                 for quadra in mapa:
                     quadra.speedy = 0
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedymap +=2
             elif event.key == pygame.K_a :
                 for quadra in mapa:
                     quadra.speedx = 0
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedxmap -=2
             elif event.key == pygame.K_d :
                 for quadra in mapa:
                     quadra.speedx = 0
+                for zumbi in Zombie_Grupo:
+                    zumbi.speedxmap +=2
     if quarteirao.speedx==0 and quarteirao.speedy==0:
         P1.move=Parado
     mapa.update() # Atualiza os sprites do mapa
-    P1.update() # Atualiza os sprites do Player
+    Player_Grupo.update() # Atualiza os sprites do Player
+    Z1.move()
+    Z1.update()
 
     hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
     if hits!= {}:
@@ -209,10 +245,12 @@ while game:
     mapa.update()
     Player_Grupo.update()
 
-    window.fill((255, 255, 255))  
+    window.fill((0, 0, 0))  
     mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
+    window.blit(Z1.img, Z1.rect)
 
     pygame.display.update() # Atualiza a janela
 
 pygame.quit() # Finalização
+    

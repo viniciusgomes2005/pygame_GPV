@@ -129,6 +129,9 @@ class Player(pygame.sprite.Sprite):
                 if self.frame >= 25:
                     self.frame=18
                 self.img=self.anim[self.frame]
+                if self.frame==24:
+                    self.move=1
+                    self.frame=10
 P1=Player(Player_Normal_Anim,2)
 Player_Grupo.add(P1)
 

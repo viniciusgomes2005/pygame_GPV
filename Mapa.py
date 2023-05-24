@@ -5,8 +5,8 @@ import random
 pygame.init()
 #############################  JANELA  ###############################
 # Dimensões da janela
-altura_janela = 1000
-largura_janela = 800
+altura_janela = 800
+largura_janela = 600
 window = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 
@@ -35,6 +35,8 @@ for i in range(1,8):
     Player_Ataca_img = pygame.image.load(Player_Ataca).convert_alpha()
     Player_Ataca_img = pygame.transform.scale(Player_Ataca_img, (120, 130))
     Player_Normal_Anim.append(Player_Ataca_img)
+zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
+zombie_img = pygame.transform.scale(zombie_img, (120, 130))
 ###########################  GRUPOS  ################################
 
 Player_Grupo= pygame.sprite.Group()
@@ -82,6 +84,7 @@ class casa(pygame.sprite.Sprite):
         self.rect.y = quadra_y+y
         self.speedx = 0
         self.speedy = 0
+
     def update(self):
         self.rect.x += self.speedx
         self.rect.y +=self.speedy
@@ -98,6 +101,7 @@ class Player(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
         self.move=move #1=sim 2=não 3=ataque
+
     def update(self):
         now=pygame.time.get_ticks()
         elapsed_ticks= now - self.last_update
@@ -131,9 +135,36 @@ class Player(pygame.sprite.Sprite):
                 if self.img== self.anim[24]:
                     self.move=1
                     self.frame=10
+
+class Zombie(pygame.sprite.Sprite):
+    def __init__(self, img, speed):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.img = img
+        self.mask = pygame.mask.from_surface(self.img)
+
+        self.rect = self.img.get_rect()
+        self.rect.centerx =  400
+        self.rect.bottom = 200
+        self.speed = speed
+    def update(self):
+        # Move em x
+        if self.rect.x > P1.rect.x:
+            self.rect.x -= self.speed
+        elif self.rect.x < P1.rect.y:
+            self.rect.x += self.speed
+        # Move em y
+        if self.rect.y < P1.rect.y:
+            self.rect.y += self.speed
+        elif self.rect.y > P1.rect.y:
+            self.rect.y -= self.speed
+
 P1=Player(Player_Normal_Anim,2)
 Player_Grupo.add(P1)
 
+Z1 = Zombie(zombie_img,0)
+mapa.add(Z1)
 predio2=[predio1_img,350,150]
 casas=[predio2]*36
 for i in range(6):
@@ -208,7 +239,7 @@ while game:
             quadra.speedx= 0
             quadra.speedy=0
     mapa.update()
-    Player_Grupo.update()
+    Player_Grupo.update() 
 
     window.fill((255, 255, 255))  
     mapa.draw(window)

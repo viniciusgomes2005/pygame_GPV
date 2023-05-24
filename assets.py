@@ -24,64 +24,64 @@ def load_assets():
     igreja=[igreja_img,350,150]
     casas.append(igreja)
     casa1_img = pygame.image.load('assets/Sprites/casa1.png').convert_alpha()
-    casa1_img = pygame.transform.scale(casa1_img, (300, 500))
-    casa1=[casa1_img,350,150]
+    casa1_img = pygame.transform.scale(casa1_img, (600, 500))
+    casa1=[casa1_img,200,120]
     casas.append(casa1)
     casas.append(casa1)
     casa2_img = pygame.image.load('assets/Sprites/casa2.png').convert_alpha()
-    casa2_img = pygame.transform.scale(casa2_img, (300, 500))
-    casa2=[casa2_img,350,150]
+    casa2_img = pygame.transform.scale(casa2_img, (600, 500))
+    casa2=[casa2_img,200,120]
     casas.append(casa2)
     casas.append(casa2)
     casa3_img = pygame.image.load('assets/Sprites/casa3.png').convert_alpha()
-    casa3_img = pygame.transform.scale(casa3_img, (300, 500))
-    casa3=[casa3_img,350,150]
+    casa3_img = pygame.transform.scale(casa3_img, (600, 500))
+    casa3=[casa3_img,200,120]
     casas.append(casa3)
     casas.append(casa3)
     casa4_img = pygame.image.load('assets/Sprites/casa4.png').convert_alpha()
-    casa4_img = pygame.transform.scale(casa4_img, (300, 500))
-    casa4=[casa4_img,350,150]
+    casa4_img = pygame.transform.scale(casa4_img, (600, 500))
+    casa4=[casa4_img,200,120]
     casas.append(casa4)
     casas.append(casa4)
     supermercado_img = pygame.image.load('assets/Sprites/super-mercado.png').convert_alpha()
-    supermercado_img = pygame.transform.scale(supermercado_img, (300, 500))
-    supermercado=[supermercado_img,350,150]
+    supermercado_img = pygame.transform.scale(supermercado_img, (600, 500))
+    supermercado=[supermercado_img,200,120]
     casas.append(supermercado)
     predio2_img = pygame.image.load('assets/Sprites/Prédio 2.png').convert_alpha()
-    predio2_img = pygame.transform.scale(predio2_img, (300, 500))
+    predio2_img = pygame.transform.scale(predio2_img, (200,120))
     predio2=[predio2_img,350,150]
     casas.append(predio2)
     casas.append(predio2)
     predio3_img = pygame.image.load('assets/Sprites/Prédio 3.png').convert_alpha()
-    predio3_img = pygame.transform.scale(predio3_img, (300, 500))
-    predio3=[predio3_img,350,150]
+    predio3_img = pygame.transform.scale(predio3_img, (600, 500))
+    predio3=[predio3_img,200,120]
     casas.append(predio3)	
     casas.append(predio3)
     pizzaria_img = pygame.image.load('assets/Sprites/pizzaria.png').convert_alpha()
-    pizzaria_img = pygame.transform.scale(pizzaria_img, (300, 500))
-    pizzaria=[pizzaria_img,350,150]
+    pizzaria_img = pygame.transform.scale(pizzaria_img, (600, 550))
+    pizzaria=[pizzaria_img,200,150]
     casas.append(pizzaria)
     farmacia_img = pygame.image.load('assets/Sprites/farmacia.png').convert_alpha()
-    farmacia_img = pygame.transform.scale(farmacia_img, (300, 500))
-    farmacia=[farmacia_img,350,150]
+    farmacia_img = pygame.transform.scale(farmacia_img, (600, 500))
+    farmacia=[farmacia_img,200,120]
     casas.append(farmacia)
     escola_img = pygame.image.load('assets/Sprites/escola.png').convert_alpha()
-    escola_img = pygame.transform.scale(escola_img, (300, 500))
-    escola=[escola_img,350,150]
+    escola_img = pygame.transform.scale(escola_img, (600, 500))
+    escola=[escola_img,200,120]
     casas.append(escola)
     casa5_img = pygame.image.load('assets/Sprites/casa5.png').convert_alpha()
-    casa5_img = pygame.transform.scale(casa5_img, (300, 500))
-    casa5=[casa5_img,350,150]
+    casa5_img = pygame.transform.scale(casa5_img, (600, 500))
+    casa5=[casa5_img,200,120]
     casas.append(casa5)
     casas.append(casa5)
     casa6_img = pygame.image.load('assets/Sprites/casa6.png').convert_alpha()
-    casa6_img = pygame.transform.scale(casa6_img, (300, 500))
-    casa6=[casa6_img,350,150]
+    casa6_img = pygame.transform.scale(casa6_img, (520, 500))
+    casa6=[casa6_img,240,120]
     casas.append(casa6)
     casas.append(casa6)
     casa7_img = pygame.image.load('assets/Sprites/casa7.png').convert_alpha()
-    casa7_img = pygame.transform.scale(casa7_img, (300, 500))
-    casa7=[casa7_img,350,150]
+    casa7_img = pygame.transform.scale(casa7_img, (800, 650))
+    casa7=[casa7_img,120,20]
     casas.append(casa7)
     casa8_img = pygame.image.load('assets/Sprites/casa8.png').convert_alpha()
     casa8_img = pygame.transform.scale(casa8_img, (800, 625))

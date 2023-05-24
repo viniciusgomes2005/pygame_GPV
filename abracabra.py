@@ -119,20 +119,22 @@ class Player(pygame.sprite.Sprite):
                     self.frame=10
 
 class Zombie(pygame.sprite.Sprite):
-    def __init__(self, img, speedx, speedy,speedxmap,speedymap):
+    def __init__(self, anim, speedx, speedy,speedxmap,speedymap):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-
-        self.img = img
-        self.mask = pygame.mask.from_surface(self.img)
-
+        self.frame=0
+        self.anim=anim
+        self.img=self.anim[self.frame]
+        self.mask= pygame.mask.from_surface(self.img)
         self.rect = self.img.get_rect()
-        self.rect.centerx =  400
-        self.rect.bottom = 200
+        self.rect.centerx =  500
+        self.rect.bottom = 400
         self.speedy = speedy
         self.speedx = speedx
         self.speedxmap = speedxmap
         self.speedymap = speedymap
+        self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.frame_ticks=50
     def move(self):
         # Move em x
         if self.rect.x > P1.rect.x:
@@ -147,9 +149,18 @@ class Zombie(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedxmap
         self.rect.y += self.speedymap
+    def Animacao(self):
+        now=pygame.time.get_ticks()
+        elapsed_ticks= now - self.last_update
+        if elapsed_ticks>self.frame_ticks:
+            self.last_update=now
+            self.frame+=1
+            if self.frame >= 10:
+                self.frame=0
+            self.img=self.anim[self.frame]
 P1=Player(assets['Player_Normal_Anim'],Parado)
 Player_Grupo.add(P1)
-Z1 = Zombie(zombie_img,1 ,1,0,0)
+Z1 = Zombie(assets['Zombie_Anim'],1 ,1,0,0)
 Zombie_Grupo.add(Z1)
 
 for i in range(6):
@@ -236,7 +247,8 @@ while game:
     Player_Grupo.update() # Atualiza os sprites do Player
     Z1.move()
     Z1.update()
-
+    Z1.Animacao()
+    
     hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
     if hits!= {}:
         for quadra in mapa:

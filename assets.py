@@ -9,38 +9,46 @@ def load_assets():
     casas = []
     Player_Normal_Anim=[]
     Zombie_Anim=[]
+
     for i in range(1,11):
-    # Os arquivos de animação são numerados de 00 a 10
         Player_Normal = 'assets/Sprites/Player_Normal{}.png'.format(i)
         Player_Normal_img = pygame.image.load(Player_Normal).convert_alpha()
         Player_Normal_img = pygame.transform.scale(Player_Normal_img, (120, 130))
         Player_Normal_Anim.append(Player_Normal_img)
+
     for i in range(1,9):
-    # Os arquivos de animação são numerados de 00 a 10
         Player_Run = 'assets/Sprites/Player_Run{}.png'.format(i)
         Player_Run_img = pygame.image.load(Player_Run).convert_alpha()
         Player_Run_img = pygame.transform.scale(Player_Run_img, (120, 130))
         Player_Normal_Anim.append(Player_Run_img)
+
     for i in range(1,8):
-    # Os arquivos de animação são numerados de 00 a 10
         Player_Ataca = 'assets/Sprites/Player_atacar{}.png'.format(i)
         Player_Ataca_img = pygame.image.load(Player_Ataca).convert_alpha()
         Player_Ataca_img = pygame.transform.scale(Player_Ataca_img, (120, 130))
         Player_Normal_Anim.append(Player_Ataca_img)
-    for i in range(1,11):
-    # Os arquivos de animação são numerados de 00 a 10
+
+    for i in range(1,11):#10
         Zombie_Run = 'assets/Sprites/Walk ({}).png'.format(i)
         Zombie_Run_img = pygame.image.load(Zombie_Run).convert_alpha()
         Zombie_Run_img = pygame.transform.scale(Zombie_Run_img, (120, 130))
         Zombie_Anim.append(Zombie_Run_img)
-    for i in range(1,8):
-    # Os arquivos de animação são numerados de 00 a 10
-        Zombie_Ataca = 'assets/Sprites/Dead ({}).png'.format(i)
+
+    for i in range(1,9):#11-18
+        Zombie_Ataca = 'assets/Sprites/Attack ({}).png'.format(i)
         Zombie_Ataca_img = pygame.image.load(Zombie_Ataca).convert_alpha()
         Zombie_Ataca_img = pygame.transform.scale(Zombie_Ataca_img, (120, 130))
         Zombie_Anim.append(Zombie_Ataca_img)
+
+    for i in range(1,13):#19-30
+        Zombie_Morre = 'assets/Sprites/Dead ({}).png'.format(i)
+        Zombie_Morre_img = pygame.image.load(Zombie_Morre).convert_alpha()
+        Zombie_Morre_img = pygame.transform.scale(Zombie_Morre_img, (120, 130))
+        Zombie_Anim.append(Zombie_Morre_img)
+
     assets['Player_Normal_Anim'] = Player_Normal_Anim
     assets['Zombie_Anim']=Zombie_Anim
+
     predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
     predio1_img = pygame.transform.scale(predio1_img, (300, 500))
     predio1=[predio1_img,350,150]

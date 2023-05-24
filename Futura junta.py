@@ -248,6 +248,7 @@ while game:
     Z1.move()
     Z1.update()
     Z1.Animacao()
+    
     hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
     if hits!= {}:
         for quadra in mapa:

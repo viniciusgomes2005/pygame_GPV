@@ -20,6 +20,9 @@ quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').conv
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
 zombie_img = pygame.transform.scale(zombie_img, (120, 130))
+Parado=1
+Correndo=2
+Facada=3
 ################################  GRUPOS  ####################################
 
 Player_Grupo= pygame.sprite.Group()
@@ -87,36 +90,32 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         now=pygame.time.get_ticks()
         elapsed_ticks= now - self.last_update
-        if self.move==2:
+        if self.move==Parado:
             if elapsed_ticks>self.frame_ticks:
                 self.last_update=now
                 self.frame+=1
                 if self.frame >= 10:
                     self.frame=0
                 self.img=self.anim[self.frame]
-        elif self.move==1:
+        elif self.move==Correndo:
             if elapsed_ticks>self.frame_ticks:
-                if self.frame<10:
+                if self.frame<10 or self.frame >= 17:
                     self.frame=10
                 else:
                     self.frame+=1
                 self.last_update=now
-                if self.frame == 18:
-                    self.frame=10
                 self.img=self.anim[self.frame]
-        elif self.move==3: 
+        elif self.move==Facada: 
             print('atacar')
             if elapsed_ticks>self.frame_ticks:
-                if self.frame<18:
+                if self.frame<18 or self.frame>=25:
                     self.frame=18
                 else:
                     self.frame+=1
                 self.last_update=now
-                if self.frame >= 25:
-                    self.frame=18
                 self.img=self.anim[self.frame]
                 if self.frame==24:
-                    self.move=1
+                    self.move=Correndo
                     self.frame=10
 
 class Zombie(pygame.sprite.Sprite):
@@ -177,7 +176,7 @@ while game:
             game = False
         elif event.type == pygame.KEYDOWN :
             if event.key == pygame.K_w:
-                P1.move=1
+                P1.move= Correndo
                 direcao=1
                 for quadra in mapa:
                     quadra.speedy += 2
@@ -186,7 +185,7 @@ while game:
                     zumbi.speedymap +=2
             elif event.key == pygame.K_s :                
                 direcao=3
-                P1.move=1
+                P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedy -= 2
                     antigo=direcao
@@ -194,7 +193,7 @@ while game:
                     zumbi.speedymap -=2
             elif event.key == pygame.K_a :                   
                 direcao=2
-                P1.move=1
+                P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedx += 2
                     antigo=direcao
@@ -202,14 +201,14 @@ while game:
                     zumbi.speedxmap +=2
             elif event.key == pygame.K_d :                
                 direcao=4
-                P1.move=1
+                P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedx -= 2
                     antigo=direcao
                 for zumbi in Zombie_Grupo:
                     zumbi.speedxmap -=2
             elif event.key == pygame.K_SPACE:
-                P1.move=3
+                P1.move=Facada
         elif event.type == pygame.KEYUP :
             if event.key == pygame.K_w :
                 for quadra in mapa:
@@ -232,7 +231,7 @@ while game:
                 for zumbi in Zombie_Grupo:
                     zumbi.speedxmap +=2
     if quarteirao.speedx==0 and quarteirao.speedy==0:
-        P1.move=2
+        P1.move=Parado
     mapa.update() # Atualiza os sprites do mapa
     Player_Grupo.update() # Atualiza os sprites do Player
     Z1.move()

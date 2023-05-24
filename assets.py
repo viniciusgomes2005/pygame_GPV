@@ -48,8 +48,8 @@ def load_assets():
     supermercado=[supermercado_img,200,120]
     casas.append(supermercado)
     predio2_img = pygame.image.load('assets/Sprites/Prédio 2.png').convert_alpha()
-    predio2_img = pygame.transform.scale(predio2_img, (200,120))
-    predio2=[predio2_img,350,150]
+    predio2_img = pygame.transform.scale(predio2_img, (600,500))
+    predio2=[predio2_img,200,120]
     casas.append(predio2)
     casas.append(predio2)
     predio3_img = pygame.image.load('assets/Sprites/Prédio 3.png').convert_alpha()

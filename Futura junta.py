@@ -147,25 +147,25 @@ while game:
                 P1.move=1
                 direcao=1
                 for quadra in mapa:
-                    quadra.speedy += 2
+                    quadra.speedy += 8
                     antigo=direcao
             elif event.key == pygame.K_s :                
                 direcao=3
                 P1.move=1
                 for quadra in mapa:
-                    quadra.speedy -= 2
+                    quadra.speedy -= 8
                     antigo=direcao
             elif event.key == pygame.K_a :                   
                 direcao=2
                 P1.move=1
                 for quadra in mapa:
-                    quadra.speedx += 2
+                    quadra.speedx += 8
                     antigo=direcao
             elif event.key == pygame.K_d :                
                 direcao=4
                 P1.move=1
                 for quadra in mapa:
-                    quadra.speedx -= 2
+                    quadra.speedx -= 8
                     antigo=direcao
             elif event.key == pygame.K_SPACE:
                 P1.move=3

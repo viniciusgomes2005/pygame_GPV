@@ -148,7 +148,7 @@ class Zombie(pygame.sprite.Sprite):
         self.rect.centerx =  400
         self.rect.bottom = 200
         self.speed = speed
-    def update(self):
+    def move(self):
         # Move em x
         if self.rect.x > P1.rect.x:
             self.rect.x -= self.speed
@@ -163,8 +163,8 @@ class Zombie(pygame.sprite.Sprite):
 P1=Player(Player_Normal_Anim,2)
 Player_Grupo.add(P1)
 
-Z1 = Zombie(zombie_img,0)
-mapa.add(Z1)
+Z1 = Zombie(zombie_img,2)
+
 predio2=[predio1_img,350,150]
 casas=[predio2]*36
 for i in range(6):
@@ -176,6 +176,7 @@ for i in range(6):
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)
+
 
 ################ LOOP PRINCIPAL##########################
 
@@ -232,6 +233,7 @@ while game:
         P1.move=2
     mapa.update() # Atualiza os sprites do mapa
     Player_Grupo.update() # Atualiza os sprites do Player
+    Z1.move()
 
     hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
     if hits!= {}:
@@ -244,6 +246,7 @@ while game:
     window.fill((255, 255, 255))  
     mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
+    window.blit(Z1.img, Z1.rect)
 
     pygame.display.update() # Atualiza a janela
 

@@ -147,7 +147,7 @@ class Zombie(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedxmap
         self.rect.y += self.speedymap
-P1=Player(assets['Player_Normal_Anim'],2)
+P1=Player(assets['Player_Normal_Anim'],Parado)
 Player_Grupo.add(P1)
 Z1 = Zombie(zombie_img,1 ,1,0,0)
 Zombie_Grupo.add(Z1)

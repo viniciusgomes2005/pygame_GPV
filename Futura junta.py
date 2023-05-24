@@ -5,12 +5,15 @@ from assets import *
 
 # Inicialização do Pygame
 pygame.init()
+
 ######################  JANELA  #############################
+
 # Dimensões da janela
 altura_janela = 1000
 largura_janela = 800
 window = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
+
 #####################  SPRITES  ################################
 assets=load_assets()
 quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
@@ -18,6 +21,7 @@ quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 # Posições das quadras
 
 ################################  GRUPOS  ####################################
+
 Player_Grupo= pygame.sprite.Group()
 Construcoes_Grupo= pygame.sprite.Group()
 mapa = pygame.sprite.Group()
@@ -37,6 +41,7 @@ def gerar_bloco_aleatorio(quadra_possivel):
     return bloco_aleatorio
 
 ###############################  CLASSES  #################################
+
 class Quadra(pygame.sprite.Sprite): # Classe para representar uma quadra
     def __init__(self, img, x, y, speedx, speedy):
         pygame.sprite.Sprite.__init__(self)
@@ -188,7 +193,7 @@ while game:
     mapa.update()
     Player_Grupo.update()
 
-    window.fill((255, 255, 255))  
+    window.fill((0, 0, 0))  
     mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
 

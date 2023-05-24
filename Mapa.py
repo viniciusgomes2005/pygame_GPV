@@ -1,102 +1,205 @@
-#################  IMPORTS  #######################
+# ===== Inicialização =====
+# ----- Importa e inicia pacotes
 import pygame
-import os
+import random
+
 
 pygame.init()
 
-Altura_janela = 600
-Largura_janela = 800
-window = pygame.display.set_mode(( Largura_janela, Altura_janela))
-pygame.display.set_caption('Pygame')
-################  SPRITES  ##################################################
-quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
-quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
-Player_Normal_Anim=[]
-for i in range(1,10):
-    # Os arquivos de animação são numerados de 00 a 10
-    filename = 'assets/Sprites/Player_Normal{}.png'.format(i)
-    img = pygame.image.load(filename).convert_alpha()
-    img = pygame.transform.scale(img, (120, 130))
-    Player_Normal_Anim.append(img)
-###############  Grupos  #####################################
-Mapa = pygame.sprite.Group()
-Player_Grupo= pygame.sprite.Group()
-###############  Mapa  #################################################
-class Quadra(pygame.sprite.Sprite):
-    def __init__(self, img, x, y, speedx, speedy):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = img # define imagem
-        self.rect = self.image.get_rect() #torna imagem em um retangulo
-        self.rect.x = x # X do canto superior esquerdo do retangulo
-        self.rect.y = y # Y do canto superior esquerdo do retangulo
-        self.speedx = speedx # VELOCIDADE DO PLAYER NO EIXO X
-        self.speedy = speedy # VELOCIDADE DO PLAYER NO EIXO Y
+# ----- Gera tela principal
+player_WIDTH = 120
+player_HEIGHT = 122
+WIDTH = 800
+HEIGHT = 600
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+player_img = pygame.image.load('assets/Sprites/Player_Normal1.png').convert_alpha()
+player_img = pygame.transform.scale(player_img, (player_WIDTH, player_HEIGHT))
 
-    def update(self):
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
 
-Posição_quadra = [[-3600, 3500], [-3600, 2700], [-3600, 1900], [-3600, 1100], [-3600, 300], [-3600, -500], [-3600, -1300],
-                  [-3600, -2100], [-3600, -2900], [-3600, -3700], [-2600, 3500], [-2600, 2700], [-2600, 1900], [-2600, 1100],
-                  [-2600, 300], [-2600, -500], [-2600, -1300], [-2600, -2100], [-2600, -2900], [-2600, -3700], [-1600, 3500],
-                  [-1600, 2700], [-1600, 1900], [-1600, 1100], [-1600, 300], [-1600, -500], [-1600, -1300], [-1600, -2100],
-                  [-1600, -2900], [-1600, -3700], [-600, 3500], [-600, 2700], [-600, 1900], [-600, 1100], [-600, 300],
-                  [-600, -500], [-600, -1300], [-600, -2100], [-600, -2900], [-600, -3700], [400, 3500], [400, 2700],
-                  [400, 1900], [400, 1100], [400, 300], [400, -500], [400, -1300], [400, -2100], [400, -2900], [400, -3700],
-                  [1400, 3500], [1400, 2700], [1400, 1900], [1400, 1100], [1400, 300], [1400, -500], [1400, -1300], [1400, -2100],
-                  [1400, -2900], [1400, -3700], [2400, 3500], [2400, 2700], [2400, 1900], [2400, 1100], [2400, 300], [2400, -500],
-                  [2400, -1300], [2400, -2100], [2400, -2900], [2400, -3700], [3400, 3500], [3400, 2700], [3400, 1900], [3400, 1100],
-                  [3400, 300], [3400, -500], [3400, -1300], [3400, -2100], [3400, -2900], [3400, -3700], [4400, 3500], [4400, 2700],
-                  [4400, 1900], [4400, 1100], [4400, 300], [4400, -500], [4400, -1300], [4400, -2100], [4400, -2900], [4400, -3700],
-                  [5400, 3500], [5400, 2700], [5400, 1900], [5400, 1100], [5400, 300], [5400, -500], [5400, -1300], [5400, -2100],
-                  [5400, -2900], [5400, -3700]]
 
-for posicao in Posição_quadra:
-    x = posicao[0]
-    y = posicao[1]
-    speedx = 0
-    speedy = 0  # Velocidade do movimento do fundo
-    quarteirao = Quadra(quarteirao_img, x, y, speedx, speedy)
-    Mapa.add(quarteirao)
-###################  Player  #######################
+zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
+zombie_img = pygame.transform.scale(zombie_img, (player_WIDTH, player_HEIGHT))
+
+bullet_img = pygame.image.load('assets/Sprites/VIDA_1.png').convert_alpha()
+
+
+pygame.display.set_caption('Hello World!')
+
+#gera class
+
+
 class Player(pygame.sprite.Sprite):
-    def __init__(self,anim):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.frame=0
-        self.anim=anim
-        self.img=self.anim[self.frame]
-        self.rect=self.img.get_rect()
-        self.rect.center = (Largura_janela / 2, Altura_janela / 2)
-        self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.frame_ticks=50
-        self.speedx = speedx # VELOCIDADE DO PLAYER NO EIXO X
-        self.speedy = speedy
+
+        self.image = img
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = WIDTH / 2
+        self.rect.bottom = HEIGHT - 10
+        self.speedx = 0
+        self.speedy = 0
+
     def update(self):
+        # Atualização da posição da nave
         self.rect.x += self.speedx
         self.rect.y += self.speedy
+
+        # Mantem dentro da tela
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+            
+    def atira(self):
+        #atira
+        new_bullet = Bullet(self.bullet_img, self.rect.top, self.rect.centerx)
+        self.all_sprites.add(new_bullet)
+        self.all_bullets.add(new_bullet)
+            
+class Zombie(pygame.sprite.Sprite):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.mask = pygame.mask.from_surface(self.image)
+
+        self.rect = self.image.get_rect()
+        self.rect.centerx = WIDTH / 2
+        self.rect.bottom = 200
+
+
+    def move(self, speed=3):
+        # Move em x
+        if self.rect.x > player.rect.x:
+            self.rect.x -= speed
+        elif self.rect.x < player.rect.y:
+            self.rect.x += speed
+        # Move em y
+        if self.rect.y < player.rect.y:
+            self.rect.y += speed
+        elif self.rect.y > player.rect.y:
+            self.rect.y -= speed
+            
+class Bullet(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, img, bottom, centerx):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+
+        # Coloca no lugar inicial 
+        self.rect.centerx = centerx
+        self.rect.bottom = bottom
+        self.speedy = 0 # velocidade
+        self.speedx = 0 
         
 
-Player_Grupo.add(Player(Player_Normal_Anim))
-game = True
-clock = pygame.time.Clock()
-FPS = 100
+    def update(self):
+        # A bala move
+        self.rect.y += self.speedy
+        self.rect.x += self.speedx
+        
 
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.bottom < 0:
+            self.kill()
+
+
+
+
+#  Inicia estruturas de dados
+game = True
+
+# aInicia assets
+image = pygame.image.load('assets/Sprites/background cortado.png').convert()
+image = pygame.transform.scale(image, (500, 600))
+
+#posiciona
+game = True
+# Variável para o ajuste de velocidade
+clock = pygame.time.Clock()
+FPS = 60
+
+# Criando um grupo
+all_sprites = pygame.sprite.Group()
+# Criando o jogador
+player = Player(player_img)
+all_sprites.add(player)
+#criando zombies
+zombie = Zombie(zombie_img)
+all_sprites.add(zombie)
+
+#grupo colisoes
+zombies = pygame.sprite.Group()
+zombies.add(zombie)
+
+all_bullets = pygame.sprite.Group()
+
+# ===== Loop principal =====
 while game:
     clock.tick(FPS)
-    
+    # ----- Trata eventos
     for event in pygame.event.get():
+        # ----- Verifica consequências
         if event.type == pygame.QUIT:
             game = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w:
-                    Player_Grupo.speedy += speedy
+            
+            
+            
+                # Verifica se apertou alguma tecla.
+        if event.type == pygame.KEYDOWN:
+            # Dependendo da tecla, altera a velocidade.
+            if event.key == pygame.K_LEFT:
+                player.speedx -= 4
+            if event.key == pygame.K_RIGHT:
+                player.speedx += 4
+            if event.key == pygame.K_UP:
+                player.speedy -= 4
+            if event.key == pygame.K_DOWN:
+                player.speedy += 4
+                
+            if event.key == pygame.K_SPACE:
+                player.shoot()
+                
+                
+        # Verifica se soltou alguma tecla.
+        if event.type == pygame.KEYUP:
+            # Dependendo da tecla, altera a velocidade.
+            if event.key == pygame.K_LEFT:
+                player.speedx += 4
+            if event.key == pygame.K_RIGHT:
+                player.speedx -= 4
+            if event.key == pygame.K_UP:
+                player.speedy += 4
+            if event.key == pygame.K_DOWN:
+                player.speedy -= 4
+        
+    zombie.move()
 
 
-    Mapa.update()
-    Player_Grupo.update()
-    window.fill((0, 0, 0))
-    Mapa.draw(window)
-    window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
-    pygame.display.update()
 
-pygame.quit()
+    # Atualiza estado do jogo
+    all_sprites.update()
+
+    # Verifica se houve colisão 
+    hits = pygame.sprite.spritecollide(player, zombies, True)
+    if len(hits)>0:
+        game = False
+        
+    #  Gera saídas
+    window.fill((0, 0, 0))  # Preenche com a cor branca
+    window.blit(image, (10, 10))
+
+    # Desenhando 
+    all_sprites.draw(window)
+
+    pygame.display.update()  # Mostra o novo frame para o jogador
+
+# Finalização
+pygame.quit() 
+

@@ -163,7 +163,7 @@ class Player(pygame.sprite.Sprite):
                         self.move=Correndo
                         self.direcao=2
                         self.frame=0
-    def shot(b_shoot):
+    def shot(self,b_shoot):
         new_bullet = Bullet(assets['bullet_img'], largura_janela+68, altura_janela+34, b_shoot)
         bullet_Grupo.add(new_bullet)
 

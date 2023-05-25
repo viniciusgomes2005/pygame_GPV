@@ -83,7 +83,11 @@ def load_assets():
     assets['Zombie_Anim']=Zombie_Anim
     assets['Vida_Anim']=Vida_Anim
     assets['Player_Normal_E_Anim']=Player_Normal_E_Anim
-    
+
+    bullet= 'assets/Sprites/bullet.png'
+    bullet_img= pygame.image.load(bullet).convert_alpha()
+    bullet_img = pygame.transform.scale(Vida_img, (10, 10))
+    assets['bullet_img']=bullet_img
     predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
     predio1_img = pygame.transform.scale(predio1_img, (300, 500))
     predio1=[predio1_img,350,150]

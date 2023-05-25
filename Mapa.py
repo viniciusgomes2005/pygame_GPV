@@ -171,7 +171,7 @@ class Vida(pygame.sprite.Sprite):
         self.anim=anim
         self.img=self.anim[self.frame//20]
         self.rect = self.img.get_rect()
-        self.rect.x = 0
+        self.rect.x = 600
         self.rect.y = 0
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=400

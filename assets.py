@@ -50,7 +50,7 @@ def load_assets():
     for i in range(10,0,-1):
         Vida= 'assets/Sprites/VIDA_{}.png'.format(i)
         Vida_img= pygame.image.load(Vida).convert_alpha()
-        Vida_img = pygame.transform.scale(Vida_img, (800, 100))
+        Vida_img = pygame.transform.scale(Vida_img, (400, 50))
         Vida_Anim.append(Vida_img)
 
     assets['Player_Normal_Anim'] = Player_Normal_Anim

@@ -23,6 +23,7 @@ zombie_img = pygame.transform.scale(zombie_img, (120, 130))
 Parado=1
 Correndo=2
 Facada=3
+Shot=4
 ################################  GRUPOS  ####################################
 
 Player_Grupo= pygame.sprite.Group()
@@ -139,10 +140,32 @@ class Player(pygame.sprite.Sprite):
                         self.move=Correndo
                         self.direcao=2
                         self.frame=0
-    def shot():
-        new_bullet = Bullet(bullet_img, largura_janela+68, altura_janela+34, )
-        self.all_sprites.add(new_bullet)
-        self.all_bullets.add(new_bullet)
+        elif self.move==Shot:
+            if elapsed_ticks>self.frame_ticks:
+                if self.direcao==1:
+                    if self.frame<25 or self.frame>=28:
+                        self.frame=25
+                    else:
+                        self.frame+=1
+                    self.last_update=now
+                    self.img=self.anim[self.frame]
+                    if self.frame==27:
+                        self.move=Correndo
+                        self.frame=10
+                elif self.direcao==2:
+                    if self.frame<15 or self.frame>18:
+                        self.frame=15
+                    else:
+                        self.frame+=1
+                    self.last_update=now
+                    self.img=self.anim2[self.frame]
+                    if self.frame==17:
+                        self.move=Correndo
+                        self.direcao=2
+                        self.frame=0
+    def shot(b_shoot):
+        new_bullet = Bullet(assets['bullet_img'], largura_janela+68, altura_janela+34, b_shoot)
+        bullet_Grupo.add(new_bullet)
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, anim, speedx, speedy,speedxmap,speedymap):
@@ -284,6 +307,13 @@ while game:
                     zumbi.speedxmap -=2
             elif event.key == pygame.K_SPACE:
                 P1.move=Facada
+            elif event.key== pygame.K_z:
+                P1.move=Shot
+                if P1.direcao==1:
+                    b_shoot=20
+                elif P1.direcao==2:
+                    b_shoot=-20
+                P1.shot(b_shoot)
         elif event.type == pygame.KEYUP :
             if event.key == pygame.K_w :
                 for quadra in mapa:
@@ -312,6 +342,8 @@ while game:
     Z1.move()
     Z1.update()
     Z1.Animacao()
+    if len(bullet_Grupo)!=0:
+        bullet_Grupo.update()
     
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
     if hits_Construcoes!= {}:

@@ -365,7 +365,7 @@ while game:
     if P1.move==Facada and Hit_do_Player!={}:
         Z1.kill()
     
-    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,False,True,pygame.sprite.collide_mask)
+    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,True,pygame.sprite.collide_mask)
     mapa.update()
     Player_Grupo.update()
     Z1.move()

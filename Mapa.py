@@ -301,14 +301,24 @@ while game:
         vida_seg+=1
     vida.update(vida_seg)
 
+
+    Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+    if P1.move==Facada and Hit_do_Player!={}:
+        Z1.kill()
+
     mapa.update()
     Player_Grupo.update()
+    Z1.move()
+    Z1.update()
+    Z1.Animacao()
 
     window.fill((0, 0, 0))  
     mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
-    window.blit(Z1.img, Z1.rect)
+    if len(Zombie_Grupo)>0:
+        window.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
     window.blit(vida.img, vida.rect)
+
     pygame.display.update() # Atualiza a janela
 
 pygame.quit() # Finalização

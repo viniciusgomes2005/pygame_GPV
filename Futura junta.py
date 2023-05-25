@@ -203,10 +203,8 @@ class Vida(pygame.sprite.Sprite):
         self.frame=vida_seg
         if elapsed_ticks>self.frame_ticks:
             self.last_update=now
-            if self.frame == 11:
-                game = False
-                return game
-            self.img=self.anim[self.frame//20]
+            if vida_seg<200:
+                self.img=self.anim[self.frame//20]
 
 for i in range(6):
     for j in range(6):
@@ -300,7 +298,8 @@ while game:
     if Hit_do_zumbi!={} and P1.move!=Facada:
         vida_seg+=1
     vida.update(vida_seg)
-
+    if vida_seg>200:
+        game=False
 
     Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if P1.move==Facada and Hit_do_Player!={}:
@@ -317,7 +316,8 @@ while game:
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
     if len(Zombie_Grupo)>0:
         window.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
-    window.blit(vida.img, vida.rect)
+    if vida_seg<=200:
+        window.blit(vida.img, vida.rect)
 
     pygame.display.update() # Atualiza a janela
 

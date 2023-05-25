@@ -42,6 +42,18 @@ def load_assets():
         Player_Ataca_img = pygame.image.load(Player_Ataca).convert_alpha()
         Player_Ataca_img = pygame.transform.scale(Player_Ataca_img, (120, 130))
         Player_Normal_E_Anim.append(Player_Ataca_img)
+    
+    for i in range(1,4):
+        Player_shot='assets/Sprites/Player_Shot{}.png'.format(i)
+        Player_shot_img= pygame.image.load(Player_shot).convert_alpha()
+        Player_shot_img= pygame.transform.scale(Player_shot_img, (120, 130))
+        Player_Normal_Anim.append(Player_Run_img)
+    
+    for i in range(1,4):
+        Player_shot='assets/Sprites/Player_i_Shot{}.png'.format(i)
+        Player_shot_i_img= pygame.image.load(Player_shot).convert_alpha()
+        Player_shot_i_img= pygame.transform.scale(Player_shot_i_img, (120, 130))
+        Player_Normal_E_Anim.append(Player_shot_i_img)
 
     for i in range(1,11):#10
         Zombie_Run = 'assets/Sprites/Walk ({}).png'.format(i)

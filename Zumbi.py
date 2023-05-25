@@ -12,7 +12,7 @@ player_HEIGHT = 122
 WIDTH = 800
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-player_img = pygame.image.load('assets/Sprites/Player_Normal1.png').convert_alpha()
+player_img = pygame.image.load('assets/Sprites/Player_Shot1.png').convert_alpha()
 player_img = pygame.transform.scale(player_img, (player_WIDTH, player_HEIGHT))
 
 
@@ -20,8 +20,8 @@ player_img = pygame.transform.scale(player_img, (player_WIDTH, player_HEIGHT))
 zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
 zombie_img = pygame.transform.scale(zombie_img, (player_WIDTH, player_HEIGHT))
 
-bullet_img = pygame.image.load('assets/Sprites/VIDA_1.png').convert_alpha()
-
+bullet_img = pygame.image.load('assets/Sprites/icone_bala.png').convert_alpha()
+bullet_img  =  pygame.transform.scale(bullet_img, (10, 10 ))
 
 pygame.display.set_caption('Hello World!')
 
@@ -29,7 +29,7 @@ pygame.display.set_caption('Hello World!')
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img,bullet_img, all_sprites, all_bullets,):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
@@ -40,9 +40,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
         self.speedy = 0
+        self.bullet_img = bullet_img
+        self.all_sprites = all_sprites
+        self.all_bullets = all_bullets
+        self.direcao = "up"
 
     def update(self):
-        # Atualização da posição da nave
+        # Atualização da posição 
         self.rect.x += self.speedx
         self.rect.y += self.speedy
 
@@ -51,12 +55,15 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
+        
             
     def atira(self):
         #atira
-        new_bullet = Bullet(self.bullet_img, self.rect.top, self.rect.centerx)
-        self.all_sprites.add(new_bullet)
-        self.all_bullets.add(new_bullet)
+        
+        if self.direcao == "right":
+            new_bullet = Bulletxmais(self.bullet_img, self.rect.top+68, self.rect.centerx+34 )
+            self.all_sprites.add(new_bullet)
+            self.all_bullets.add(new_bullet)
             
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -65,9 +72,11 @@ class Zombie(pygame.sprite.Sprite):
 
         self.image = img
         self.mask = pygame.mask.from_surface(self.image)
+
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = 200
+
 
     def move(self, speed=3):
         # Move em x
@@ -81,31 +90,63 @@ class Zombie(pygame.sprite.Sprite):
         elif self.rect.y > player.rect.y:
             self.rect.y -= speed
             
-class Bullet(pygame.sprite.Sprite):
+class Bulletxmais(pygame.sprite.Sprite):
     # Construtor da classe.
-    def __init__(self, img, bottom, centerx):
+    def __init__(self, bullet_img, bottom, centerx):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = img
+        self.image = bullet_img
         self.rect = self.image.get_rect()
 
         # Coloca no lugar inicial 
         self.rect.centerx = centerx
         self.rect.bottom = bottom
-        self.speedy = 0 # velocidade
-        self.speedx = 0 
+        self.speedy = 20# velocidade
+        self.speedx = 20
         
 
     def update(self):
         # A bala move
-        self.rect.y += self.speedy
         self.rect.x += self.speedx
+        
+
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.bottom < 0 :
+            self.kill()
+            
+class Bulletymais(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, bullet_img, bottom, centerx):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = bullet_img
+        self.rect = self.image.get_rect()
+
+        # Coloca no lugar inicial 
+        self.rect.centerx = centerx
+        self.rect.bottom = bottom
+        self.speedy = 20# velocidade
+        
+        
+
+    def update(self):
+        # A bala move
+        self.rect.y -= self.speedy
         
 
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()
+            
+
+            
+            
+
+
+
+
 
 #  Inicia estruturas de dados
 game = True
@@ -121,9 +162,10 @@ clock = pygame.time.Clock()
 FPS = 60
 
 # Criando um grupo
+all_bullets = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 # Criando o jogador
-player = Player(player_img)
+player = Player(player_img,bullet_img,all_sprites, all_bullets)
 all_sprites.add(player)
 #criando zombies
 zombie = Zombie(zombie_img)
@@ -132,8 +174,8 @@ all_sprites.add(zombie)
 #grupo colisoes
 zombies = pygame.sprite.Group()
 zombies.add(zombie)
+ 
 
-all_bullets = pygame.sprite.Group()
 
 # ===== Loop principal =====
 while game:
@@ -150,29 +192,34 @@ while game:
         if event.type == pygame.KEYDOWN:
             # Dependendo da tecla, altera a velocidade.
             if event.key == pygame.K_LEFT:
-                player.speedx -= 4
+                player.speedx -= 6
             if event.key == pygame.K_RIGHT:
-                player.speedx += 4
+                player.speedx += 6
+                player.direcao = "right"
             if event.key == pygame.K_UP:
-                player.speedy -= 4
+                player.speedy -= 6
             if event.key == pygame.K_DOWN:
-                player.speedy += 4
+                player.speedy += 6
+                player.direcao = "up"
                 
             if event.key == pygame.K_SPACE:
-                player.atira ()
+                player.atira()
                 
                 
         # Verifica se soltou alguma tecla.
         if event.type == pygame.KEYUP:
             # Dependendo da tecla, altera a velocidade.
             if event.key == pygame.K_LEFT:
-                player.speedx += 4
+                player.speedx += 6
             if event.key == pygame.K_RIGHT:
-                player.speedx -= 4
+                player.speedx -= 6
+                player.direcao = "right"
             if event.key == pygame.K_UP:
-                player.speedy += 4
+                player.speedy += 6
+                player.direcao = "up"
             if event.key == pygame.K_DOWN:
-                player.speedy -= 4
+                player.speedy -= 6
+                
         
     zombie.move()
 
@@ -182,9 +229,12 @@ while game:
     all_sprites.update()
 
     # Verifica se houve colisão 
-    hits = pygame.sprite.spritecollide(player, zombies, True)
+    hits = pygame.sprite.spritecollide(player, zombies, True,pygame.sprite.collide_mask)
     if len(hits)>0:
         game = False
+        
+    hits2 = pygame.sprite.groupcollide(all_bullets, zombies, True,pygame.sprite.collide_mask)
+
         
     #  Gera saídas
     window.fill((0, 0, 0))  # Preenche com a cor branca

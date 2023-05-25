@@ -76,10 +76,11 @@ class casa(pygame.sprite.Sprite):
         self.rect.y +=self.speedy
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,anim,move):
+    def __init__(self,anim,anim2,move, direcao):
         pygame.sprite.Sprite.__init__(self)
         self.frame=0
         self.anim=anim
+        self.anim2=anim2
         self.img=self.anim[self.frame]
         self.mask= pygame.mask.from_surface(self.img)
         self.rect=self.img.get_rect()
@@ -87,6 +88,7 @@ class Player(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
         self.move=move #1=sim 2=não
+        self.direcao=direcao
     def update(self):
         now=pygame.time.get_ticks()
         elapsed_ticks= now - self.last_update
@@ -99,24 +101,43 @@ class Player(pygame.sprite.Sprite):
                 self.img=self.anim[self.frame]
         elif self.move==Correndo:
             if elapsed_ticks>self.frame_ticks:
-                if self.frame<10 or self.frame >= 17:
-                    self.frame=10
-                else:
-                    self.frame+=1
-                self.last_update=now
-                self.img=self.anim[self.frame]
+                if self.direcao==1:
+                    if self.frame<10 or self.frame >= 17:
+                        self.frame=10
+                    else:
+                        self.frame+=1
+                    self.last_update=now
+                    self.img=self.anim[self.frame]
+                elif self.direcao == 2:
+                    if self.frame>=7:
+                        self.frame=0
+                    else:
+                        self.frame+=1
+                    self.last_update=now
+                    self.img=self.anim2[self.frame]
         elif self.move==Facada: 
-            print('atacar')
             if elapsed_ticks>self.frame_ticks:
-                if self.frame<18 or self.frame>=25:
-                    self.frame=18
-                else:
-                    self.frame+=1
-                self.last_update=now
-                self.img=self.anim[self.frame]
-                if self.frame==24:
-                    self.move=Correndo
-                    self.frame=10
+                if self.direcao==1:
+                    if self.frame<18 or self.frame>=25:
+                        self.frame=18
+                    else:
+                        self.frame+=1
+                    self.last_update=now
+                    self.img=self.anim[self.frame]
+                    if self.frame==24:
+                        self.move=Correndo
+                        self.frame=10
+                elif self.direcao==2:
+                    if self.frame<8 or self.frame>14:
+                        self.frame=8
+                    else:
+                        self.frame+=1
+                    self.last_update=now
+                    self.img=self.anim2[self.frame]
+                    if self.frame==14:
+                        self.move=Correndo
+                        self.direcao=2
+                        self.frame=0
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, anim, speedx, speedy,speedxmap,speedymap):
@@ -158,10 +179,34 @@ class Zombie(pygame.sprite.Sprite):
             if self.frame >= 10:
                 self.frame=0
             self.img=self.anim[self.frame]
-P1=Player(assets['Player_Normal_Anim'],Parado)
+direcao=1
+P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
 Player_Grupo.add(P1)
 Z1 = Zombie(assets['Zombie_Anim'],1 ,1,0,0)
 Zombie_Grupo.add(Z1)
+
+class Vida(pygame.sprite.Sprite):
+    def __init__(self, anim):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+        self.frame= 0
+        self.anim=anim
+        self.img=self.anim[self.frame//20]
+        self.rect = self.img.get_rect()
+        self.rect.x = 600
+        self.rect.y = 0
+        self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.frame_ticks=400
+    def update(self, vida_seg):
+        now=pygame.time.get_ticks()
+        elapsed_ticks= now - self.last_update
+        self.frame=vida_seg
+        if elapsed_ticks>self.frame_ticks:
+            self.last_update=now
+            if self.frame == 11:
+                game = False
+                return game
+            self.img=self.anim[self.frame//20]
 
 for i in range(6):
     for j in range(6):
@@ -178,8 +223,10 @@ for i in range(6):
 # Loop principal
 clock = pygame.time.Clock()
 FPS = 60
-direcao=0
 game = True
+vida=Vida(assets['Vida_Anim'])
+vida_seg=0
+
 while game:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -188,34 +235,28 @@ while game:
         elif event.type == pygame.KEYDOWN :
             if event.key == pygame.K_w:
                 P1.move= Correndo
-                direcao=1
                 for quadra in mapa:
                     quadra.speedy += 2
-                    antigo=direcao
                 for zumbi in Zombie_Grupo:
                     zumbi.speedymap +=2
-            elif event.key == pygame.K_s :                
-                direcao=3
+            elif event.key == pygame.K_s :
                 P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedy -= 2
-                    antigo=direcao
                 for zumbi in Zombie_Grupo:
                     zumbi.speedymap -=2
             elif event.key == pygame.K_a :                   
-                direcao=2
+                P1.direcao=2
                 P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedx += 2
-                    antigo=direcao
                 for zumbi in Zombie_Grupo:
                     zumbi.speedxmap +=2
             elif event.key == pygame.K_d :                
-                direcao=4
+                P1.direcao=1
                 P1.move=Correndo
                 for quadra in mapa:
                     quadra.speedx -= 2
-                    antigo=direcao
                 for zumbi in Zombie_Grupo:
                     zumbi.speedxmap -=2
             elif event.key == pygame.K_SPACE:
@@ -249,18 +290,34 @@ while game:
     Z1.update()
     Z1.Animacao()
     
-    hits= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões
-    if hits!= {}:
+    hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
+    if hits_Construcoes!= {}:
         for quadra in mapa:
             quadra.speedx= 0
             quadra.speedy=0
+    
+    Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+    if Hit_do_zumbi!={} and P1.move!=Facada:
+        vida_seg+=1
+    vida.update(vida_seg)
+
+
+    Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+    if P1.move==Facada and Hit_do_Player!={}:
+        Z1.kill()
+
     mapa.update()
     Player_Grupo.update()
+    Z1.move()
+    Z1.update()
+    Z1.Animacao()
 
     window.fill((0, 0, 0))  
     mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
-    window.blit(Z1.img, Z1.rect)
+    if len(Zombie_Grupo)>0:
+        window.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
+    window.blit(vida.img, vida.rect)
 
     pygame.display.update() # Atualiza a janela
 

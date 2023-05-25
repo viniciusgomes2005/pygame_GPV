@@ -167,9 +167,9 @@ class Vida(pygame.sprite.Sprite):
     def __init__(self, anim):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.frame= 100
+        self.frame= 0
         self.anim=anim
-        self.img=self.anim[self.frame//100]
+        self.img=self.anim[self.frame//20]
         self.rect = self.img.get_rect()
         self.rect.x = 0
         self.rect.y = 0
@@ -184,7 +184,7 @@ class Vida(pygame.sprite.Sprite):
             if self.frame == 11:
                 game = False
                 return game
-            self.img=self.anim[self.frame//100]
+            self.img=self.anim[self.frame//20]
 
 for i in range(6):
     for j in range(6):
@@ -204,7 +204,7 @@ FPS = 60
 direcao=0
 game = True
 vida=Vida(assets['Vida_Anim'])
-vida_seg=100
+vida_seg=0
 
 while game:
     clock.tick(FPS)
@@ -283,7 +283,7 @@ while game:
     
     Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if Hit_do_zumbi!={} and P1.move!=Facada:
-        vida_seg-=1
+        vida_seg+=1
     vida.update(vida_seg)
 
     mapa.update()

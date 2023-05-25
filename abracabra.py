@@ -11,7 +11,7 @@ pygame.init()
 # Dimensões da janela
 altura_janela = 1000
 largura_janela = 800
-window = pygame.display.set_mode((altura_janela, largura_janela))
+windowdow = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 
 #####################  SPRITES  ################################
@@ -257,10 +257,10 @@ while game:
     mapa.update()
     Player_Grupo.update()
 
-    window.fill((0, 0, 0))  
-    mapa.draw(window)
-    window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
-    window.blit(Z1.img, Z1.rect)
+    windowdow.fill((0, 0, 0))  
+    mapa.draw(windowdow)
+    windowdow.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
+    windowdow.blit(Z1.img, Z1.rect)
 
     pygame.display.update() # Atualiza a janela
 

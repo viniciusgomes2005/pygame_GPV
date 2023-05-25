@@ -11,7 +11,7 @@ pygame.init()
 # Dimensões da janela
 altura_janela = 1000
 largura_janela = 800
-window = pygame.display.set_mode((altura_janela, largura_janela))
+windowdow = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 
 #####################  SPRITES  ################################
@@ -223,103 +223,111 @@ for i in range(6):
 # Loop principal
 clock = pygame.time.Clock()
 FPS = 60
-game = True
+menu = True 
 vida=Vida(assets['Vida_Anim'])
 vida_seg=0
-
-while game:
-    clock.tick(FPS)
+while menu:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game = False
-        elif event.type == pygame.KEYDOWN :
-            if event.key == pygame.K_w:
-                P1.move= Correndo
+        game = False
+        def menu_():
+            windowdow.fill(0,0,0)
+            Menu = quarteirao_img
+            windowdow.blit(Menu,(0,0))
+            pygame.display.flip()
+        Tela = menu_()
+        while game:
+            clock.tick(FPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game = False
+                elif event.type == pygame.KEYDOWN :
+                    if event.key == pygame.K_w:
+                        P1.move= Correndo
+                        for quadra in mapa:
+                            quadra.speedy += 2
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedymap +=2
+                    elif event.key == pygame.K_s :
+                        P1.move=Correndo
+                        for quadra in mapa:
+                            quadra.speedy -= 2
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedymap -=2
+                    elif event.key == pygame.K_a :                   
+                        P1.direcao=2
+                        P1.move=Correndo
+                        for quadra in mapa:
+                            quadra.speedx += 2
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedxmap +=2
+                    elif event.key == pygame.K_d :                
+                        P1.direcao=1
+                        P1.move=Correndo
+                        for quadra in mapa:
+                            quadra.speedx -= 2
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedxmap -=2
+                    elif event.key == pygame.K_SPACE:
+                        P1.move=Facada
+                elif event.type == pygame.KEYUP :
+                    if event.key == pygame.K_w :
+                        for quadra in mapa:
+                            quadra.speedy = 0
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedymap -=2
+                    elif event.key == pygame.K_s :
+                        for quadra in mapa:
+                            quadra.speedy = 0
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedymap +=2
+                    elif event.key == pygame.K_a :
+                        for quadra in mapa:
+                            quadra.speedx = 0
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedxmap -=2
+                    elif event.key == pygame.K_d :
+                        for quadra in mapa:
+                            quadra.speedx = 0
+                        for zumbi in Zombie_Grupo:
+                            zumbi.speedxmap +=2
+            if quarteirao.speedx==0 and quarteirao.speedy==0:
+                P1.move=Parado
+            mapa.update() # Atualiza os sprites do mapa
+            Player_Grupo.update() # Atualiza os sprites do Player
+            Z1.move()
+            Z1.update()
+            Z1.Animacao()
+
+            hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
+            if hits_Construcoes!= {}:
                 for quadra in mapa:
-                    quadra.speedy += 2
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedymap +=2
-            elif event.key == pygame.K_s :
-                P1.move=Correndo
-                for quadra in mapa:
-                    quadra.speedy -= 2
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedymap -=2
-            elif event.key == pygame.K_a :                   
-                P1.direcao=2
-                P1.move=Correndo
-                for quadra in mapa:
-                    quadra.speedx += 2
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap +=2
-            elif event.key == pygame.K_d :                
-                P1.direcao=1
-                P1.move=Correndo
-                for quadra in mapa:
-                    quadra.speedx -= 2
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap -=2
-            elif event.key == pygame.K_SPACE:
-                P1.move=Facada
-        elif event.type == pygame.KEYUP :
-            if event.key == pygame.K_w :
-                for quadra in mapa:
-                    quadra.speedy = 0
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedymap -=2
-            elif event.key == pygame.K_s :
-                for quadra in mapa:
-                    quadra.speedy = 0
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedymap +=2
-            elif event.key == pygame.K_a :
-                for quadra in mapa:
-                    quadra.speedx = 0
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap -=2
-            elif event.key == pygame.K_d :
-                for quadra in mapa:
-                    quadra.speedx = 0
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap +=2
-    if quarteirao.speedx==0 and quarteirao.speedy==0:
-        P1.move=Parado
-    mapa.update() # Atualiza os sprites do mapa
-    Player_Grupo.update() # Atualiza os sprites do Player
-    Z1.move()
-    Z1.update()
-    Z1.Animacao()
-    
-    hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
-    if hits_Construcoes!= {}:
-        for quadra in mapa:
-            quadra.speedx= 0
-            quadra.speedy=0
-    
-    Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
-    if Hit_do_zumbi!={} and P1.move!=Facada:
-        vida_seg+=1
-    vida.update(vida_seg)
+                    quadra.speedx= 0
+                    quadra.speedy=0
+
+            Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+            if Hit_do_zumbi!={} and P1.move!=Facada:
+                vida_seg+=1
+            vida.update(vida_seg)
 
 
-    Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
-    if P1.move==Facada and Hit_do_Player!={}:
-        Z1.kill()
+            Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+            if P1.move==Facada and Hit_do_Player!={}:
+                Z1.kill()
 
-    mapa.update()
-    Player_Grupo.update()
-    Z1.move()
-    Z1.update()
-    Z1.Animacao()
+            mapa.update()
+            Player_Grupo.update()
+            Z1.move()
+            Z1.update()
+            Z1.Animacao()
 
-    window.fill((0, 0, 0))  
-    mapa.draw(window)
-    window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
-    if len(Zombie_Grupo)>0:
-        window.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
-    window.blit(vida.img, vida.rect)
+            windowdow.fill((0, 0, 0))  
+            mapa.draw(windowdow)
+            windowdow.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
+            if len(Zombie_Grupo)>0:
+                windowdow.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
+            windowdow.blit(vida.img, vida.rect)
 
-    pygame.display.update() # Atualiza a janela
+            pygame.display.update() # Atualiza a janela
 
 pygame.quit() # Finalização
     

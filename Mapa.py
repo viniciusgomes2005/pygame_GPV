@@ -11,7 +11,7 @@ pygame.init()
 # Dimensões da janela
 altura_janela = 1000
 largura_janela = 800
-window = pygame.display.set_mode((altura_janela, largura_janela))
+windowdow = pygame.display.set_mode((altura_janela, largura_janela))
 pygame.display.set_caption('Pygame')
 
 #####################  SPRITES  ################################
@@ -367,12 +367,12 @@ while game:
     Z1.update()
     Z1.Animacao()
 
-    window.fill((0, 0, 0))  
-    mapa.draw(window)
-    window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
+    windowdow.fill((0, 0, 0))  
+    mapa.draw(windowdow)
+    windowdow.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
     if len(Zombie_Grupo)>0:
-        window.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
-    window.blit(vida.img, vida.rect)
+        windowdow.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
+    windowdow.blit(vida.img, vida.rect)
 
     pygame.display.update() # Atualiza a janela
 

@@ -9,9 +9,9 @@ pygame.init()
 ######################  JANELA  #############################
 
 # Dimensões da janela
-altura_janela = 1000
+altura_janela = 600
 largura_janela = 800
-window = pygame.display.set_mode((altura_janela, largura_janela))
+window = pygame.display.set_mode(( largura_janela,altura_janela))
 pygame.display.set_caption('Pygame')
 
 #####################  SPRITES  ################################
@@ -86,7 +86,7 @@ class Player(pygame.sprite.Sprite):
         self.img=self.anim[self.frame]
         self.mask= pygame.mask.from_surface(self.img)
         self.rect=self.img.get_rect()
-        self.rect.center = (largura_janela/2, altura_janela/ 2)
+        self.rect.center = (largura_janela/2,altura_janela/2)
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
         self.move=move #1=sim 2=não
@@ -128,6 +128,7 @@ class Player(pygame.sprite.Sprite):
                     self.img=self.anim[self.frame]
                     if self.frame==24:
                         self.move=Correndo
+                        self.direcao=1
                         self.frame=10
                 elif self.direcao==2:
                     if self.frame<8 or self.frame>14:
@@ -149,11 +150,12 @@ class Player(pygame.sprite.Sprite):
                         self.frame+=1
                     self.last_update=now
                     self.img=self.anim[self.frame]
-                    if self.frame==27:
+                    if self.frame>=27:
                         self.move=Correndo
+                        self.direcao=1
                         self.frame=10
                 elif self.direcao==2:
-                    if self.frame<15 or self.frame>18:
+                    if self.frame<15 or self.frame>19:
                         self.frame=15
                     else:
                         self.frame+=1
@@ -164,7 +166,7 @@ class Player(pygame.sprite.Sprite):
                         self.direcao=2
                         self.frame=0
     def shot(self,b_shoot):
-        new_bullet = Bullet(assets['bullet_img'], largura_janela+68, altura_janela+34, b_shoot)
+        new_bullet = Bullet(assets['bullet_img'],  altura_janela/2-40, largura_janela/2-20, b_shoot)
         bullet_Grupo.add(new_bullet)
 
 class Zombie(pygame.sprite.Sprite):
@@ -210,13 +212,14 @@ class Zombie(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
     # Construtor da classe.
-    def __init__(self, bullet_img, bottom, centerx, b_speed):
+    def __init__(self, bullet_img, y, x, b_speed):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.image = bullet_img
-        self.rect = self.image.get_rect()
-        self.rect.centerx = centerx
-        self.rect.bottom = bottom
+        self.img = bullet_img
+        self.rect = self.img.get_rect()
+        self.mask= pygame.mask.from_surface(self.img)
+        self.rect.x = x
+        self.rect.y = y
         self.speedx = b_speed
 
     def update(self):
@@ -239,7 +242,7 @@ class Vida(pygame.sprite.Sprite):
         self.anim=anim
         self.img=self.anim[self.frame//20]
         self.rect = self.img.get_rect()
-        self.rect.x = 600
+        self.rect.x = largura_janela-400
         self.rect.y = 0
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=400
@@ -311,7 +314,7 @@ while game:
                 P1.move=Shot
                 if P1.direcao==1:
                     b_shoot=20
-                elif P1.direcao==2:
+                if P1.direcao==2:
                     b_shoot=-20
                 P1.shot(b_shoot)
         elif event.type == pygame.KEYUP :
@@ -355,12 +358,14 @@ while game:
     if Hit_do_zumbi!={} and P1.move!=Facada:
         vida_seg+=1
     vida.update(vida_seg)
-
+    if vida_seg>200:
+        game=False
 
     Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if P1.move==Facada and Hit_do_Player!={}:
         Z1.kill()
-
+    
+    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,False,True,pygame.sprite.collide_mask)
     mapa.update()
     Player_Grupo.update()
     Z1.move()
@@ -372,6 +377,8 @@ while game:
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
     if len(Zombie_Grupo)>0:
         window.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
+    if len(bullet_Grupo)!=0:
+        window.blit(bullet_Grupo.sprites()[0].img, bullet_Grupo.sprites()[0].rect)
     window.blit(vida.img, vida.rect)
 
     pygame.display.update() # Atualiza a janela

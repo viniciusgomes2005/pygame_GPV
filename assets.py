@@ -47,7 +47,7 @@ def load_assets():
         Player_shot='assets/Sprites/Player_Shot{}.png'.format(i)
         Player_shot_img= pygame.image.load(Player_shot).convert_alpha()
         Player_shot_img= pygame.transform.scale(Player_shot_img, (120, 130))
-        Player_Normal_Anim.append(Player_Run_img)
+        Player_Normal_Anim.append(Player_shot_img)
     
     for i in range(1,4):
         Player_shot='assets/Sprites/Player_i_Shot{}.png'.format(i)
@@ -86,7 +86,7 @@ def load_assets():
 
     bullet= 'assets/Sprites/bullet.png'
     bullet_img= pygame.image.load(bullet).convert_alpha()
-    bullet_img = pygame.transform.scale(Vida_img, (10, 10))
+    bullet_img = pygame.transform.scale(bullet_img, (100, 100))
     assets['bullet_img']=bullet_img
     predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
     predio1_img = pygame.transform.scale(predio1_img, (300, 500))

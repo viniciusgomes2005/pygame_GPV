@@ -9,8 +9,8 @@ pygame.init()
 ######################  JANELA  #############################
 
 # Dimensões da janela
-altura_janela = 600
-largura_janela = 800
+altura_janela = 800
+largura_janela = 1000
 window = pygame.display.set_mode(( largura_janela,altura_janela))
 pygame.display.set_caption('Pygame')
 
@@ -31,6 +31,7 @@ Construcoes_Grupo= pygame.sprite.Group()
 Zombie_Grupo = pygame.sprite.Group()
 mapa = pygame.sprite.Group()
 bullet_Grupo = pygame.sprite.Group()
+Personagens=pygame.sprite.Group()
 
 posicoes_quadra = posicoes_quadra = [[-3600, 3500], [-3600, 2700], [-3600, 1900], [-3600, 1100], [-3600, 300], [-3600, -500],[-3600, -1300], [-3600, -2100], [-3600, -2900], [-3600, -3700], [-2600, 3500], [-2600, 2700],[-2600, 1900], [-2600, 1100], [-2600, 300], [-2600, -500], [-2600, -1300], [-2600, -2100],[-2600, -2900], [-2600, -3700], [-1600, 3500], [-1600, 2700], [-1600, 1900], [-1600, 1100],[-1600, 300], [-1600, -500], [-1600, -1300], [-1600, -2100], [-1600, -2900], [-1600, -3700],[-600, 3500], [-600, 2700], [-600, 1900], [-600, 1100], [-600, 300], [-600, -500], [-600, -1300],[-600, -2100], [-600, -2900], [-600, -3700], [400, 3500], [400, 2700], [400, 1900], [400, 1100],[400, 300], [400, -500], [400, -1300], [400, -2100], [400, -2900], [400, -3700], [1400, 3500],[1400, 2700], [1400, 1900], [1400, 1100], [1400, 300], [1400, -500], [1400, -1300], [1400, -2100],[1400, -2900], [1400, -3700], [2400, 3500], [2400, 2700], [2400, 1900], [2400, 1100], [2400, 300],[2400, -500], [2400, -1300], [2400, -2100], [2400, -2900], [2400, -3700], [3400, 3500],[3400, 2700], [3400, 1900], [3400, 1100], [3400, 300], [3400, -500], [3400, -1300], [3400, -2100],[3400, -2900], [3400, -3700], [4400, 3500], [4400, 2700], [4400, 1900], [4400, 1100], [4400, 300], [4400, -500], [4400, -1300],[4400, -2100], [4400, -2900], [4400, -3700], [5400, 3500], [5400, 2700], [5400, 1900], [5400, 1100],[5400, 300], [5400, -500], [5400, -1300], [5400, -2100], [5400, -2900], [5400, -3700]]
 mapa_largura = 800 * 6  # Largura total do mapa
@@ -170,7 +171,7 @@ class Player(pygame.sprite.Sprite):
         bullet_Grupo.add(new_bullet)
 
 class Zombie(pygame.sprite.Sprite):
-    def __init__(self, anim, speedx, speedy,speedxmap,speedymap):
+    def __init__(self, anim, speedx, speedy,speedxmap,speedymap,x,y):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
         self.frame=0
@@ -178,20 +179,23 @@ class Zombie(pygame.sprite.Sprite):
         self.img=self.anim[self.frame]
         self.mask= pygame.mask.from_surface(self.img)
         self.rect = self.img.get_rect()
-        self.rect.centerx =  500
-        self.rect.bottom = 400
+        self.rect.x =  x
+        self.rect.y = y
         self.speedy = speedy
         self.speedx = speedx
         self.speedxmap = speedxmap
         self.speedymap = speedymap
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
+        self.direcao_z=1
     def move(self):
         # Move em x
         if self.rect.x > P1.rect.x:
             self.rect.x -= self.speedx
+            self.direcao_z=2
         elif self.rect.x < P1.rect.x:
             self.rect.x += self.speedx
+            self.direcao_z=1
         # Move em y
         if self.rect.y < P1.rect.y:
             self.rect.y += self.speedy
@@ -204,11 +208,20 @@ class Zombie(pygame.sprite.Sprite):
         now=pygame.time.get_ticks()
         elapsed_ticks= now - self.last_update
         if elapsed_ticks>self.frame_ticks:
-            self.last_update=now
-            self.frame+=1
-            if self.frame >= 10:
-                self.frame=0
-            self.img=self.anim[self.frame]
+            if self.direcao_z==1:
+                self.last_update=now
+                if self.frame >= 10:
+                    self.frame=0
+                else:
+                    self.frame+=1
+                self.img=self.anim[self.frame]
+            elif self.direcao_z==2:
+                self.last_update=now
+                if self.frame<10 or self.frame>=19:
+                    self.frame=10
+                else:
+                    self.frame+=1
+                self.img=self.anim[self.frame]
 
 class Bullet(pygame.sprite.Sprite):
     # Construtor da classe.
@@ -227,12 +240,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         if self.rect.x < 0  or self.rect.x>800: # Se o tiro passar do inicio da tela, morre.
             self.kill()
-
-direcao=1
-P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
-Player_Grupo.add(P1)
-Z1 = Zombie(assets['Zombie_Anim'],1 ,1,0,0)
-Zombie_Grupo.add(Z1)
 
 class Vida(pygame.sprite.Sprite):
     def __init__(self, anim):
@@ -256,6 +263,15 @@ class Vida(pygame.sprite.Sprite):
                 game = False
                 return game
             self.img=self.anim[self.frame//20]
+direcao=1
+P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
+Player_Grupo.add(P1)
+Personagens.add(P1)
+for i in range (20):
+    variavel=random.randint(0,len(posicoes_quadra))
+    Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
+    Zombie_Grupo.add(Z)
+    Personagens.add(Z)
 
 for i in range(6):
     for j in range(6):
@@ -275,7 +291,7 @@ FPS = 60
 game = True
 vida=Vida(assets['Vida_Anim'])
 vida_seg=0
-
+Zumbis_Mortos=0
 while game:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -342,9 +358,10 @@ while game:
         P1.move=Parado
     mapa.update() # Atualiza os sprites do mapa
     Player_Grupo.update() # Atualiza os sprites do Player
-    Z1.move()
-    Z1.update()
-    Z1.Animacao()
+    for zumbi in Zombie_Grupo:
+        zumbi.move()
+        zumbi.update()
+        zumbi.Animacao()
     if len(bullet_Grupo)!=0:
         bullet_Grupo.update()
     
@@ -353,30 +370,37 @@ while game:
         for quadra in mapa:
             quadra.speedx= 0
             quadra.speedy=0
-    
     Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if Hit_do_zumbi!={} and P1.move!=Facada:
         vida_seg+=1
     vida.update(vida_seg)
     if vida_seg>200:
         game=False
-
     Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if P1.move==Facada and Hit_do_Player!={}:
-        Z1.kill()
-    
-    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,True,pygame.sprite.collide_mask)
+        for i in Hit_do_Player.values():
+            for i2 in i:
+                i2.kill()
+        Zumbis_Mortos+=1
+    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+    if Hit_da_Bala!={}:
+        for i in Hit_da_Bala.values():
+            for i2 in i:
+                i2.kill()
+        Zumbis_Mortos+=1
     mapa.update()
     Player_Grupo.update()
-    Z1.move()
-    Z1.update()
-    Z1.Animacao()
+    for zumbi in Zombie_Grupo:
+        zumbi.move()
+        zumbi.update()
+        zumbi.Animacao()
 
     window.fill((0, 0, 0))  
     mapa.draw(window)
     window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
     if len(Zombie_Grupo)>0:
-        window.blit(Zombie_Grupo.sprites()[0].img, Zombie_Grupo.sprites()[0].rect)
+        for i in range(len(Zombie_Grupo)):
+            window.blit(Zombie_Grupo.sprites()[i].img, Zombie_Grupo.sprites()[i].rect)
     if len(bullet_Grupo)!=0:
         window.blit(bullet_Grupo.sprites()[0].img, bullet_Grupo.sprites()[0].rect)
     window.blit(vida.img, vida.rect)

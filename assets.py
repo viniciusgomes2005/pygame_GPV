@@ -78,7 +78,12 @@ def load_assets():
         Vida_img= pygame.image.load(Vida).convert_alpha()
         Vida_img = pygame.transform.scale(Vida_img, (400, 50))
         Vida_Anim.append(Vida_img)
-
+    for i in range(1,11):
+        zumbi='assets/Sprites/Walk2_({}).png'.format(i)
+        zumbi_img = pygame.image.load(zumbi).convert_alpha()
+        zumbi_img=pygame.transform.scale(zumbi_img, (120, 130))
+        Zombie_Anim.append(zumbi_img)
+    
     assets['Player_Normal_Anim'] = Player_Normal_Anim
     assets['Zombie_Anim']=Zombie_Anim
     assets['Vida_Anim']=Vida_Anim
@@ -86,7 +91,7 @@ def load_assets():
 
     bullet= 'assets/Sprites/bullet.png'
     bullet_img= pygame.image.load(bullet).convert_alpha()
-    bullet_img = pygame.transform.scale(bullet_img, (100, 100))
+    bullet_img = pygame.transform.scale(bullet_img, (50, 50))
     assets['bullet_img']=bullet_img
     predio1_img = pygame.image.load('assets/Sprites/predio1.png').convert_alpha()
     predio1_img = pygame.transform.scale(predio1_img, (300, 500))

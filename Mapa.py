@@ -247,7 +247,7 @@ class Vida(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.frame= 0
         self.anim=anim
-        self.img=self.anim[self.frame//20]
+        self.img=self.anim[self.frame//10]
         self.rect = self.img.get_rect()
         self.rect.x = largura_janela-400
         self.rect.y = 0
@@ -262,7 +262,7 @@ class Vida(pygame.sprite.Sprite):
             if self.frame == 11:
                 game = False
                 return game
-            self.img=self.anim[self.frame//20]
+            self.img=self.anim[self.frame//10]
 direcao=1
 P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
 Player_Grupo.add(P1)
@@ -294,6 +294,9 @@ vida_seg=0
 Zumbis_Mortos=0
 while game:
     clock.tick(FPS)
+    font = pygame.font.SysFont(None, 48)
+    text = font.render('Zumbis Mortos: ', True, (0, 0, 0))
+    text2=font.render('{}'.format(Zumbis_Mortos),True,(0,0,0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
@@ -380,7 +383,11 @@ while game:
     if P1.move==Facada and Hit_do_Player!={}:
         for i in Hit_do_Player.values():
             for i2 in i:
-                i2.kill()
+                for x in range (len(i)):
+                    i2.kill()
+                    variavel=random.randint(0,len(posicoes_quadra))
+                    Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
+                    Zombie_Grupo.add(Z)
         Zumbis_Mortos+=1
     Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,False,pygame.sprite.collide_mask)
     if Hit_da_Bala!={}:
@@ -404,7 +411,8 @@ while game:
     if len(bullet_Grupo)!=0:
         window.blit(bullet_Grupo.sprites()[0].img, bullet_Grupo.sprites()[0].rect)
     window.blit(vida.img, vida.rect)
-
+    window.blit(text, (10, 10))
+    window.blit(text2, (275, 10))
     pygame.display.update() # Atualiza a janela
 
 pygame.quit() # Finalização

@@ -1,4 +1,7 @@
 import pygame
+altura_janela = 1000
+largura_janela = 800
+window = pygame.display.set_mode((altura_janela, largura_janela))
 class button:
     def __init__(self, color,x,y,largura,altura,texto,fontsize,fontname):
         self.color = color
@@ -22,3 +25,10 @@ class button:
             if pos[1]>self.y and pos[1]<self.y+self.altura:
                 return True
         return False
+def redraw():
+    window.fill((0, 0, 0))
+    greenButton.draw(window)
+    pygame.display.update()
+
+
+    

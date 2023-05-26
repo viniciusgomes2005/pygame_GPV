@@ -11,7 +11,7 @@ player_WIDTH = 120
 player_HEIGHT = 122
 WIDTH = 800
 HEIGHT = 600
-windowdow = pygame.display.set_mode((WIDTH, HEIGHT))
+window = pygame.display.set_mode((WIDTH, HEIGHT))
 player_img = pygame.image.load('assets/Sprites/Player_Shot1.png').convert_alpha()
 player_img = pygame.transform.scale(player_img, (player_WIDTH, player_HEIGHT))
 
@@ -237,11 +237,11 @@ while game:
 
         
     #  Gera saídas
-    windowdow.fill((0, 0, 0))  # Preenche com a cor branca
-    windowdow.blit(image, (10, 10))
+    window.fill((0, 0, 0))  # Preenche com a cor branca
+    window.blit(image, (10, 10))
 
     # Desenhando 
-    all_sprites.draw(windowdow)
+    all_sprites.draw(window)
 
     pygame.display.update()  # Mostra o novo frame para o jogador
 

@@ -217,8 +217,8 @@ class Zombie(pygame.sprite.Sprite):
                 self.img=self.anim[self.frame]
             elif self.direcao_z==2:
                 self.last_update=now
-                if self.frame<10 or self.frame>=19:
-                    self.frame=10
+                if self.frame<31 or self.frame>=39:
+                    self.frame=31
                 else:
                     self.frame+=1
                 self.img=self.anim[self.frame]
@@ -382,7 +382,7 @@ while game:
             for i2 in i:
                 i2.kill()
         Zumbis_Mortos+=1
-    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
+    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,False,pygame.sprite.collide_mask)
     if Hit_da_Bala!={}:
         for i in Hit_da_Bala.values():
             for i2 in i:

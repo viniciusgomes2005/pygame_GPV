@@ -235,9 +235,10 @@ def sair():
     pygame.quit()
 def como_jogar():
     d=-0
-def menu_():
+def menu_(window):
+    print('menu')
     while menu_:
-        window.fill((0,0,0))
+        window.fill((255,0,0))
         texto_iniciar = fonte.render("Iniciar jogo", True, ((0,0,0)))
         texto_config = fonte.render("Como Jogar", True, ((0,0,0)))
         texto_sair = fonte.render("Sair", True, ((0,0,0)))
@@ -246,7 +247,7 @@ def menu_():
         window.blit(texto_sair, (100, 400))
         pygame.display.update()
         for event in pygame.event.get():
-            if event == pygame.quit():
+            if event == pygame.QUIT:
                 sair()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if texto_iniciar.get_rect().collidepoint(event.pos):
@@ -255,8 +256,9 @@ def menu_():
                 elif texto_config.get_rect().collidepoint(event.pos):
                     como_jogar()
                 elif texto_sair.get_rect().collidepoint(event.pos):
+                    print('sair')
                     sair()
-menu_()
+menu_(window)
 game=True
 while game:
     clock.tick(FPS)

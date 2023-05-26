@@ -332,7 +332,25 @@ while game:
         vida_seg+=1
     vida.update(vida_seg)
 
-
+    hits_zumbi_construcao = pygame.sprite.groupcollide(Zombie_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)
+    if hits_zumbi_construcao!={}:
+        for zumbi in hits_zumbi_construcao:
+            construcao =hits_zumbi_construcao[zumbi][0]
+            if zumbi.rect.right>=construcao.rect.left and zumbi.speedx!=0 :
+                zumbi.rect.right=construcao.rect.left
+                zumbi.speedx*=-1
+            if zumbi.rect.left>=construcao.rect.right and zumbi.speedx!=0 :
+                zumbi.rect.left=construcao.rect.right
+                zumbi.speedx*=-1
+            if zumbi.rect.top>=construcao.rect.bottom and zumbi.speedy!=0 :
+                zumbi.rect.top=construcao.rect.bottom
+                zumbi.speedy*=-1
+            if zumbi.rect.bottom>=construcao.rect.top and zumbi.speedy!=0 :
+                zumbi.rect.bottom=construcao.rect.top
+                zumbi.speedy*=-1
+    else:
+        Z1.speedy =1
+        Z1.speedx=1
     Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if P1.move==Facada and Hit_do_Player!={}:
         Z1.kill()

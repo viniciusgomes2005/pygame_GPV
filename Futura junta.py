@@ -1,9 +1,9 @@
-
+import os
 import pygame
 import sys
 import random
 from assets import *
-
+from time import sleep
 # Inicialização do Pygame
 pygame.init()
 
@@ -258,7 +258,7 @@ def menu_(window):
                 elif texto_sair.get_rect().collidepoint(event.pos):
                     print('sair')
                     sair()
-menu_(window)
+
 game=True
 while game:
     clock.tick(FPS)
@@ -339,20 +339,24 @@ while game:
         for zumbi in hits_zumbi_construcao:
             construcao =hits_zumbi_construcao[zumbi][0]
             if zumbi.rect.right>=construcao.rect.left and zumbi.speedx!=0 :
-                zumbi.rect.right=construcao.rect.left
                 zumbi.speedx*=-1
             if zumbi.rect.left>=construcao.rect.right and zumbi.speedx!=0 :
-                zumbi.rect.left=construcao.rect.right
                 zumbi.speedx*=-1
             if zumbi.rect.top>=construcao.rect.bottom and zumbi.speedy!=0 :
-                zumbi.rect.top=construcao.rect.bottom
                 zumbi.speedy*=-1
             if zumbi.rect.bottom>=construcao.rect.top and zumbi.speedy!=0 :
-                zumbi.rect.bottom=construcao.rect.top
                 zumbi.speedy*=-1
     else:
-        Z1.speedy =1
-        Z1.speedx=1
+        for zumbi in hits_zumbi_construcao:
+            construcao =hits_zumbi_construcao[zumbi][0]
+            if zumbi.rect.right<construcao.rect.left and zumbi.speedx!=0 :
+                zumbi.speedx=1
+            if zumbi.rect.left<construcao.rect.right and zumbi.speedx!=0 :
+                zumbi.speedx=1
+            if zumbi.rect.top<construcao.rect.bottom and zumbi.speedy!=0 :
+                zumbi.speedy=1
+            if zumbi.rect.bottom<construcao.rect.top and zumbi.speedy!=0 :
+                zumbi.speedy=1
     Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if P1.move==Facada and Hit_do_Player!={}:
         Z1.kill()

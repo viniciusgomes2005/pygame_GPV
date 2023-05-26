@@ -236,29 +236,31 @@ def sair():
 def como_jogar():
     d=-0
 def menu_(window):
-    print('menu')
     while menu_:
-        window.fill((255,0,0))
-        texto_iniciar = fonte.render("Iniciar jogo", True, ((0,0,0)))
-        texto_config = fonte.render("Como Jogar", True, ((0,0,0)))
-        texto_sair = fonte.render("Sair", True, ((0,0,0)))
-        window.blit(texto_iniciar, (100, 200))
-        window.blit(texto_config, (100, 300))
-        window.blit(texto_sair, (100, 400))
+        window.fill((0,0,0))
+        retangulo_iniciar = pygame.Rect(100, 200, 200, 50)
+        retangulo_comojogar = pygame.Rect(100, 300, 200, 50)
+        retangulo_sair = pygame.Rect(100, 400, 200, 50)
+        texto_iniciar = fonte.render("Iniciar jogo", True, ((255,255,255)))
+        texto_comojogar = fonte.render("Como Jogar", True, ((255,255,255)))
+        texto_sair = fonte.render("Sair", True, ((255,255,255)))
+        window.blit(texto_iniciar, (retangulo_iniciar.x,retangulo_iniciar.y))
+        window.blit(texto_comojogar, (retangulo_comojogar.x,retangulo_comojogar.y))
+        window.blit(texto_sair, (retangulo_sair.x,retangulo_sair.y))
         pygame.display.update()
         for event in pygame.event.get():
             if event == pygame.QUIT:
                 sair()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if texto_iniciar.get_rect().collidepoint(event.pos):
+                mouse=pygame.mouse.get_pos()
+                if retangulo_iniciar.collidepoint(mouse):
                     jogando()
-                    mostrar_menu = False  # Inicia o jogo e oculta o menu
-                elif texto_config.get_rect().collidepoint(event.pos):
+                    break  # Inicia o jogo e oculta o menu
+                elif retangulo_comojogar.collidepoint(mouse):
                     como_jogar()
-                elif texto_sair.get_rect().collidepoint(event.pos):
-                    print('sair')
+                elif retangulo_sair.collidepoint(mouse):
                     sair()
-
+menu_(window)
 game=True
 while game:
     clock.tick(FPS)

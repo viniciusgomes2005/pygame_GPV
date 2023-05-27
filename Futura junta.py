@@ -278,6 +278,7 @@ def menu_(window):
                     como_jogar()
                 elif retangulo_sair.collidepoint(mouse):
                     pygame.QUIT
+menu_(window)
 game=True
 while game:
     clock.tick(FPS)

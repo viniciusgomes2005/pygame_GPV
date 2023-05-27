@@ -20,8 +20,8 @@ quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').conv
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
 zombie_img = pygame.transform.scale(zombie_img, (120, 130))
-htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (1).png')
-htp = pygame.transform.scale(htp,(1000,800))
+htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (2).png')
+htp = pygame.transform.scale(htp,(800,600))
 Parado=1
 Correndo=2
 Facada=3
@@ -141,7 +141,6 @@ class Player(pygame.sprite.Sprite):
                         self.move=Correndo
                         self.direcao=2
                         self.frame=0
-
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, anim, speedx, speedy,speedxmap,speedymap):
         # Construtor da classe mãe (Sprite).
@@ -258,7 +257,7 @@ def como_jogar():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key==pygame.K_RETURN:
-                    menu_(window)
+                    return 0
 def menu_(window):
     while menu_:
         window.fill((0,0,0))
@@ -277,13 +276,14 @@ def menu_(window):
                 sair()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if retangulo_iniciar.collidepoint(event.pos):
-                    game=True
-                    break  # Inicia o jogo e oculta o menu
+                    return True # Inicia o jogo e oculta o menu
                 elif retangulo_comojogar.collidepoint(event.pos):
                     como_jogar()
                 elif retangulo_sair.collidepoint(event.pos):
-                    pygame.QUIT
-como_jogar()
+                    return False
+menu_(window)
+if menu_(window) ==True:
+    game=True
 while game:
     clock.tick(FPS)
     for event in pygame.event.get():

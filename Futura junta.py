@@ -20,6 +20,8 @@ quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').conv
 quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
 zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
 zombie_img = pygame.transform.scale(zombie_img, (120, 130))
+htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (1).png')
+htp = pygame.transform.scale(htp,(1000,800))
 Parado=1
 Correndo=2
 Facada=3
@@ -246,13 +248,17 @@ FPS = 60
 menu = True 
 vida=Vida(assets['Vida_Anim'])
 vida_seg=0
-
-def jogando():
-    game = True
+game=False
 def sair():
     pygame.quit()
 def como_jogar():
-    d=-0
+    while como_jogar:
+        window.blit(htp,(100,100))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key==pygame.K_RETURN:
+                    menu_(window)
 def menu_(window):
     while menu_:
         window.fill((0,0,0))
@@ -269,17 +275,15 @@ def menu_(window):
         for event in pygame.event.get():
             if event == pygame.QUIT:
                 sair()
-            elif event.type == pygame.MOUSEBUTTONUP:
-                mouse=pygame.mouse.get_pos()
-                if retangulo_iniciar.collidepoint(mouse):
-                    jogando()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if retangulo_iniciar.collidepoint(event.pos):
+                    game=True
                     break  # Inicia o jogo e oculta o menu
-                elif retangulo_comojogar.collidepoint(mouse):
+                elif retangulo_comojogar.collidepoint(event.pos):
                     como_jogar()
-                elif retangulo_sair.collidepoint(mouse):
+                elif retangulo_sair.collidepoint(event.pos):
                     pygame.QUIT
-menu_(window)
-game=True
+como_jogar()
 while game:
     clock.tick(FPS)
     for event in pygame.event.get():

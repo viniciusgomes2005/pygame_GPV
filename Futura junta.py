@@ -3,7 +3,6 @@ import pygame
 import sys
 import random
 from assets import *
-from time import sleep
 # Inicialização do Pygame
 pygame.init()
 
@@ -160,15 +159,34 @@ class Zombie(pygame.sprite.Sprite):
         self.frame_ticks=50
     def move(self):
         # Move em x
-        if self.rect.x > P1.rect.x:
-            self.rect.x -= self.speedx
-        elif self.rect.x < P1.rect.x:
-            self.rect.x += self.speedx
-        # Move em y
-        if self.rect.y < P1.rect.y:
-            self.rect.y += self.speedy
-        elif self.rect.y > P1.rect.y:
-            self.rect.y -= self.speedy
+        if self.speedx>-1:
+            if self.rect.x > P1.rect.x:
+                self.rect.x -= self.speedx
+            elif self.rect.x < P1.rect.x:
+                self.rect.x += self.speedx
+            # Move em y
+            if self.rect.y < P1.rect.y:
+                self.rect.y += self.speedy
+            elif self.rect.y > P1.rect.y:
+                self.rect.y -= self.speedy
+        else:
+            deltax=self.rect.x-P1.rect.x
+            deltax=abs(deltax)
+            deltay=self.rect.y-P1.rect.y
+            deltay=abs(deltay)
+            if deltax<50 and deltax<50:
+                self.speedx*=-1
+                self.speedy*=-1
+            else:
+                if self.rect.x > P1.rect.x:
+                    self.rect.x -= self.speedx
+                elif self.rect.x < P1.rect.x:
+                    self.rect.x += self.speedx
+                # Move em y
+                if self.rect.y < P1.rect.y:
+                    self.rect.y += self.speedy
+                elif self.rect.y > P1.rect.y:
+                    self.rect.y -= self.speedy
     def update(self):
         self.rect.x += self.speedxmap
         self.rect.y += self.speedymap

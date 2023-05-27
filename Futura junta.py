@@ -259,7 +259,7 @@ def menu_(window):
                 elif retangulo_comojogar.collidepoint(mouse):
                     como_jogar()
                 elif retangulo_sair.collidepoint(mouse):
-                    sair()
+                    pygame.QUIT
 menu_(window)
 game=True
 while game:

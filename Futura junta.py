@@ -251,7 +251,7 @@ def menu_(window):
         for event in pygame.event.get():
             if event == pygame.QUIT:
                 sair()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONUP:
                 mouse=pygame.mouse.get_pos()
                 if retangulo_iniciar.collidepoint(mouse):
                     jogando()
@@ -260,7 +260,6 @@ def menu_(window):
                     como_jogar()
                 elif retangulo_sair.collidepoint(mouse):
                     pygame.QUIT
-menu_(window)
 game=True
 while game:
     clock.tick(FPS)
@@ -319,13 +318,14 @@ while game:
                     zumbi.speedxmap +=2
     if quarteirao.speedx==0 and quarteirao.speedy==0:
         P1.move=Parado
+    hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
     mapa.update() # Atualiza os sprites do mapa
-    Player_Grupo.update() # Atualiza os sprites do Player
-    Z1.move()
-    Z1.update()
+    Player_Grupo.update()
+    if hits_Construcoes=={}: # Atualiza os sprites do Player
+        Z1.move()
+        Z1.update()
     Z1.Animacao()
 
-    hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
     if hits_Construcoes!= {}:
         for quadra in mapa:
             quadra.speedx= 0
@@ -365,8 +365,9 @@ while game:
 
     mapa.update()
     Player_Grupo.update()
-    Z1.move()
-    Z1.update()
+    if hits_Construcoes=={}:
+        Z1.move()
+        Z1.update()
     Z1.Animacao()
 
     window.fill((0, 0, 0))  

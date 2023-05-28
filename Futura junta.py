@@ -25,7 +25,7 @@ htp = pygame.transform.scale(htp,(800,600))
 Parado=1
 Correndo=2
 Facada=3
-fonte=pygame.font.SysFont("Inter",60)
+fonte=pygame.font.SysFont("Comic Sans MS",60)
 ################################  GRUPOS  ####################################
 
 Player_Grupo= pygame.sprite.Group()
@@ -261,9 +261,9 @@ def como_jogar():
 def menu_(window):
     while menu_:
         window.fill((0,0,0))
-        retangulo_iniciar = pygame.Rect(100, 200, 200, 50)
-        retangulo_comojogar = pygame.Rect(100, 300, 200, 50)
-        retangulo_sair = pygame.Rect(100, 400, 200, 50)
+        retangulo_iniciar = pygame.Rect(300, 200, 200, 50)
+        retangulo_comojogar = pygame.Rect(300, 300, 200, 50)
+        retangulo_sair = pygame.Rect(300, 400, 200, 50)
         texto_iniciar = fonte.render("Iniciar jogo", True, ((255,255,255)))
         texto_comojogar = fonte.render("Como Jogar", True, ((255,255,255)))
         texto_sair = fonte.render("Sair", True, ((255,255,255)))

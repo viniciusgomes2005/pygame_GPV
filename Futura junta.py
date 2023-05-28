@@ -345,8 +345,8 @@ while game:
     mapa.update() # Atualiza os sprites do mapa
     Player_Grupo.update()
     if hits_Construcoes=={}: # Atualiza os sprites do Player
-        Z1.move()
         Z1.update()
+    Z1.move()
     Z1.Animacao()
 
     if hits_Construcoes!= {}:
@@ -389,9 +389,9 @@ while game:
     mapa.update()
     Player_Grupo.update()
     if hits_Construcoes=={}:
-        Z1.move()
         Z1.update()
     Z1.Animacao()
+    Z1.move()
 
     window.fill((0, 0, 0))  
     mapa.draw(window)

@@ -390,8 +390,8 @@ while game:
     Player_Grupo.update()
     if hits_Construcoes=={}:
         Z1.update()
-    Z1.Animacao()
     Z1.move()
+    Z1.Animacao()
 
     window.fill((0, 0, 0))  
     mapa.draw(window)

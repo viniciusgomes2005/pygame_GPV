@@ -73,7 +73,7 @@ def load_assets():
         Zombie_Morre_img = pygame.transform.scale(Zombie_Morre_img, (120, 130))
         Zombie_Anim.append(Zombie_Morre_img)
     
-    for i in range(10,0,-1):
+    for i in range(10,-1,-1):
         Vida= 'assets/Sprites/VIDA_{}.png'.format(i)
         Vida_img= pygame.image.load(Vida).convert_alpha()
         Vida_img = pygame.transform.scale(Vida_img, (400, 50))

@@ -22,6 +22,8 @@ zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
 zombie_img = pygame.transform.scale(zombie_img, (120, 130))
 htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (2).png')
 htp = pygame.transform.scale(htp,(800,600))
+gameover=pygame.image.load('assets/Sprites/gameover (1).png')
+gameover=pygame.transform.scale(gameover,(800,600))
 Parado=1
 Correndo=2
 Facada=3
@@ -258,6 +260,14 @@ def como_jogar():
             if event.type == pygame.KEYDOWN:
                 if event.key==pygame.K_RETURN:
                     return 0
+def game_over():
+    while game_over:
+        window.blit(gameover,(100,100))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return 0
 def menu_(window):
     while menu_:
         window.fill((0,0,0))
@@ -339,6 +349,7 @@ while game:
                     quadra.speedx = 0
                 for zumbi in Zombie_Grupo:
                     zumbi.speedxmap +=2
+    
     if quarteirao.speedx==0 and quarteirao.speedy==0:
         P1.move=Parado
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
@@ -401,4 +412,6 @@ while game:
     window.blit(vida.img, vida.rect)
 
     pygame.display.update() # Atualiza a janela
+if menu_(window) ==True:
+    game_over()
 pygame.quit() # Finalização

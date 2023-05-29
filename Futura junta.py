@@ -294,7 +294,7 @@ direcao=1
 P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
 Player_Grupo.add(P1)
 for i in range (20):
-    variavel=random.randint(0,len(posicoes_quadra))
+    variavel=random.randint(0,len(posicoes_quadra)-1)
     Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
     Zombie_Grupo.add(Z)
 
@@ -454,7 +454,7 @@ while game:
     Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if Hit_do_zumbi!={} and P1.move!=Facada:
         vida_seg+=1
-        if vida_seg<200:
+        if vida_seg<101:
             vida.update(vida_seg)
         else:
             game=False

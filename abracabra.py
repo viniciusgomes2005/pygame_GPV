@@ -30,6 +30,11 @@ Correndo=2
 Facada=3
 Shot=4
 fonte=pygame.font.SysFont("Comic Sans MS",60)
+
+
+##### sons ######
+pygame.mixer.music.load('assets/audios/twd.ogg')
+pygame.mixer.music.set_volume(0.4)
 ################################  GRUPOS  ####################################
 
 Player_Grupo= pygame.sprite.Group()
@@ -360,6 +365,8 @@ def menu_(window):
                     como_jogar()
                 elif retangulo_sair.collidepoint(event.pos):
                     return False
+                
+pygame.mixer.music.play(loops=-1)   
 menu_ativo = menu_(window)
 if menu_ativo ==True:
     game=True

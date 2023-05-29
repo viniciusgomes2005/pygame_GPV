@@ -55,6 +55,7 @@ def load_assets():
         Player_shot_i_img= pygame.transform.scale(Player_shot_i_img, (120, 130))
         Player_Normal_E_Anim.append(Player_shot_i_img)
 
+    ###########  ZUMBI  #################
     for i in range(1,11):#10
         Zombie_Run = 'assets/Sprites/Walk ({}).png'.format(i)
         Zombie_Run_img = pygame.image.load(Zombie_Run).convert_alpha()

@@ -32,10 +32,15 @@ Shot=4
 fonte=pygame.font.SysFont("Comic Sans MS",60)
 
 
-##### sons ######
+##### sons ###################################################################################################################################################################
 pygame.mixer.music.load('assets/audios/twd.ogg')
 pygame.mixer.music.set_volume(0.4)
-################################  GRUPOS  ####################################
+
+tiro_sound = pygame.mixer.Sound('assets/audios/tiro.wav')
+faca_sound = pygame.mixer.Sound('assets/audios/facada.wav')
+zumbi_sound = pygame.mixer.Sound('assets/audios/zumbi.wav')
+
+################################  GRUPOS  ################################
 
 Player_Grupo= pygame.sprite.Group()
 Construcoes_Grupo= pygame.sprite.Group()
@@ -298,7 +303,7 @@ class Vida(pygame.sprite.Sprite):
 direcao=1
 P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
 Player_Grupo.add(P1)
-for i in range (20):
+for i in range (30):
     variavel=random.randint(0,len(posicoes_quadra)-1)
     Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
     Zombie_Grupo.add(Z)
@@ -407,13 +412,21 @@ while game:
                     zumbi.speedxmap -=2
             elif event.key == pygame.K_l:
                 P1.move=Facada
+                if quadra.speedx != 0 or quadra.speedy != 0:
+                    # toca facada
+                    faca_sound.play() 
+                
             elif event.key== pygame.K_k:
                 P1.move=Shot
                 if P1.direcao==1:
                     b_shoot=20
                 if P1.direcao==2:
                     b_shoot=-20
+          
                 P1.shot(b_shoot)
+                
+                #toca tiro
+                tiro_sound.play()
         elif event.type == pygame.KEYUP :
             if event.key == pygame.K_w :
                 for quadra in mapa:
@@ -500,6 +513,8 @@ while game:
                     Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
                     Zombie_Grupo.add(Z)
                 i2.kill()
+                #toca audio zumbi ###############
+        zumbi_sound.play()
         Zumbis_Mortos+=1
     
     Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,False,pygame.sprite.collide_mask)
@@ -511,6 +526,8 @@ while game:
                     Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
                     Zombie_Grupo.add(Z)
                 i2.kill()
+              #toca audio zumbi ###############
+        zumbi_sound.play()
         Zumbis_Mortos+=1
     mapa.update()
     Player_Grupo.update()

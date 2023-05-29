@@ -330,6 +330,7 @@ def como_jogar():
                     return 0
 def game_over():
     while game_over:
+        window.fill((0,0,0))
         window.blit(gameover,(100,100))
         pygame.display.update()
         for event in pygame.event.get():
@@ -359,8 +360,8 @@ def menu_(window):
                     como_jogar()
                 elif retangulo_sair.collidepoint(event.pos):
                     return False
-menu_(window)
-if menu_(window) ==True:
+menu_ativo = menu_(window)
+if menu_ativo ==True:
     game=True
 while game:
     clock.tick(FPS)
@@ -439,11 +440,12 @@ while game:
         zumbi.Animacao()
     if len(bullet_Grupo)!=0:
         bullet_Grupo.update()
-    if hits_Construcoes=={}: # Atualiza os sprites do Player
-        for zumbi in Zombie_Grupo:
+    # Atualiza os sprites do Player
+    for zumbi in Zombie_Grupo:
+        if hits_Construcoes=={}: 
             zumbi.update()
-            zumbi.move()
-            zumbi.Animacao()
+        zumbi.move()
+        zumbi.Animacao()
 
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
     if hits_Construcoes!= {}:
@@ -523,6 +525,8 @@ while game:
     window.blit(text, (10, 10))
     window.blit(text2, (275, 10))
     pygame.display.update() # Atualiza a janela
-if menu_(window) ==True:
+if menu_ativo ==True:
     game_over()
+menu_ativo=False
+
 pygame.quit() # Finalização

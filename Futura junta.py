@@ -261,9 +261,9 @@ def como_jogar():
 def menu_(window):
     while menu_:
         window.fill((0,0,0))
-        retangulo_iniciar = pygame.Rect(300, 200, 200, 50)
-        retangulo_comojogar = pygame.Rect(300, 300, 200, 50)
-        retangulo_sair = pygame.Rect(300, 400, 200, 50)
+        retangulo_iniciar = pygame.Rect(300, 200, 200, 100)
+        retangulo_comojogar = pygame.Rect(300, 300, 200, 100)
+        retangulo_sair = pygame.Rect(300, 400, 200, 100)
         texto_iniciar = fonte.render("Iniciar jogo", True, ((255,255,255)))
         texto_comojogar = fonte.render("Como Jogar", True, ((255,255,255)))
         texto_sair = fonte.render("Sair", True, ((255,255,255)))

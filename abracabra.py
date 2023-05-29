@@ -266,7 +266,12 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         if self.rect.x < 0  or self.rect.x>800: # Se o tiro passar do inicio da tela, morre.
             self.kill()
-
+class barreira(pygame.sprite.Sprite):
+    def __init__(self, x,y,w,h):
+        pygame.sprite.Sprite.__init__(self)
+        self.rect=self.get_rect()
+        self.rect.x=w
+        self.rect.y=h
 class Vida(pygame.sprite.Sprite):
     def __init__(self, anim):
         # Construtor da classe mãe (Sprite).
@@ -307,7 +312,12 @@ for i in range(6):
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)
-
+retangulo_cima=barreira(0,0,4800,-10)
+retangulo_baixo=barreira(0,3600,4800,10)
+retangulo_esquerda=barreira(0,0,-10,3600)
+retangulo_direita=barreira(4800,0,10,3600)
+mapa.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
+Construcoes_Grupo.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
 ##########################  LOOP PRINCIPAL ###############################
 
 # Loop principal

@@ -370,12 +370,14 @@ while game:
         for quadra in mapa:
             quadra.speedx= 0
             quadra.speedy=0
+
     Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if Hit_do_zumbi!={} and P1.move!=Facada:
         vida_seg+=1
     vida.update(vida_seg)
     if vida_seg>200:
         game=False
+        
     Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if P1.move==Facada and Hit_do_Player!={}:
         for i in Hit_do_Player.values():

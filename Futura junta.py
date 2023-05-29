@@ -176,7 +176,7 @@ class Player(pygame.sprite.Sprite):
         bullet_Grupo.add(new_bullet)
 
 class Zombie(pygame.sprite.Sprite):
-    def __init__(self, anim, speedx, speedy,speedxmap,speedymap):
+    def __init__(self, anim, speedx, speedy,speedxmap,speedymap,x,y):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
         self.frame=0
@@ -184,14 +184,15 @@ class Zombie(pygame.sprite.Sprite):
         self.img=self.anim[self.frame]
         self.mask= pygame.mask.from_surface(self.img)
         self.rect = self.img.get_rect()
-        self.rect.centerx =  500
-        self.rect.bottom = 400
+        self.rect.x =  x
+        self.rect.y = y
         self.speedy = speedy
         self.speedx = speedx
         self.speedxmap = speedxmap
         self.speedymap = speedymap
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.frame_ticks=50
+        self.direcao_z=1
     def move(self):
         # Move em x
         if self.speedx>-1:
@@ -301,7 +302,6 @@ for i in range(6):
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)
-
 
 ##########################  LOOP PRINCIPAL ###############################
 

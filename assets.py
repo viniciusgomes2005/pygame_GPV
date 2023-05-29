@@ -89,7 +89,6 @@ def load_assets():
     assets['Zombie_Anim']=Zombie_Anim
     assets['Vida_Anim']=Vida_Anim
     assets['Player_Normal_E_Anim']=Player_Normal_E_Anim
-
     bullet= 'assets/Sprites/bullet.png'
     bullet_img= pygame.image.load(bullet).convert_alpha()
     bullet_img = pygame.transform.scale(bullet_img, (50, 50))

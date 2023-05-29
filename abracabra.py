@@ -23,6 +23,10 @@ zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
 zombie_img = pygame.transform.scale(zombie_img, (120, 130))
 htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (2).png')
 htp = pygame.transform.scale(htp,(800,600))
+black=pygame.image.load('assets/Sprites/black.png')
+black=pygame.transform.scale(black,(4800,1))
+preto=pygame.image.load('assets/Sprites/preto.png')
+preto=pygame.transform.scale(preto,(1,3600))
 gameover=pygame.image.load('assets/Sprites/gameover (1).png')
 gameover=pygame.transform.scale(gameover,(800,600))
 Parado=1
@@ -266,12 +270,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         if self.rect.x < 0  or self.rect.x>800: # Se o tiro passar do inicio da tela, morre.
             self.kill()
-class barreira(pygame.sprite.Sprite):
-    def __init__(self, x,y,w,h):
-        pygame.sprite.Sprite.__init__(self)
-        self.rect=self.get_rect()
-        self.rect.x=w
-        self.rect.y=h
 class Vida(pygame.sprite.Sprite):
     def __init__(self, anim):
         # Construtor da classe mãe (Sprite).
@@ -312,10 +310,10 @@ for i in range(6):
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)
-retangulo_cima=barreira(0,0,4800,-10)
-retangulo_baixo=barreira(0,3600,4800,10)
-retangulo_esquerda=barreira(0,0,-10,3600)
-retangulo_direita=barreira(4800,0,10,3600)
+retangulo_cima=casa(black,-2400,-1800,0,0)
+retangulo_baixo=casa(black,-2400,1800,0,0)
+retangulo_esquerda=casa(preto,-2400,-1800,0,0)
+retangulo_direita=casa(preto,2400,-1800,0,0)
 mapa.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
 Construcoes_Grupo.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
 ##########################  LOOP PRINCIPAL ###############################
@@ -510,8 +508,9 @@ while game:
         for i in Hit_da_Bala.values():
             for i2 in i:
                 for x in range (len(i)):
-                    variavel=random.randint(0,len(posicoes_quadra))
-                    Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
+                    variavel=random.randint(0,len(posicoes_quadra)-1)
+                    posq=random.choice(len(posicoes_quadra))
+                    Z = Zombie(assets['Zombie_Anim'],1,1,0,0,quadra.rect.x,quadra.rect.y)
                     Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1

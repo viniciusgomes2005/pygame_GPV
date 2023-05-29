@@ -10,9 +10,9 @@ pygame.init()
 ######################  JANELA  #############################
 
 # Dimensões da janela
-altura_janela = 1000
-largura_janela = 800
-window = pygame.display.set_mode((altura_janela, largura_janela))
+altura_janela = 800
+largura_janela = 1000
+window = pygame.display.set_mode((largura_janela, altura_janela))
 pygame.display.set_caption('Pygame')
 
 #####################  SPRITES  ################################
@@ -198,8 +198,10 @@ class Zombie(pygame.sprite.Sprite):
         if self.speedx>-1:
             if self.rect.x > P1.rect.x:
                 self.rect.x -= self.speedx
+                self.direcao_z=2
             elif self.rect.x < P1.rect.x:
                 self.rect.x += self.speedx
+                self.direcao_z=1
             # Move em y
             if self.rect.y < P1.rect.y:
                 self.rect.y += self.speedy
@@ -216,8 +218,10 @@ class Zombie(pygame.sprite.Sprite):
             else:
                 if self.rect.x > P1.rect.x:
                     self.rect.x -= self.speedx
+                    self.direcao_z=1
                 elif self.rect.x < P1.rect.x:
                     self.rect.x += self.speedx
+                    self.direcao_z=2
                 # Move em y
                 if self.rect.y < P1.rect.y:
                     self.rect.y += self.speedy
@@ -281,10 +285,11 @@ class Vida(pygame.sprite.Sprite):
         self.frame=vida_seg
         if elapsed_ticks>self.frame_ticks:
             self.last_update=now
-            if self.frame == 100:
+            if self.frame<101:
+                self.img=self.anim[self.frame//10]
+            else:
                 game = False
                 return game
-            self.img=self.anim[self.frame//10]
 direcao=1
 P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
 Player_Grupo.add(P1)
@@ -449,9 +454,10 @@ while game:
     Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if Hit_do_zumbi!={} and P1.move!=Facada:
         vida_seg+=1
-    vida.update(vida_seg)
-    if vida_seg>200:
-        game=False
+        if vida_seg<200:
+            vida.update(vida_seg)
+        else:
+            game=False
 
     hits_zumbi_construcao = pygame.sprite.groupcollide(Zombie_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)
     if hits_zumbi_construcao!={}:
@@ -482,7 +488,7 @@ while game:
             for i2 in i:
                 for x in range (len(i)):
                     variavel=random.randint(0,len(posicoes_quadra))
-                    Z = Zombie(assets['Zombie_Anim'],1 , 1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
+                    Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
                     Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1
@@ -493,7 +499,7 @@ while game:
             for i2 in i:
                 for x in range (len(i)):
                     variavel=random.randint(0,len(posicoes_quadra))
-                    Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
+                    Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
                     Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1

@@ -377,14 +377,14 @@ while game:
     vida.update(vida_seg)
     if vida_seg>200:
         game=False
-        
+
     Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if P1.move==Facada and Hit_do_Player!={}:
         for i in Hit_do_Player.values():
             for i2 in i:
                 for x in range (len(i)):
                     variavel=random.randint(0,len(posicoes_quadra))
-                    Z = Zombie(assets['Zombie_Anim'],1 , 1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
+                    Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
                     Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1

@@ -1,6 +1,4 @@
-import os
 import pygame
-import sys
 import random
 from assets import *
 
@@ -9,45 +7,31 @@ pygame.init()
 
 ######################  JANELA  #############################
 
-# Dimensões da janela
-altura_janela = 800
-largura_janela = 1000
-window = pygame.display.set_mode((largura_janela, altura_janela))
-pygame.display.set_caption('Pygame')
+altura_janela = 800 # altura da janela
+largura_janela = 1000 # largura da janela
+window = pygame.display.set_mode((largura_janela, altura_janela)) # define tamanho da janela
+pygame.display.set_caption('Pygame') # Da o nome do jogo
 
 #####################  SPRITES  ################################
 assets=load_assets()
-quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
-quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
-zombie_img = pygame.image.load('assets/Sprites/Idle (1).png').convert_alpha()
-zombie_img = pygame.transform.scale(zombie_img, (120, 130))
-htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (2).png')
-htp = pygame.transform.scale(htp,(800,600))
-gameover=pygame.image.load('assets/Sprites/gameover (1).png')
-gameover=pygame.transform.scale(gameover,(800,600))
-Parado=1
-Correndo=2
-Facada=3
-Shot=4
 fonte=pygame.font.SysFont("Comic Sans MS",60)
 ################################  GRUPOS  ####################################
 
-Player_Grupo= pygame.sprite.Group()
-Construcoes_Grupo= pygame.sprite.Group()
-Zombie_Grupo = pygame.sprite.Group()
-mapa = pygame.sprite.Group()
-bullet_Grupo = pygame.sprite.Group()
+Player_Grupo= pygame.sprite.Group() #Grupo do Player
+Construcoes_Grupo= pygame.sprite.Group() # Grupo das Construções 
+Zombie_Grupo = pygame.sprite.Group() # Grupo dos Zumbis
+mapa = pygame.sprite.Group() #Grupo que forma o mapa
+bullet_Grupo = pygame.sprite.Group() # Grupo para as balas
 
-posicoes_quadra = posicoes_quadra = [[-3600, 3500], [-3600, 2700], [-3600, 1900], [-3600, 1100], [-3600, 300], [-3600, -500],[-3600, -1300], [-3600, -2100], [-3600, -2900], [-3600, -3700], [-2600, 3500], [-2600, 2700],[-2600, 1900], [-2600, 1100], [-2600, 300], [-2600, -500], [-2600, -1300], [-2600, -2100],[-2600, -2900], [-2600, -3700], [-1600, 3500], [-1600, 2700], [-1600, 1900], [-1600, 1100],[-1600, 300], [-1600, -500], [-1600, -1300], [-1600, -2100], [-1600, -2900], [-1600, -3700],[-600, 3500], [-600, 2700], [-600, 1900], [-600, 1100], [-600, 300], [-600, -500], [-600, -1300],[-600, -2100], [-600, -2900], [-600, -3700], [400, 3500], [400, 2700], [400, 1900], [400, 1100],[400, 300], [400, -500], [400, -1300], [400, -2100], [400, -2900], [400, -3700], [1400, 3500],[1400, 2700], [1400, 1900], [1400, 1100], [1400, 300], [1400, -500], [1400, -1300], [1400, -2100],[1400, -2900], [1400, -3700], [2400, 3500], [2400, 2700], [2400, 1900], [2400, 1100], [2400, 300],[2400, -500], [2400, -1300], [2400, -2100], [2400, -2900], [2400, -3700], [3400, 3500],[3400, 2700], [3400, 1900], [3400, 1100], [3400, 300], [3400, -500], [3400, -1300], [3400, -2100],[3400, -2900], [3400, -3700], [4400, 3500], [4400, 2700], [4400, 1900], [4400, 1100], [4400, 300], [4400, -500], [4400, -1300],[4400, -2100], [4400, -2900], [4400, -3700], [5400, 3500], [5400, 2700], [5400, 1900], [5400, 1100],[5400, 300], [5400, -500], [5400, -1300], [5400, -2100], [5400, -2900], [5400, -3700]]
+posicoes_possiveis=[] #posições possiveis para spawn de zumbis
 mapa_largura = 800 * 6  # Largura total do mapa
 mapa_altura = 600 * 6  # Altura total do mapa
-map_data = [[None] * 6 for _ in range(6)]  # Matriz 6x6 para representar o mapa
 
-quadra_possivel = []
+quadra_possivel = [] # lista de quadras
 for i in range(36):
     quadra_possivel.append('assets/Sprites/Background cortado.png')
 
-def gerar_bloco_aleatorio(quadra_possivel):
+def gerar_bloco_aleatorio(quadra_possivel): #seleciona uma quadra aleatória
     bloco_aleatorio = random.choice(quadra_possivel)
     del quadra_possivel[quadra_possivel.index(bloco_aleatorio)]
     return bloco_aleatorio
@@ -64,145 +48,143 @@ class Quadra(pygame.sprite.Sprite): # Classe para representar uma quadra
         self.speedx = speedx # VELOCIDADE DO PLAYER NO EIXO X
         self.speedy = speedy # VELOCIDADE DO PLAYER NO EIXO Y
 
-    def update(self):
+    def update(self): # atualiza o movimento das quadras
         self.rect.x += self.speedx
         self.rect.y += self.speedy
 
     
-class casa(pygame.sprite.Sprite):
+class casa(pygame.sprite.Sprite): # Classe para representar uma Construção
     def __init__(self, img, quadra_x,quadra_y,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = img
+        self.image = img # define imagem
         self.mask= pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.rect.x = quadra_x+x
-        self.rect.y = quadra_y+y
-        self.speedx = 0
-        self.speedy = 0
-    def update(self):
+        self.rect = self.image.get_rect() #torna imagem em um retangulo
+        self.rect.x = quadra_x+x # X da posição em que a construção vai estar 
+        self.rect.y = quadra_y+y # Y da posição em que a construção vai estar
+        self.speedx = 0 # VELOCIDADE DA CONSTRUÇÃO NO EIXO X
+        self.speedy = 0 # VELOCIDADE DA CONSTRUÇÃO NO EIXO Y
+    def update(self): # atualiza o movimento das Construções
         self.rect.x += self.speedx
         self.rect.y +=self.speedy
 
-class Player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite): # Classe do PLayer
     def __init__(self,anim,anim2,move, direcao):
         pygame.sprite.Sprite.__init__(self)
-        self.frame=0
-        self.anim=anim
-        self.anim2=anim2
-        self.img=self.anim[self.frame]
+        self.frame=0 # Armazena o índice atual na animação
+        self.anim=anim # Animação do Player olhando para a direita
+        self.anim2=anim2 # Animação do Player olhando para a esquerda
+        self.img=self.anim[self.frame] #define a imagem do Player como uma das imagens da animação
         self.mask= pygame.mask.from_surface(self.img)
-        self.rect=self.img.get_rect()
-        self.rect.center = (largura_janela/2, altura_janela/ 2)
+        self.rect=self.img.get_rect() #torna imagem em um retangulo
+        self.rect.center = (largura_janela/2, altura_janela/ 2) #define a posição do Player
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.frame_ticks=50
-        self.move=move #1=sim 2=não
-        self.direcao=direcao
+        self.frame_ticks=50 #minimo de ticks para mudar o frame
+        self.move=move #Qual ação o Player está fazendo
+        self.direcao=direcao #direção em que o jogador está olhando
     def update(self):
-        now=pygame.time.get_ticks()
-        elapsed_ticks= now - self.last_update
-        if self.move==Parado:
-            if elapsed_ticks>self.frame_ticks:
-                self.last_update=now
-                self.frame+=1
+        now=pygame.time.get_ticks() # Verifica o tick atual.
+        elapsed_ticks= now - self.last_update # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        if self.move==Parado: #Se o Player está Parado...
+            if elapsed_ticks>self.frame_ticks:# Se já está na hora de mudar de imagem...
+                self.last_update=now # Marca o tick da nova imagem.
+                self.frame+=1 # Avança um quadro
                 if self.frame >= 10:
                     self.frame=0
-                self.img=self.anim[self.frame]
-        elif self.move==Correndo:
-            if elapsed_ticks>self.frame_ticks:
-                if self.direcao==1:
+                self.img=self.anim[self.frame] #define a nova imagem
+        elif self.move==Correndo: #Se o Player está Correndo...
+            if elapsed_ticks>self.frame_ticks:# Se já está na hora de mudar de imagem...
+                if self.direcao==1: #Se está olhando para a direita...
                     if self.frame<10 or self.frame >= 17:
                         self.frame=10
                     else:
-                        self.frame+=1
-                    self.last_update=now
-                    self.img=self.anim[self.frame]
-                elif self.direcao == 2:
+                        self.frame+=1 # Avança um quadro
+                    self.last_update=now # Marca o tick da nova imagem.
+                    self.img=self.anim[self.frame] #define a nova imagem
+                elif self.direcao == 2: #Se está olhando para a esquerda...
                     if self.frame>=7:
                         self.frame=0
                     else:
-                        self.frame+=1
-                    self.last_update=now
-                    self.img=self.anim2[self.frame]
-        elif self.move==Facada: 
-            if elapsed_ticks>self.frame_ticks:
-                if self.direcao==1:
+                        self.frame+=1 # Avança um quadro
+                    self.last_update=now # Marca o tick da nova imagem.
+                    self.img=self.anim2[self.frame] #define a nova imagem
+        elif self.move==Facada: #Se o Player está dando Facada...
+            if elapsed_ticks>self.frame_ticks: # Se já está na hora de mudar de imagem...
+                if self.direcao==1: #Se está olhando para a direita...
                     if self.frame<18 or self.frame>=25:
                         self.frame=18
                     else:
-                        self.frame+=1
-                    self.last_update=now
-                    self.img=self.anim[self.frame]
-                    if self.frame==24:
+                        self.frame+=1 # Avança um quadro
+                    self.last_update=now # Marca o tick da nova imagem
+                    self.img=self.anim[self.frame] #define a nova imagem
+                    if self.frame==24: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
                         self.direcao=1
                         self.frame=10
-                elif self.direcao==2:
+                elif self.direcao==2: #Se está olhando para a esquerda...
                     if self.frame<8 or self.frame>14:
                         self.frame=8
                     else:
-                        self.frame+=1
-                    self.last_update=now
-                    self.img=self.anim2[self.frame]
-                    if self.frame==14:
+                        self.frame+=1 # Avança um quadro
+                    self.last_update=now # Marca o tick da nova imagem.
+                    self.img=self.anim2[self.frame] #define a nova imagem
+                    if self.frame==14: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
                         self.direcao=2
                         self.frame=0
         elif self.move==Shot:
-            if elapsed_ticks>self.frame_ticks:
-                if self.direcao==1:
+            if elapsed_ticks>self.frame_ticks: # Se já está na hora de mudar de imagem...
+                if self.direcao==1: #Se está olhando para a direita...
                     if self.frame<25 or self.frame>=28:
                         self.frame=25
                     else:
-                        self.frame+=1
-                    self.last_update=now
-                    self.img=self.anim[self.frame]
-                    if self.frame>=27:
+                        self.frame+=1 # Avança um quadro
+                    self.last_update=now # Marca o tick da nova imagem.
+                    self.img=self.anim[self.frame] #define a nova imagem
+                    if self.frame>=27: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
                         self.direcao=1
                         self.frame=10
-                elif self.direcao==2:
+                elif self.direcao==2: #Se está olhando para a esquerda...
                     if self.frame<15 or self.frame>19:
                         self.frame=15
                     else:
-                        self.frame+=1
-                    self.last_update=now
-                    self.img=self.anim2[self.frame]
-                    if self.frame==17:
+                        self.frame+=1 # Avança um quadro
+                    self.last_update=now # Marca o tick da nova imagem.
+                    self.img=self.anim2[self.frame] #define a nova imagem
+                    if self.frame==17: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
                         self.direcao=2
                         self.frame=0
-    def shot(self,b_shoot):
-        new_bullet = Bullet(assets['bullet_img'],  altura_janela/2-40, largura_janela/2-20, b_shoot)
-        bullet_Grupo.add(new_bullet)
+    def shot(self,b_shoot): #função em que o Player da tiro
+        new_bullet = Bullet(assets['bullet_img'],  altura_janela/2-40, largura_janela/2-20, b_shoot) #cria bala
+        bullet_Grupo.add(new_bullet) #adiciona bala criada ao Grupo de balas
 
-class Zombie(pygame.sprite.Sprite):
+class Zombie(pygame.sprite.Sprite): # Classe de zumbis
     def __init__(self, anim, speedx, speedy,speedxmap,speedymap,x,y):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.frame=0
-        self.anim=anim
-        self.img=self.anim[self.frame]
+        self.frame=0 # Armazena o índice atual na animação
+        self.anim=anim # Animação do Player
+        self.img=self.anim[self.frame] #define a imagem do Zumbi como uma das imagens da animação
         self.mask= pygame.mask.from_surface(self.img)
-        self.rect = self.img.get_rect()
-        self.rect.x =  x
-        self.rect.y = y
-        self.speedy = speedy
-        self.speedx = speedx
-        self.speedxmap = speedxmap
-        self.speedymap = speedymap
+        self.rect = self.img.get_rect() #torna imagem em um retangulo
+        self.rect.x =  x # X do canto superior esquerdo do retangulo
+        self.rect.y = y # Y do canto superior esquerdo do retangulo
+        self.speedy = speedy # VELOCIDADE DO Zumbi NO EIXO Y
+        self.speedx = speedx # VELOCIDADE DO Zumbi NO EIXO X
+        self.speedxmap = speedxmap # velocidade do mapa no Eixo X
+        self.speedymap = speedymap # velocidade do mapa no Eixo Y
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.frame_ticks=50
-        self.direcao_z=1
-    def move(self):
-        # Move em x
-        if self.speedx>-1:
+        self.frame_ticks=50#minimo de ticks para mudar o frame
+        self.direcao_z=1 # Direção em que 1 é olhando para a direita e 2 é para a esquerda
+    def move(self): # função para decidir em qual direção o Zumbi vai se mover
+        if self.speedx>-1: #Verifica se a velocidade em x é positiva
             if self.rect.x > P1.rect.x:
                 self.rect.x -= self.speedx
                 self.direcao_z=2
             elif self.rect.x < P1.rect.x:
                 self.rect.x += self.speedx
                 self.direcao_z=1
-            # Move em y
             if self.rect.y < P1.rect.y:
                 self.rect.y += self.speedy
             elif self.rect.y > P1.rect.y:
@@ -227,86 +209,85 @@ class Zombie(pygame.sprite.Sprite):
                     self.rect.y += self.speedy
                 elif self.rect.y > P1.rect.y:
                     self.rect.y -= self.speedy
-    def update(self):
+    def update(self): #Atualiza a posição do Zumbi
         self.rect.x += self.speedxmap
         self.rect.y += self.speedymap
-    def Animacao(self):
-        now=pygame.time.get_ticks()
-        elapsed_ticks= now - self.last_update
+    def Animacao(self): #Muda a imagem para criar a animação 
+        now=pygame.time.get_ticks() # Verifica o tick atual.
+        elapsed_ticks= now - self.last_update # Verifica quantos ticks se passaram desde a ultima mudança de frame.
         if elapsed_ticks>self.frame_ticks:
             if self.direcao_z==1:
-                self.last_update=now
+                self.last_update=now # Marca o tick da nova imagem.
                 if self.frame >= 10:
                     self.frame=0
                 else:
                     self.frame+=1
-                self.img=self.anim[self.frame]
+                self.img=self.anim[self.frame] #define a nova imagem
             elif self.direcao_z==2:
-                self.last_update=now
+                self.last_update=now # Marca o tick da nova imagem.
                 if self.frame<31 or self.frame>=39:
                     self.frame=31
                 else:
                     self.frame+=1
-                self.img=self.anim[self.frame]
+                self.img=self.anim[self.frame] #define a nova imagem
 
-class Bullet(pygame.sprite.Sprite):
-    # Construtor da classe.
-    def __init__(self, bullet_img, y, x, b_speed):
+class Bullet(pygame.sprite.Sprite): #Classe das balas
+    def __init__(self, bullet_img, y, x, b_speed): # Construtor da classe.
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.img = bullet_img
-        self.rect = self.img.get_rect()
+        self.img = bullet_img # define a imagem da bala
+        self.rect = self.img.get_rect()#torna imagem em um retangulo
         self.mask= pygame.mask.from_surface(self.img)
-        self.rect.x = x
-        self.rect.y = y
-        self.speedx = b_speed
+        self.rect.x = x #Posição no Eixo X
+        self.rect.y = y #Posição no Eixo Y
+        self.speedx = b_speed #Velocidade da Bala
 
-    def update(self):
-        # A bala move
+    def update(self): #Atualiza a posição da Bala
         self.rect.x += self.speedx
-        if self.rect.x < 0  or self.rect.x>800: # Se o tiro passar do inicio da tela, morre.
+        if self.rect.x < 0  or self.rect.x>largura_janela: # Se o tiro passar do inicio da tela, morre.
             self.kill()
 
-class Vida(pygame.sprite.Sprite):
+class Vida(pygame.sprite.Sprite): #Classe da Barra de Vida
     def __init__(self, anim):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.frame= 0
-        self.anim=anim
-        self.img=self.anim[self.frame//20]
-        self.rect = self.img.get_rect()
-        self.rect.x = largura_janela-400
-        self.rect.y = 0
+        self.frame= 0 # Armazena o índice atual na animação
+        self.anim=anim #Animação da Barra de Vida
+        self.img=self.anim[self.frame//20]  #define a imagem da Barra de Vida como uma das imagens da animação
+        self.rect = self.img.get_rect()  #torna imagem em um retangulo
+        self.rect.x = largura_janela-400 #Posição da Barra de Vida no Eixo X
+        self.rect.y = 0 #Posição da Barra de Vida no Eixo Y
         self.last_update = pygame.time.get_ticks() # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.frame_ticks=400
-    def update(self, vida_seg):
-        now=pygame.time.get_ticks()
-        elapsed_ticks= now - self.last_update
-        self.frame=vida_seg
+        self.frame_ticks=400 #minimo de ticks para mudar o frame
+    def update(self, vida_seg): # Atualiza a Barra de Vida
+        now=pygame.time.get_ticks() # Verifica o tick atual.
+        elapsed_ticks= now - self.last_update # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        self.frame=vida_seg # vida é o indice da animação da Barra de Vida
         if elapsed_ticks>self.frame_ticks:
-            self.last_update=now
-            if self.frame<201:
-                self.img=self.anim[self.frame//20]
-            else:
-                game = False
-                return game
-direcao=1
-P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao)
-Player_Grupo.add(P1)
-for i in range (20):
-    variavel=random.randint(0,len(posicoes_quadra)-1)
-    Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
-    Zombie_Grupo.add(Z)
-
-for i in range(6):
+            self.last_update=now # Marca o tick da nova imagem.
+            if self.frame<201: # Se os frames ainda estão na vida
+                self.img=self.anim[self.frame//20] # define a imagem para a vida correspondente
+            else: # Se os frames ultrapassaram a vida máxima
+                game = False # Jogo acaba
+                return game 
+P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao) # Cria o Personagem
+Player_Grupo.add(P1) #Adiciona o personagem no Grupo do Player
+for i in range(6): #Cria o Mapa juntando as quadras
     for j in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
-        quarteirao = Quadra(quarteirao_img, x, y,0,0)
+        posicao=[x,y]
+        posicoes_possiveis.append(posicao)
+        posicoes_quadra=posicoes_possiveis
+        quarteirao = Quadra(assets['quarteirao_img'], x, y,0,0)
         predio1=gerar_bloco_aleatorio(assets["casas"])
         predio = casa(predio1[0],x,y,predio1[1],predio1[2])
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)
+for i in range (20): # cria 20 Zumbis
+    variavel=random.randint(0,len(posicoes_quadra)-1) #Define aleatóriamente onde o Zumbi irá surgir
+    Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1]) # Cria Zumbi
+    Zombie_Grupo.add(Z) #Adiciona Zumbi no Grupo de Zmubis
 
 ##########################  LOOP PRINCIPAL ###############################
 
@@ -322,7 +303,7 @@ def sair():
     pygame.quit()
 def como_jogar():
     while como_jogar:
-        window.blit(htp,(100,100))
+        window.blit(assets['htp'],(100,100))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -331,7 +312,7 @@ def como_jogar():
 def game_over():
     while game_over:
         window.fill((0,0,0))
-        window.blit(gameover,(100,100))
+        window.blit(assets['gameover'],(100,100))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -430,7 +411,8 @@ while game:
                     zumbi.speedxmap =0
     
     if quarteirao.speedx==0 and quarteirao.speedy==0:
-        P1.move=Parado
+        if P1.move!=Shot:
+            P1.move=Parado
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
     mapa.update() # Atualiza os sprites do mapa
     Player_Grupo.update()
@@ -489,7 +471,7 @@ while game:
         for i in Hit_do_Player.values():
             for i2 in i:
                 for x in range (len(i)):
-                    variavel=random.randint(0,len(posicoes_quadra))
+                    variavel=random.randint(0,len(posicoes_quadra)-1)
                     Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
                     Zombie_Grupo.add(Z)
                 i2.kill()

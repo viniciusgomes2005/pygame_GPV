@@ -1,9 +1,12 @@
 import pygame
 import os
 from config import Player_largura, Player_altura, Zumbi_largura, Zumbie_altura, IMG_DIR, SND_DIR, FNT_DIR
-Normal_anim='animação player normal'
 
-
+Parado=1 #Ação do Player
+Correndo=2 #Ação do Player
+Facada=3 #Ação do Player
+Shot=4 #Ação do Player
+direcao=1 #Direção do Zumbi
 def load_assets():
     assets = {}
     casas = []
@@ -13,29 +16,29 @@ def load_assets():
     Player_Normal_E_Anim=[]
 
     ####  JOGADOR  #######
-    for i in range(1,11):
+    for i in range(1,11): #0-10
         Player_Normal = 'assets/Sprites/Player_Normal{}.png'.format(i)
         Player_Normal_img = pygame.image.load(Player_Normal).convert_alpha()
         Player_Normal_img = pygame.transform.scale(Player_Normal_img, (120, 130))
         Player_Normal_Anim.append(Player_Normal_img)
 
-    for i in range(1,9):
+    for i in range(1,9): #11-19
         Player_Run = 'assets/Sprites/Player_Run{}.png'.format(i)
         Player_Run_img = pygame.image.load(Player_Run).convert_alpha()
         Player_Run_img = pygame.transform.scale(Player_Run_img, (120, 130))
         Player_Normal_Anim.append(Player_Run_img)
 
-    for i in range(1,8):
+    for i in range(1,8): #20-26
         Player_Ataca = 'assets/Sprites/Player_atacar{}.png'.format(i)
         Player_Ataca_img = pygame.image.load(Player_Ataca).convert_alpha()
         Player_Ataca_img = pygame.transform.scale(Player_Ataca_img, (120, 130))
         Player_Normal_Anim.append(Player_Ataca_img)
 
-    for i in range(1,9):
-        Player_Run = 'assets/Sprites/Player_i_Run{}.png'.format(i)
-        Player_Run_img = pygame.image.load(Player_Run).convert_alpha()
-        Player_Run_img = pygame.transform.scale(Player_Run_img, (120, 130))
-        Player_Normal_E_Anim.append(Player_Run_img)
+    for i in range(1,9): 
+        Player_i_Run = 'assets/Sprites/Player_i_Run{}.png'.format(i)
+        Player_i_Run_img = pygame.image.load(Player_i_Run).convert_alpha()
+        Player_i_Run_img = pygame.transform.scale(Player_i_Run_img, (120, 130))
+        Player_Normal_E_Anim.append(Player_i_Run_img)
 
     for i in range(1,8):
         Player_Ataca = 'assets/Sprites/Player_i_atacar{}.png'.format(i)
@@ -43,7 +46,7 @@ def load_assets():
         Player_Ataca_img = pygame.transform.scale(Player_Ataca_img, (120, 130))
         Player_Normal_E_Anim.append(Player_Ataca_img)
     
-    for i in range(1,4):
+    for i in range(1,4): #27-29
         Player_shot='assets/Sprites/Player_Shot{}.png'.format(i)
         Player_shot_img= pygame.image.load(Player_shot).convert_alpha()
         Player_shot_img= pygame.transform.scale(Player_shot_img, (120, 130))
@@ -74,22 +77,33 @@ def load_assets():
         Zombie_Morre_img = pygame.transform.scale(Zombie_Morre_img, (120, 130))
         Zombie_Anim.append(Zombie_Morre_img)
     
-    for i in range(10,-1,-1):
-        Vida= 'assets/Sprites/VIDA_{}.png'.format(i)
-        Vida_img= pygame.image.load(Vida).convert_alpha()
-        Vida_img = pygame.transform.scale(Vida_img, (400, 50))
-        Vida_Anim.append(Vida_img)
     for i in range(1,11): #31-41
         zumbi='assets/Sprites/Walk2 ({}).png'.format(i)
         zumbi_img = pygame.image.load(zumbi).convert_alpha()
         zumbi_img=pygame.transform.scale(zumbi_img, (120, 130))
         Zombie_Anim.append(zumbi_img)
     
+    ########  VIDA  #############
+    for i in range(10,-1,-1):
+        Vida= 'assets/Sprites/VIDA_{}.png'.format(i)
+        Vida_img= pygame.image.load(Vida).convert_alpha()
+        Vida_img = pygame.transform.scale(Vida_img, (400, 50))
+        Vida_Anim.append(Vida_img)
+
     assets['Player_Normal_Anim'] = Player_Normal_Anim
     assets['Zombie_Anim']=Zombie_Anim
     assets['Vida_Anim']=Vida_Anim
     assets['Player_Normal_E_Anim']=Player_Normal_E_Anim
 
+    quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
+    quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
+    assets['quarteirao_img']=quarteirao_img
+    htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (2).png')
+    htp = pygame.transform.scale(htp,(800,600))
+    assets['htp']=htp
+    gameover=pygame.image.load('assets/Sprites/gameover (1).png')
+    gameover=pygame.transform.scale(gameover,(800,600))
+    assets['gameover']=gameover
     bullet= 'assets/Sprites/bullet.png'
     bullet_img= pygame.image.load(bullet).convert_alpha()
     bullet_img = pygame.transform.scale(bullet_img, (50, 50))

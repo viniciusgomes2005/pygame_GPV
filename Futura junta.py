@@ -273,7 +273,7 @@ class Vida(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.frame= 0
         self.anim=anim
-        self.img=self.anim[self.frame//10]
+        self.img=self.anim[self.frame//20]
         self.rect = self.img.get_rect()
         self.rect.x = largura_janela-400
         self.rect.y = 0
@@ -285,8 +285,8 @@ class Vida(pygame.sprite.Sprite):
         self.frame=vida_seg
         if elapsed_ticks>self.frame_ticks:
             self.last_update=now
-            if self.frame<101:
-                self.img=self.anim[self.frame//10]
+            if self.frame<201:
+                self.img=self.anim[self.frame//20]
             else:
                 game = False
                 return game
@@ -454,7 +454,7 @@ while game:
     Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
     if Hit_do_zumbi!={} and P1.move!=Facada:
         vida_seg+=1
-        if vida_seg<101:
+        if vida_seg<201:
             vida.update(vida_seg)
         else:
             game=False

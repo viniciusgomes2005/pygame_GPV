@@ -42,7 +42,7 @@ def gerar_bloco_aleatorio(quadra_possivel): #seleciona uma quadra aleatória
     bloco_aleatorio = random.choice(quadra_possivel)
     del quadra_possivel[quadra_possivel.index(bloco_aleatorio)]
     return bloco_aleatorio
-
+backmenu=pygame.image.load('assets/Sprites/backmenu.png')
 ###############################  CLASSES  #################################
 
 class Quadra(pygame.sprite.Sprite): # Classe para representar uma quadra
@@ -382,6 +382,7 @@ def game_over():
 def menu_(window):
     while menu_:
         window.fill((0,0,0))
+        window.blit(backmenu,(0,0))
         retangulo_iniciar = pygame.Rect(300, 200, 200, 100)
         retangulo_comojogar = pygame.Rect(300, 300, 200, 100)
         retangulo_sair = pygame.Rect(300, 400, 200, 100)

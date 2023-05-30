@@ -342,12 +342,14 @@ def lider(x):
         pontord = sorted(pontuacao)
         for i in range(len(pontord)):
             pontord[i]=str(pontord[i])
-        nomesord=[i for _, i in sorted(zip(pontuacao, nomes))]
+        nomesord=[i for _, i in sorted(zip(pontord, nomes))]
+        pontord.reverse()
+        nomesord.reverse()
         for i in range(len(pontord)):
             texto_nome=fonte.render(nomesord[i], True, (255, 255, 255))
             texto_pont=fonte.render(pontord[i], True, (255, 255, 255))
-            window.blit(texto_nome,(100,i*100))
-            window.blit(texto_pont,(100,i*100+50))
+            window.blit(texto_nome,(330,i*150))
+            window.blit(texto_pont,(450,i*150+80))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type==pygame.KEYDOWN:

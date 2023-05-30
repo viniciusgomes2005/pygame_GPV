@@ -363,29 +363,29 @@ while game:
             if event.key == pygame.K_w:
                 P1.move= Correndo
                 for quadra in mapa:
-                    quadra.speedy += 1
+                    quadra.speedy += 2
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedymap +=1
+                    zumbi.speedymap +=2
             elif event.key == pygame.K_s :
                 P1.move=Correndo
                 for quadra in mapa:
-                    quadra.speedy -= 1
+                    quadra.speedy -= 2
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedymap -=1
+                    zumbi.speedymap -=2
             elif event.key == pygame.K_a :                   
                 P1.direcao=2
                 P1.move=Correndo
                 for quadra in mapa:
-                    quadra.speedx += 1
+                    quadra.speedx += 2
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap +=1
+                    zumbi.speedxmap +=2
             elif event.key == pygame.K_d :                
                 P1.direcao=1
                 P1.move=Correndo
                 for quadra in mapa:
-                    quadra.speedx -= 1
+                    quadra.speedx -= 2
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap -=1
+                    zumbi.speedxmap -=2
             elif event.key == pygame.K_l:
                 P1.move=Facada
             elif event.key== pygame.K_k:
@@ -425,16 +425,16 @@ while game:
     Player_Grupo.update()
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}:
-            zumbi.move()
-        zumbi.update()
+            zumbi.update()
+        zumbi.move()
         zumbi.Animacao()
     if len(bullet_Grupo)!=0:
         bullet_Grupo.update()
     # Atualiza os sprites do Player
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}: 
-            zumbi.move()
-        zumbi.update()
+            zumbi.update()
+        zumbi.move()
         zumbi.Animacao()
 
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios

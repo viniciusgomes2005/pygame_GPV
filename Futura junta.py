@@ -15,6 +15,12 @@ pygame.display.set_caption('Pygame') # Da o nome do jogo
 #####################  SPRITES  ################################
 assets=load_assets()
 fonte=pygame.font.SysFont("Comic Sans MS",60)
+##### sons ###################################################################################################################################################################
+pygame.mixer.music.load('assets/audios/twd.ogg')
+pygame.mixer.music.set_volume(0.4)
+tiro_sound = pygame.mixer.Sound('assets/audios/tiro.wav')
+faca_sound = pygame.mixer.Sound('assets/audios/facada.wav')
+zumbi_sound = pygame.mixer.Sound('assets/audios/zumbi.wav')
 ################################  GRUPOS  ####################################
 
 Player_Grupo= pygame.sprite.Group() #Grupo do Player
@@ -396,11 +402,14 @@ def menu_(window):
                     como_jogar()
                 elif retangulo_sair.collidepoint(event.pos):
                     return False
+pygame.mixer.music.play(loops=-1)   
 username = nome()
 menu_ativo = menu_(window)
+
 if menu_ativo ==True:
     game=True
 while game:
+
     clock.tick(FPS)
     font = pygame.font.SysFont(None, 48)
     text = font.render('Zumbis Mortos: ', True, (0, 0, 0))
@@ -437,8 +446,13 @@ while game:
                     zumbi.speedxmap -=2
             elif event.key == pygame.K_l:
                 P1.move=Facada
+                if quadra.speedx != 0 or quadra.speedy != 0:
+                    # toca facada
+                    faca_sound.play() 
             elif event.key== pygame.K_k:
                 P1.move=Shot
+                #toca tiro
+                tiro_sound.play()
                 if P1.direcao==1:
                     b_shoot=20
                 if P1.direcao==2:
@@ -535,7 +549,12 @@ while game:
                 posq=random.choice(Quadras.sprites())
                 Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
+                posq=random.choice(Quadras.sprites())
+                Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
+                Zombie_Grupo.add(Z)
                 i2.kill()
+                        #toca audio zumbi ###############
+        zumbi_sound.play()
         Zumbis_Mortos+=1
     
     Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,False,pygame.sprite.collide_mask)
@@ -545,7 +564,12 @@ while game:
                 posq=random.choice(Quadras.sprites())
                 Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
+                posq=random.choice(Quadras.sprites())
+                Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
+                Zombie_Grupo.add(Z)
                 i2.kill()
+         #toca audio zumbi ###############
+        zumbi_sound.play()
         Zumbis_Mortos+=1
     mapa.update()
     Player_Grupo.update()

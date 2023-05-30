@@ -288,7 +288,7 @@ for i in range(6): #Cria o Mapa juntando as quadras
         Quadras.add(quarteirao)
 for i in range (30): # cria 20 Zumbis
     variavel=random.randint(0,len(posicoes_quadra)-1) #Define aleatóriamente onde o Zumbi irá surgir
-    Z = Zombie(assets['Zombie_Anim'],2 ,2,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1]) # Cria Zumbi
+    Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1]) # Cria Zumbi
     Zombie_Grupo.add(Z) #Adiciona Zumbi no Grupo de Zmubis
 retangulo_cima=casa(assets['black'],-3600,-2900,0,0)
 retangulo_baixo=casa(assets['black'],-3600,1900,0,0)
@@ -363,29 +363,29 @@ while game:
             if event.key == pygame.K_w:
                 P1.move= Correndo
                 for quadra in mapa:
-                    quadra.speedy += 2
+                    quadra.speedy += 1
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedymap +=2
+                    zumbi.speedymap +=1
             elif event.key == pygame.K_s :
                 P1.move=Correndo
                 for quadra in mapa:
-                    quadra.speedy -= 2
+                    quadra.speedy -= 1
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedymap -=2
+                    zumbi.speedymap -=1
             elif event.key == pygame.K_a :                   
                 P1.direcao=2
                 P1.move=Correndo
                 for quadra in mapa:
-                    quadra.speedx += 2
+                    quadra.speedx += 1
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap +=2
+                    zumbi.speedxmap +=1
             elif event.key == pygame.K_d :                
                 P1.direcao=1
                 P1.move=Correndo
                 for quadra in mapa:
-                    quadra.speedx -= 2
+                    quadra.speedx -= 1
                 for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap -=2
+                    zumbi.speedxmap -=1
             elif event.key == pygame.K_l:
                 P1.move=Facada
             elif event.key== pygame.K_k:
@@ -425,16 +425,16 @@ while game:
     Player_Grupo.update()
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}:
-            zumbi.update()
-        zumbi.move()
+            zumbi.move()
+        zumbi.update()
         zumbi.Animacao()
     if len(bullet_Grupo)!=0:
         bullet_Grupo.update()
     # Atualiza os sprites do Player
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}: 
-            zumbi.update()
-        zumbi.move()
+            zumbi.move()
+        zumbi.update()
         zumbi.Animacao()
 
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
@@ -479,7 +479,7 @@ while game:
         for i in Hit_do_Player.values():
             for i2 in i:
                 posq=random.choice(Quadras.sprites())
-                Z = Zombie(assets['Zombie_Anim'],2,2,0,0,posq.rect.x,posq.rect.y)
+                Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1
@@ -489,7 +489,7 @@ while game:
         for i in Hit_da_Bala.values():
             for i2 in i:
                 posq=random.choice(Quadras.sprites())
-                Z = Zombie(assets['Zombie_Anim'],2,2,0,0,posq.rect.x,posq.rect.y)
+                Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1

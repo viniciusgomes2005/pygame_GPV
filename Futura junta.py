@@ -1,7 +1,7 @@
 import pygame
 import random
 from assets import *
-
+import json
 # Inicialização do Pygame
 pygame.init()
 
@@ -306,6 +306,30 @@ vida=Vida(assets['Vida_Anim'])
 vida_seg=0
 Zumbis_Mortos=0
 game=False
+input_rect = pygame.Rect(200, 200, 140, 32)
+color_active = pygame.Color('lightskyblue3')
+color_passive = pygame.Color('chartreuse4')
+color = color_passive
+active=False
+def nome():
+    name = ""
+    sair = False
+    while not sair:
+        window.fill((0, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    sair = True
+                elif event.key == pygame.K_BACKSPACE or event.key == pygame.K_DELETE:
+                    name = name[:-1]
+                else:
+                    name += event.unicode
+        
+        texto_nome = fonte.render(name, True, (255, 255, 255))
+        window.blit(texto_nome, (100, 100))
+        pygame.display.update()
+
+    return name
 def sair():
     pygame.quit()
 def como_jogar():
@@ -348,6 +372,7 @@ def menu_(window):
                     como_jogar()
                 elif retangulo_sair.collidepoint(event.pos):
                     return False
+username = nome()
 menu_ativo = menu_(window)
 if menu_ativo ==True:
     game=True
@@ -449,6 +474,10 @@ while game:
         if vida_seg<201:
             vida.update(vida_seg)
         else:
+            with open('leaderboard.txt','a') as arq:
+                arq.write("{0}".format(username))
+                arq.write(" {0} ".format(Zumbis_Mortos))
+            arq.close()
             game=False
 
     hits_zumbi_construcao = pygame.sprite.groupcollide(Zombie_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)

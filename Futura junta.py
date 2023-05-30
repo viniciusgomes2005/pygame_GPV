@@ -306,11 +306,6 @@ vida=Vida(assets['Vida_Anim'])
 vida_seg=0
 Zumbis_Mortos=0
 game=False
-input_rect = pygame.Rect(200, 200, 140, 32)
-color_active = pygame.Color('lightskyblue3')
-color_passive = pygame.Color('chartreuse4')
-color = color_passive
-active=False
 def nome():
     name = ""
     sair = False
@@ -328,8 +323,35 @@ def nome():
         texto_nome = fonte.render(name, True, (255, 255, 255))
         window.blit(texto_nome, (100, 100))
         pygame.display.update()
-
     return name
+def lider(x):
+    while lider:
+        window.fill((0,0,0))
+        with open(x) as arq:
+            string=arq.read()
+        string = string.split(" ")
+        nomes=[]
+        pontuacao=[]
+        for i in range(len(string)):
+            if i%2==0:
+                nomes.append(string[i])
+            else:
+                pontuacao.append(string[i])
+        for i in range(len(pontuacao)):
+            pontuacao[i] = int(pontuacao[i])      
+        pontord = sorted(pontuacao)
+        for i in range(len(pontord)):
+            pontord[i]=str(pontord[i])
+        nomesord=[i for _, i in sorted(zip(pontuacao, nomes))]
+        for i in range(len(pontord)):
+            texto_nome=fonte.render(nomesord[i], True, (255, 255, 255))
+            texto_pont=fonte.render(pontord[i], True, (255, 255, 255))
+            window.blit(texto_nome,(100,i*100))
+            window.blit(texto_pont,(100,i*100+50))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type==pygame.KEYDOWN:
+                return 0
 def sair():
     pygame.quit()
 def como_jogar():
@@ -478,6 +500,7 @@ while game:
                 arq.write("{0}".format(username))
                 arq.write(" {0} ".format(Zumbis_Mortos))
             arq.close()
+            lider('leaderboard.txt')
             game=False
 
     hits_zumbi_construcao = pygame.sprite.groupcollide(Zombie_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)

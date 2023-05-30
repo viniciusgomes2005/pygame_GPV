@@ -22,6 +22,7 @@ Construcoes_Grupo= pygame.sprite.Group() # Grupo das Construções
 Zombie_Grupo = pygame.sprite.Group() # Grupo dos Zumbis
 mapa = pygame.sprite.Group() #Grupo que forma o mapa
 bullet_Grupo = pygame.sprite.Group() # Grupo para as balas
+Quadras=pygame.sprite.Group()
 
 posicoes_possiveis=[] #posições possiveis para spawn de zumbis
 mapa_largura = 800 * 6  # Largura total do mapa
@@ -288,7 +289,12 @@ for i in range (20): # cria 20 Zumbis
     variavel=random.randint(0,len(posicoes_quadra)-1) #Define aleatóriamente onde o Zumbi irá surgir
     Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1]) # Cria Zumbi
     Zombie_Grupo.add(Z) #Adiciona Zumbi no Grupo de Zmubis
-
+retangulo_cima=casa(assets['black'],-2400,-1800,0,0)
+retangulo_baixo=casa(assets['black'],-2400,1800,0,0)
+retangulo_esquerda=casa(assets['preto'],-2400,-1800,0,0)
+retangulo_direita=casa(assets['preto'],2400,-1800,0,0)
+mapa.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
+Construcoes_Grupo.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
 ##########################  LOOP PRINCIPAL ###############################
 
 # Loop principal
@@ -415,6 +421,7 @@ while game:
             P1.move=Parado
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
     mapa.update() # Atualiza os sprites do mapa
+    Quadras.update()
     Player_Grupo.update()
     for zumbi in Zombie_Grupo:
         zumbi.move()
@@ -470,10 +477,9 @@ while game:
     if P1.move==Facada and Hit_do_Player!={}:
         for i in Hit_do_Player.values():
             for i2 in i:
-                for x in range (len(i)):
-                    variavel=random.randint(0,len(posicoes_quadra)-1)
-                    Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
-                    Zombie_Grupo.add(Z)
+                posq=random.choice(Quadras.sprites())
+                Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
+                Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1
     
@@ -481,13 +487,15 @@ while game:
     if Hit_da_Bala!={}:
         for i in Hit_da_Bala.values():
             for i2 in i:
-                for x in range (len(i)):
-                    variavel=random.randint(0,len(posicoes_quadra))
-                    Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1])
-                    Zombie_Grupo.add(Z)
+                if len(Quadras.sprites())==0:
+                    print('grupo vazio')
+                posq=random.choice(Quadras.sprites())
+                Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
+                Zombie_Grupo.add(Z)
                 i2.kill()
         Zumbis_Mortos+=1
     mapa.update()
+    Quadras.update()
     Player_Grupo.update()
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}:

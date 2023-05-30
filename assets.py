@@ -94,7 +94,12 @@ def load_assets():
     assets['Zombie_Anim']=Zombie_Anim
     assets['Vida_Anim']=Vida_Anim
     assets['Player_Normal_E_Anim']=Player_Normal_E_Anim
-
+    black=pygame.image.load('assets/Sprites/black.png')
+    black=pygame.transform.scale(black,(4800,1))
+    assets['black']=black
+    preto=pygame.image.load('assets/Sprites/preto.png')
+    preto=pygame.transform.scale(preto,(1,3600))
+    assets['preto']=preto
     quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
     quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
     assets['quarteirao_img']=quarteirao_img

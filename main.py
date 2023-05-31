@@ -129,7 +129,7 @@ class Player(pygame.sprite.Sprite): # Classe do PLayer
                     self.img=self.anim[self.frame] #define a nova imagem
                     if self.frame==24: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
-                        self.direcao=1
+                        self.direcao=1# está olhando para a direita...
                         self.frame=10
                 elif self.direcao==2: #Se está olhando para a esquerda...
                     if self.frame<8 or self.frame>14:
@@ -140,7 +140,7 @@ class Player(pygame.sprite.Sprite): # Classe do PLayer
                     self.img=self.anim2[self.frame] #define a nova imagem
                     if self.frame==14: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
-                        self.direcao=2
+                        self.direcao=2 # está olhando para a esquerda...
                         self.frame=0
         elif self.move==Shot:
             if elapsed_ticks>self.frame_ticks: # Se já está na hora de mudar de imagem...
@@ -153,7 +153,7 @@ class Player(pygame.sprite.Sprite): # Classe do PLayer
                     self.img=self.anim[self.frame] #define a nova imagem
                     if self.frame>=27: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
-                        self.direcao=1
+                        self.direcao=1# está olhando para a direita...
                         self.frame=10
                 elif self.direcao==2: #Se está olhando para a esquerda...
                     if self.frame<15 or self.frame>19:
@@ -164,7 +164,7 @@ class Player(pygame.sprite.Sprite): # Classe do PLayer
                     self.img=self.anim2[self.frame] #define a nova imagem
                     if self.frame==17: #Se a animação chegou ao fim, volta para a animação de correr
                         self.move=Correndo
-                        self.direcao=2
+                        self.direcao=2 # está olhando para a esquerda...
                         self.frame=0
     def shot(self,b_shoot): #função em que o Player da tiro
         new_bullet = Bullet(assets['bullet_img'],  altura_janela/2-40, largura_janela/2-20, b_shoot) #cria bala
@@ -192,10 +192,10 @@ class Zombie(pygame.sprite.Sprite): # Classe de zumbis
         if self.speedx>-1: #Verifica se a velocidade em x é positiva
             if self.rect.x > P1.rect.x:
                 self.rect.x -= self.speedx
-                self.direcao_z=2
+                self.direcao_z=2 # está olhando para a esquerda...
             elif self.rect.x < P1.rect.x:
                 self.rect.x += self.speedx
-                self.direcao_z=1
+                self.direcao_z=1# está olhando para a direita...
             if self.rect.y < P1.rect.y:
                 self.rect.y += self.speedy
             elif self.rect.y > P1.rect.y:
@@ -211,7 +211,7 @@ class Zombie(pygame.sprite.Sprite): # Classe de zumbis
             else:
                 if self.rect.x > P1.rect.x:
                     self.rect.x -= self.speedx
-                    self.direcao_z=1
+                    self.direcao_z=1 # está olhando para a direita...
                 elif self.rect.x < P1.rect.x:
                     self.rect.x += self.speedx
                     self.direcao_z=2
@@ -227,14 +227,14 @@ class Zombie(pygame.sprite.Sprite): # Classe de zumbis
         now=pygame.time.get_ticks() # Verifica o tick atual.
         elapsed_ticks= now - self.last_update # Verifica quantos ticks se passaram desde a ultima mudança de frame.
         if elapsed_ticks>self.frame_ticks:
-            if self.direcao_z==1:
+            if self.direcao_z==1: #se está olhando para a direita...
                 self.last_update=now # Marca o tick da nova imagem.
                 if self.frame >= 10:
                     self.frame=0
                 else:
                     self.frame+=1
                 self.img=self.anim[self.frame] #define a nova imagem
-            elif self.direcao_z==2:
+            elif self.direcao_z==2: #se está olhando para a esquerda...
                 self.last_update=now # Marca o tick da nova imagem.
                 if self.frame<31 or self.frame>=39:
                     self.frame=31
@@ -283,7 +283,7 @@ class Vida(pygame.sprite.Sprite): #Classe da Barra de Vida
                 return game 
 P1=Player(assets['Player_Normal_Anim'],assets['Player_Normal_E_Anim'],Parado, direcao) # Cria o Personagem
 Player_Grupo.add(P1) #Adiciona o personagem no Grupo do Player
-for i in range(6): #Cria o Mapa juntando as quadras
+for i in range(6): #Cria o Mapa juntando as quadras, adicionando e gerando os prédios aos seus respectivos Grupos
     for j in range(6):
         x = j * 1000 - 3600
         y = i * 800 - 2900
@@ -296,19 +296,18 @@ for i in range(6): #Cria o Mapa juntando as quadras
         mapa.add(quarteirao,predio)
         Construcoes_Grupo.add(predio)
         Quadras.add(quarteirao)
-for i in range (30): # cria 20 Zumbis
+for i in range (30): # cria 30 Zumbis
     variavel=random.randint(0,len(posicoes_quadra)-1) #Define aleatóriamente onde o Zumbi irá surgir
     Z = Zombie(assets['Zombie_Anim'],1 ,1,0,0,posicoes_quadra[variavel][0],posicoes_quadra[variavel][1]) # Cria Zumbi
     Zombie_Grupo.add(Z) #Adiciona Zumbi no Grupo de Zmubis
+#limites do mapa
 retangulo_cima=casa(assets['black'],-3600,-2900,0,0)
 retangulo_baixo=casa(assets['black'],-3600,1900,0,0)
 retangulo_esquerda=casa(assets['preto'],-3600,-2899,0,0)
 retangulo_direita=casa(assets['preto'],2400,-2900,0,0)
 mapa.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
 Construcoes_Grupo.add(retangulo_baixo,retangulo_cima,retangulo_esquerda,retangulo_direita)
-##########################  LOOP PRINCIPAL ###############################
-
-# Loop principal
+##########################  FUNÇÕES DO JOGO ###############################
 clock = pygame.time.Clock()
 FPS = 60
 menu = True 
@@ -316,13 +315,13 @@ vida=Vida(assets['Vida_Anim'])
 vida_seg=0
 Zumbis_Mortos=0
 game=False
-def nome():
+def nome(): # Função que pergunta o nome do jogador
     qualseunome="QUAL O SEU NOME?"
     semespaco="(sem espaço por favor)"
     name = ""
     sair = False
     while not sair:
-        window.fill((0, 0, 0))
+        window.fill((0, 0, 0)) #gera tela preta
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
@@ -331,15 +330,17 @@ def nome():
                     name = name[:-1]
                 else:
                     name += event.unicode
+        # Fontes das escritas
         texto_nome = fonte.render(name, True, (255, 255, 255))
         texto_sm = font.render(semespaco, True, (255, 255, 255))
         texto_qsn = titulo.render(qualseunome, True, (255, 255, 255))
+        # Mostra as escritas na tela
         window.blit(texto_nome, (320, 350))
         window.blit(texto_sm,(350,100))
         window.blit(texto_qsn, (35, 0))
         pygame.display.update()
     return name
-def lider(x):
+def lider(x): # Função que organiza o leaderboard 
     while lider:
         window.fill((0,0,0))
         window.blit(liderbord,(200,0))
@@ -372,9 +373,9 @@ def lider(x):
         for event in pygame.event.get():
             if event.type==pygame.KEYDOWN:
                 return 0
-def sair():
+def sair(): # Função que sai do jogo
     pygame.quit()
-def como_jogar():
+def como_jogar(): # Função que mostra na janela como jogar
     while como_jogar:
         window.fill((0,0,0))
         window.blit(assets['htp'],(100,100))
@@ -383,7 +384,7 @@ def como_jogar():
             if event.type == pygame.KEYDOWN:
                 if event.key==pygame.K_RETURN:
                     return 0
-def game_over():
+def game_over(): # Função que mostra a tela de Game over
     while game_over:
         window.fill((0,0,0))
         window.blit(assets['gameover'],(100,100))
@@ -392,7 +393,7 @@ def game_over():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     return 0
-def menu_(window):
+def menu_(window): # Função que mostra o Menu
     while menu_:
         window.fill((0,0,0))
         window.blit(backmenu,(0,0))
@@ -416,124 +417,129 @@ def menu_(window):
                     como_jogar()
                 elif retangulo_sair.collidepoint(event.pos):
                     return False
-pygame.mixer.music.play(loops=-1)   
-username = nome()
-menu_ativo = menu_(window)
+#########################  FUNÇÃO PRINCIPAL  ###################3
+pygame.mixer.music.play(loops=-1) # Toca musica de fundo
+username = nome() #Chama a função que pede o nome do jogador
+menu_ativo = menu_(window) # Chama a função que mostra o Menu
 
-if menu_ativo ==True:
-    game=True
+# Loop principal
+if menu_ativo ==True: #Se o menu retorna True...
+    game=True # Jogo começa
 while game:
-
     clock.tick(FPS)
     font = pygame.font.SysFont(None, 48)
-    text = font.render('Zumbis Mortos: ', True, (0, 0, 0))
+    # Placar de Zumbis mortos
+    text = font.render('Zumbis Mortos: ', True, (0, 0, 0)) 
     text2=font.render('{}'.format(Zumbis_Mortos),True,(0,0,0))
-    for event in pygame.event.get():
+    # Eventos:
+    for event in pygame.event.get(): # Clicar no X
         if event.type == pygame.QUIT:
             game = False
-        elif event.type == pygame.KEYDOWN :
-            if event.key == pygame.K_w:
-                P1.move= Correndo
-                for quadra in mapa:
+        elif event.type == pygame.KEYDOWN : # Tecla apertada
+            if event.key == pygame.K_w: #SE w forpressionado...
+                P1.move= Correndo # altera estado da ação do Player
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento #muda a velocidade do mapa para dar a ilusão de movimento 
                     quadra.speedy += 2
-                for zumbi in Zombie_Grupo:
+                for zumbi in Zombie_Grupo: #muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
                     zumbi.speedymap +=2
-            elif event.key == pygame.K_s :
-                P1.move=Correndo
-                for quadra in mapa:
+            elif event.key == pygame.K_s :#SE s forpressionado...
+                P1.move=Correndo # altera estado da ação do Player
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento #muda a velocidade do mapa para dar a ilusão de movimento
                     quadra.speedy -= 2
-                for zumbi in Zombie_Grupo:
+                for zumbi in Zombie_Grupo:#muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
                     zumbi.speedymap -=2
-            elif event.key == pygame.K_a :                   
-                P1.direcao=2
-                P1.move=Correndo
-                for quadra in mapa:
+            elif event.key == pygame.K_a : #SE a forpressionado...           
+                P1.direcao=2 # define a direção do Player
+                P1.move=Correndo # altera estado da ação do Player
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento
                     quadra.speedx += 2
-                for zumbi in Zombie_Grupo:
-                    zumbi.speedxmap +=2
-            elif event.key == pygame.K_d :                
-                P1.direcao=1
-                P1.move=Correndo
-                for quadra in mapa:
+                for zumbi in Zombie_Grupo: #muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
+                    zumbi.speedxmap +=2 
+            elif event.key == pygame.K_d : #SE d forpressionado...          
+                P1.direcao=1 # define a direção do Player
+                P1.move=Correndo # altera estado da ação do Player
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento
                     quadra.speedx -= 2
-                for zumbi in Zombie_Grupo:
+                for zumbi in Zombie_Grupo:#muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
                     zumbi.speedxmap -=2
-            elif event.key == pygame.K_l:
-                P1.move=Facada
+            elif event.key == pygame.K_l: # Se aperta l: da facada
+                P1.move=Facada # altera estado da ação do Player
                 if quadra.speedx != 0 or quadra.speedy != 0:
-                    # toca facada
+                    # toca som de facada
                     faca_sound.play() 
-            elif event.key== pygame.K_k:
+            elif event.key== pygame.K_k: # Se aperta k: da o tiro
                 P1.move=Shot
-                #toca tiro
+                #toca o som de tiro
                 tiro_sound.play()
-                if P1.direcao==1:
+                if P1.direcao==1: # define a direção do Player
                     b_shoot=20
-                if P1.direcao==2:
+                if P1.direcao==2: # define a direção do Player
                     b_shoot=-20
-                P1.shot(b_shoot)
-        elif event.type == pygame.KEYUP :
+                P1.shot(b_shoot) # usa a função de tiro do Player
+        elif event.type == pygame.KEYUP : # Para o movimento do Player
             if event.key == pygame.K_w :
-                for quadra in mapa:
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento
                     quadra.speedy =0
-                for zumbi in Zombie_Grupo:
+                for zumbi in Zombie_Grupo:#muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
                     zumbi.speedymap =0
             elif event.key == pygame.K_s :
-                for quadra in mapa:
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento
                     quadra.speedy =0
-                for zumbi in Zombie_Grupo:
+                for zumbi in Zombie_Grupo:#muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
                     zumbi.speedymap =0
             elif event.key == pygame.K_a :
-                for quadra in mapa:
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento
                     quadra.speedx =0
-                for zumbi in Zombie_Grupo:
+                for zumbi in Zombie_Grupo:#muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
                     zumbi.speedxmap =0
             elif event.key == pygame.K_d :
-                for quadra in mapa:
+                for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento
                     quadra.speedx =0
-                for zumbi in Zombie_Grupo:
+                for zumbi in Zombie_Grupo:#muda a velocidade do mapa usada no zumbi para dar a ilusão de movimento
                     zumbi.speedxmap =0
     
     if quarteirao.speedx==0 and quarteirao.speedy==0:
         if P1.move!=Shot:
-            P1.move=Parado
+            P1.move=Parado # altera estado da ação do Player
     hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
     mapa.update() # Atualiza os sprites do mapa
-    Player_Grupo.update()
+    Player_Grupo.update() # Atualiza os sprites do Player
+    # Atualiza os sprites e movimento do Zumbi
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}:
             zumbi.update()
         zumbi.move()
         zumbi.Animacao()
-    if len(bullet_Grupo)!=0:
-        bullet_Grupo.update()
-    # Atualiza os sprites do Player
+    if len(bullet_Grupo)!=0: # Se houver tiros:
+        bullet_Grupo.update() # Atualiza os Tiros
+    # Atualiza os sprites e movimento do Zumbi
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}: 
             zumbi.update()
         zumbi.move()
         zumbi.Animacao()
 
-    hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões com os prédios
+    hits_Construcoes= pygame.sprite.groupcollide(Player_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask) #verifica colisões do Player com os prédios
     if hits_Construcoes!= {}:
-        for quadra in mapa:
+        for quadra in mapa: #muda a velocidade do mapa para dar a ilusão de movimento
             quadra.speedx= 0
             quadra.speedy=0
 
-    Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
-    if Hit_do_zumbi!={} and P1.move!=Facada:
-        vida_seg+=1
-        if vida_seg<201:
-            vida.update(vida_seg)
+    Hit_do_zumbi=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)# verifica colisões dos Zumbis no Player
+    if Hit_do_zumbi!={} and P1.move!=Facada: #Se o Player colidiu com o Zumbi e nao esta dando facada:
+        vida_seg+=1 #Zumbi da dano 
+        if vida_seg<201: # enquanto a vida for menor que a vida max...
+            vida.update(vida_seg) # Atualiza a vida do Player
         else:
-            with open('leaderboard.txt','a') as arq:
+            with open('leaderboard.txt','a') as arq: #atualiza a leaderboard com o nome e pontuação do Player
                 arq.write("{0}".format(username))
                 arq.write(" {0} ".format(Zumbis_Mortos))
-            arq.close()
-            game=False
+            arq.close() #Fecha a leaderboard
+            game=False #fim do jogo
 
-    hits_zumbi_construcao = pygame.sprite.groupcollide(Zombie_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)
-    if hits_zumbi_construcao!={}:
+    hits_zumbi_construcao = pygame.sprite.groupcollide(Zombie_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)# verifica colisão entr zumbi e construção
+    if hits_zumbi_construcao!={}: # Se Zumbi colide...
+        #todos os zumbis vão para a direção contrária 
         for zumbi in hits_zumbi_construcao:
             construcao =hits_zumbi_construcao[zumbi][0]
             if zumbi.rect.right>=construcao.rect.left and zumbi.speedx!=0 :
@@ -544,7 +550,7 @@ while game:
                 zumbi.speedy*=-1
             if zumbi.rect.bottom>=construcao.rect.top and zumbi.speedy!=0 :
                 zumbi.speedy*=-1
-    else:
+    else: # Caso contrário movimento dos zumbis volta ao normal
         for zumbi in hits_zumbi_construcao:
             construcao =hits_zumbi_construcao[zumbi][0]
             if zumbi.rect.right<construcao.rect.left and zumbi.speedx!=0 :
@@ -555,58 +561,64 @@ while game:
                 zumbi.speedy=1
             if zumbi.rect.bottom<construcao.rect.top and zumbi.speedy!=0 :
                 zumbi.speedy=1
-    Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask)
-    if P1.move==Facada and Hit_do_Player!={}:
+    Hit_do_Player=pygame.sprite.groupcollide(Player_Grupo,Zombie_Grupo,False,False,pygame.sprite.collide_mask) #verifica a colisão do Player com o Zumbi
+    if P1.move==Facada and Hit_do_Player!={}:#Se tem colisão e o pLayer esta dando facada...
         for i in Hit_do_Player.values():
             for i2 in i:
+                #gera 2 novos zumbis em posições aleatórias
                 posq=random.choice(Quadras.sprites())
                 Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
                 posq=random.choice(Quadras.sprites())
                 Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
+                #mata o Zumbi colidido
                 i2.kill()
-                        #toca audio zumbi ###############
+        #toca audio zumbi ###############
         zumbi_sound.play()
-        Zumbis_Mortos+=1
+        Zumbis_Mortos+=1 # aumenta o numero de ponto do Player
     
-    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,False,pygame.sprite.collide_mask)
-    if Hit_da_Bala!={}:
+    Hit_da_Bala=pygame.sprite.groupcollide(bullet_Grupo,Zombie_Grupo,True,False,pygame.sprite.collide_mask)# Verifica colisão entre as balas e os Zumbis
+    if Hit_da_Bala!={}: #Se ha colisão...
         for i in Hit_da_Bala.values():
             for i2 in i:
+                #gera 2 novos zumbis em posições aleatórias
                 posq=random.choice(Quadras.sprites())
                 Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
                 posq=random.choice(Quadras.sprites())
                 Z = Zombie(assets['Zombie_Anim'],1,1,0,0,posq.rect.x,posq.rect.y)
                 Zombie_Grupo.add(Z)
+                #mata o Zumbi colidido
                 i2.kill()
-         #toca audio zumbi ###############
+        #toca audio zumbi ###############
         zumbi_sound.play()
-        Zumbis_Mortos+=1
-    mapa.update()
-    Player_Grupo.update()
+        Zumbis_Mortos+=1 # aumenta o numero de ponto do Player
+    mapa.update() # Atualiza o mapa
+    Player_Grupo.update() #Atualiza o Player
+    #Atualiza os Zumbis
     for zumbi in Zombie_Grupo:
         if hits_Construcoes=={}:
              zumbi.update()
         zumbi.move()
         zumbi.Animacao()
 
-    window.fill((0, 0, 0))  
-    mapa.draw(window)
-    window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect)
-    if len(Zombie_Grupo)>0:
+    window.fill((0, 0, 0)) #preenche a janela de preto
+    mapa.draw(window) #desenha a janela
+    window.blit(Player_Grupo.sprites()[0].img, Player_Grupo.sprites()[0].rect) #desenha o Player
+    if len(Zombie_Grupo)>0:#Se houverem Zumbis...
+        #desenha os Zumbis
         for i in range(len(Zombie_Grupo)):
             window.blit(Zombie_Grupo.sprites()[i].img, Zombie_Grupo.sprites()[i].rect)
-    if len(bullet_Grupo)!=0:
-        window.blit(bullet_Grupo.sprites()[0].img, bullet_Grupo.sprites()[0].rect)
-    window.blit(vida.img, vida.rect)
-    window.blit(text, (10, 10))
-    window.blit(text2, (275, 10))
+    if len(bullet_Grupo)!=0: #Se houverem balas...
+        window.blit(bullet_Grupo.sprites()[0].img, bullet_Grupo.sprites()[0].rect) #desenha as balas
+    window.blit(vida.img, vida.rect) #desenha a Barra de Vida
+    window.blit(text, (10, 10)) # desenha a pontuação 
+    window.blit(text2, (275, 10)) # desenha a pontuação 
     pygame.display.update() # Atualiza a janela
-if menu_ativo ==True:
-    game_over()
-    lider('leaderboard.txt')
-menu_ativo=False
+if menu_ativo ==True: #Se o menu estiver aberto...
+    game_over() #chama função de game over
+    lider('leaderboard.txt') #chama função de leaderboard
+menu_ativo=False #fechamenu se o Player morrer
 
 pygame.quit() # Finalização

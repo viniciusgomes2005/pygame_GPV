@@ -14,7 +14,11 @@ pygame.display.set_caption('Pygame') # Da o nome do jogo
 
 #####################  SPRITES  ################################
 assets=load_assets()
+titulo=pygame.font.SysFont("Comic Sans MS",90)
 fonte=pygame.font.SysFont("Comic Sans MS",60)
+font=pygame.font.SysFont("Comic Sans MS",30)
+liderbord=pygame.image.load('assets/Sprites/leaderboard.png')
+liderbord=pygame.transform.scale(liderbord,(522,800))
 ##### sons ###################################################################################################################################################################
 pygame.mixer.music.load('assets/audios/twd.ogg')
 pygame.mixer.music.set_volume(0.4)
@@ -313,6 +317,8 @@ vida_seg=0
 Zumbis_Mortos=0
 game=False
 def nome():
+    qualseunome="QUAL O SEU NOME?"
+    semespaco="(sem espaço por favor)"
     name = ""
     sair = False
     while not sair:
@@ -327,12 +333,17 @@ def nome():
                     name += event.unicode
         
         texto_nome = fonte.render(name, True, (255, 255, 255))
-        window.blit(texto_nome, (100, 100))
+        texto_sm = font.render(semespaco, True, (255, 255, 255))
+        texto_qsn = titulo.render(qualseunome, True, (255, 255, 255))
+        window.blit(texto_nome, (320, 350))
+        window.blit(texto_sm,(350,100))
+        window.blit(texto_qsn, (10, 0))
         pygame.display.update()
     return name
 def lider(x):
     while lider:
         window.fill((0,0,0))
+        window.blit(liderbord,(200,0))
         with open(x) as arq:
             string=arq.read()
         string = string.split(" ")
@@ -352,10 +363,12 @@ def lider(x):
         pontord.reverse()
         nomesord.reverse()
         for i in range(len(pontord)):
-            texto_nome=fonte.render(nomesord[i], True, (255, 255, 255))
-            texto_pont=fonte.render(pontord[i], True, (255, 255, 255))
-            window.blit(texto_nome,(330,i*150))
-            window.blit(texto_pont,(450,i*150+80))
+            if i==8:
+                break
+            texto_nome=font.render(nomesord[i], True, (255, 255, 255))
+            texto_pont=font.render(pontord[i], True, (255, 255, 255))
+            window.blit(texto_nome,(330,i*73+155))
+            window.blit(texto_pont,(635,i*73+155))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type==pygame.KEYDOWN:
@@ -517,7 +530,6 @@ while game:
                 arq.write("{0}".format(username))
                 arq.write(" {0} ".format(Zumbis_Mortos))
             arq.close()
-            lider('leaderboard.txt')
             game=False
 
     hits_zumbi_construcao = pygame.sprite.groupcollide(Zombie_Grupo,Construcoes_Grupo,False,False,pygame.sprite.collide_mask)
@@ -594,6 +606,7 @@ while game:
     pygame.display.update() # Atualiza a janela
 if menu_ativo ==True:
     game_over()
+    lider('leaderboard.txt')
 menu_ativo=False
 
 pygame.quit() # Finalização

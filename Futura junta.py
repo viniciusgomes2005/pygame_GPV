@@ -10,7 +10,7 @@ pygame.init()
 altura_janela = 800 # altura da janela
 largura_janela = 1000 # largura da janela
 window = pygame.display.set_mode((largura_janela, altura_janela)) # define tamanho da janela
-pygame.display.set_caption('Pygame') # Da o nome do jogo
+pygame.display.set_caption('Zombie Outbreaker') # Da o nome do jogo
 
 #####################  SPRITES  ################################
 assets=load_assets()
@@ -331,13 +331,12 @@ def nome():
                     name = name[:-1]
                 else:
                     name += event.unicode
-        
         texto_nome = fonte.render(name, True, (255, 255, 255))
         texto_sm = font.render(semespaco, True, (255, 255, 255))
         texto_qsn = titulo.render(qualseunome, True, (255, 255, 255))
         window.blit(texto_nome, (320, 350))
         window.blit(texto_sm,(350,100))
-        window.blit(texto_qsn, (10, 0))
+        window.blit(texto_qsn, (35, 0))
         pygame.display.update()
     return name
 def lider(x):
@@ -377,6 +376,7 @@ def sair():
     pygame.quit()
 def como_jogar():
     while como_jogar:
+        window.fill((0,0,0))
         window.blit(assets['htp'],(100,100))
         pygame.display.update()
         for event in pygame.event.get():

@@ -103,7 +103,7 @@ def load_assets():
     quarteirao_img = pygame.image.load('assets/Sprites/Background cortado.png').convert()
     quarteirao_img = pygame.transform.scale(quarteirao_img, (1000, 800))
     assets['quarteirao_img']=quarteirao_img
-    htp = pygame.image.load('assets/Sprites/oie_transparent (6) (1) (1) (2).png')
+    htp = pygame.image.load('assets/Sprites/comojogar.png')
     htp = pygame.transform.scale(htp,(800,600))
     assets['htp']=htp
     gameover=pygame.image.load('assets/Sprites/gameover (1).png')
